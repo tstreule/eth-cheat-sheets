@@ -1,0 +1,63 @@
+\section{Ensemble Methods}
+
+% ===
+\subsection{Bagging
+\enskip\normalfont\sffamily (\textbf{B}ootstrap \textbf{agg}regation)}
+
+\begin{enumerate}
+    \item Draw $M$ bootstrap sets $Z'_1, \ldots, Z'_M$
+    \item Train $M$ base models $b^{(1)}, \ldots, b^{(M)}$
+    \item \textbf{Aggregate:}
+        $\bbar^{(M)}(\bm x) =
+        \left\{
+        \begin{array}{@{}l@{\enskip}l@{}}
+            \frac1M \sum_{t\leq M} b^{(t)}(\bm x)           & \text{regr.} \\
+            \mathrm{sign}\paren{ \sum_t b^{(t)}(\bm x) }    & \text{class.}
+        \end{array}\right.$
+\end{enumerate}
+
+\emph{Why it works:}
+Small \textit{variance} (weak learners),
+small \textit{covariance} (almost indep. since $Z'_i \neq Z'_j$).
+\\\vspace{-2pt}For finite range $y$ and large enough $M$:
+\\\enskip
+$\E*[\substack{Y\mid X\\ Z, Z'}]{(y - \bbar^{(M)}(\bm x))^2}
+\leq \E*[\substack{Y\mid X\\ Z, Z'}]{(y - b(\bm x))^2}$
+
+\emph{Random Forest:}\enskip
+At each splitting step, u.a.r. choose $m$ of $p$ features and split only one (best) feature.
+$\to$ reduce \textit{correlation} between trees.
+
+\textbf{Validation:}\enskip
+\textit{Out-of-bag error} $\to$ validate each $\bm x_i$ with trees that didn't use it for training.
+
+% ===
+\subsection{Boosting}
+
+\textit{Sequentially} train weak learners on all data, but \rotatebox[origin=c]{45}{$\to$}weight of misclass. samples (\rotatebox[origin=c]{-45}{$\!\to$}bias).
+
+% \emph{FSAM {\normalfont\sffamily (forward stagewise additive modeling)}:}
+
+\emph{AdaBoost:}\enskip
+Stat. learning (\textit{forward stagewise additive modeling}) with \textbf{exp. loss}, trains max-margin ($= y_i \bbar(\bm x_i)$), self-avg. and interpolating (\rotatebox[origin=c]{-45}{$\!\to$}overfitting) classifiers.
+
+\begin{highlightbox}
+    \textit{\scriptsize [Init]:} $\bbar^{(0)} \leftarrow 0$,\enskip $w_i \leftarrow 1/n \:\forall i\leq n$ \\
+    for $t = 1 \ldots M$:
+    \begin{itemize}[leftmargin=25pt]
+        \item[\textit{\scriptsize [Train]:}]
+            $b^{(t)} = \arg\min_b \mathcal L^w(b) \color{gray} = \sum_i w_i \mathbb I \{b(\bm x_i) \neq y_i\}$
+        \item[\textit{\scriptsize [Eval]:}]
+            $\mathrm{err}_t = \mathcal L^w(b^{(t)})$
+        \item[\textit{\scriptsize [Aggr]:}]
+            $\bbar^{(t)} = \bbar^{(t-1)} + \alpha_t b^{(t)}$;\enskip
+            $\alpha_t = \frac12 \log(\frac{1}{\mathrm{err}_t} - 1)$
+        \vspace{-2pt}
+        \item[\textit{\scriptsize [Reweight]:}]
+            $w_i = w_i \cdot \exp(\alpha_t \mathbb I\brace{b^{(t)}(\bm x_i) \neq y_i})$
+            {\small normalize!}
+    \end{itemize}
+    Return $\bbar^{(M)}(\bm x) = \mathrm{sign}(\sum_t \alpha_t b^{(t)}(\bm x))$
+\end{highlightbox}
+
+% ===

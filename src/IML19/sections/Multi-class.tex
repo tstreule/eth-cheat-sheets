@@ -1,0 +1,21 @@
+\section{Multi-class}
+
+\textbf{1-vs-all}: $c$ models, confidence $f^{(i)} (x) = w^{(i )\top} x$
+
+\textbf{1-vs-1}: $c\frac{c-1}{2}$ models, voting scheme
+
+% ===
+\emph{Multi-class Hinge loss}\\
+\vspace{-12pt}
+$\ell(w^{(1:c)};x,y) = \max\{ 0, 1\! + \overbracket[.7pt][.7pt]{\max\limits_{i:\,j\neq y} w^{(j)\top}x}^{(\ast\ast)} - \overbracket[.7pt][.7pt]{w^{(y)\top}x}^{(\ast\ast\ast)} \}$
+
+\textbf{Confidence:} $w^{(y)\top}x \geq \max\limits_{j\neq y} w^{(i)\top}x + 1$ {\footnotesize$(\ast)$}
+
+{\setstretch{0.9}
+$\nabla\!_{w^{(j)}} \ell =
+\begin{cases}
+	0	& (\ast)\text{ satisfied \textit{or} } j\notin\{y,\hat y\}\\
+	-x	& \neg(\ast) \text{ and } j=y		\rightsquigarrow (\ast\ast)\\
+	+x	& \neg(\ast) \text{ and } j=\hat y	\rightsquigarrow (\ast\ast\ast)
+\end{cases}$
+}

@@ -1,0 +1,73 @@
+\section{Neural networks\enskip
+$\color{section-text-color} \phi_j(x_i) \leftrightarrow \phi(x_i,\theta)$}
+
+Parameterize feature map: $\phi(x,\theta)$ instead of $\phi(x)$, usually: \highlight*{$\phi(x,\theta) = \varphi(\theta^\top x)$} $= \varphi(z)$\\
+$\Rightarrow w^* = \arg\min\limits_{w,\theta} \sum_{i=1}^n \ell(y_i; \underbracket[.7pt][.7pt]{\textstyle \sum_{j=1}^m w_j \,\phi(x_i, \theta_j)}_{f(x;w,\theta)})$
+
+% ===
+\emph{Activation functions $\color{emph-text-color} \varphi(z)$}
+
+\textbf{Sigmoid:} $\frac{1}{1+\exp(-z)} {\color{gray} \,\in [0,1]}$, \enskip {\small $\varphi'(z) = (1 \!-\! \varphi(z))\cdot\varphi(z)$}\par
+\textbf{Tanh:} $\varphi(z) = \tanh(z) = \frac{\exp(z)-\exp(-z)}{\exp(z)+\exp(-z)} \color{gray} \,\in [-1,1]$\par
+\textbf{ReLu:}  $\varphi(z) = \max(z,0) \color{gray} \;\to \text{not smooth}$
+
+% ===
+\emph{Predict: forward propagation}
+\setstretch{0.9}
+\begin{highlightbox}
+    \begin{enumerate}
+        \item $v^{(0)} = x$
+        \item $v^{(l)} = \varphi(z^{(l)})$, $z^{(l)} = W^{(l)}v^{(l-1)}${,
+            \small $\color{gray}\text{for }l = 1:L\!-\!1$}
+        \item $f = z^{(L)} = W^{(l)} v^{(L\!-\!1)}$
+        \item \textbf{Pred.}: $\hat y \!=\! f$ (Regr.) \textit{or}
+        \begin{minipage}{.4\linewidth}
+    		\small\vspace*{-10pt}
+    		$\quad\begin{cases}
+    			\hat y = \operatorname{sign}(f) \textit{ or}\\
+    			\hat y = \arg\max\limits_i(f_i)
+    		\end{cases}$
+    	\end{minipage}
+    \end{enumerate}
+\end{highlightbox}
+
+% ===
+\emph{Compute gradient: \normalfont\sffamily backpropagation}
+\begin{highlightbox}
+	\textbf{Output}: {\footnotesize$[\cdots\highlight*{\delta_k^{(L)}}\!\cdots] =$} $\delta^{(L)} \!=\! \ell'(f)$ {\footnotesize$= [\cdots\ell_k'(f_k)\cdots]$}
+	
+	\textbf{Hidden layer}: for $\normalfont l=L{-}1 : 1$, \\
+	$
+	\highlight*{\delta_k^{(l)}\!} {=} \varphi'(z_k)\cdot \hspace{-12pt} \sum\limits_{j\in\textrm{layer}_{(l+1)}} \hspace{-12pt} w_{jk}\delta_j
+	\enskip
+	\text{\normalcolor \textbf{Grad.}:} \pderiv{\ell}{w_{j,k}} \!\!=\! \delta_j^{(l)}v_k^{(l\!-\!1)}
+	$
+\end{highlightbox}
+
+$W \!=\! [w_{jk}^{(L)} \cdots w_{jk}^{(1)}]_{jk}$, \hfill $L(W) \!\equiv\! L = \sum_j\ell_j(y_j,f_j)$
+
+% ===
+\emph{Learning with momentum}
+\begin{highlightbox}
+	\textbf{1.} $a \leftarrow {\color{OrangeRed}m} a + \eta_t \nabla_W \ell(W;y,x)$\enskip
+	\textbf{2.} $W \leftarrow W \!-\! a$
+\end{highlightbox}
+
+% ===
+\emph{Convolutional NNs}
+
+$\to$ $\overbracket[.7pt][.7pt]{\text{conv. $\to$ pooling}}^{\text{repeat $n$ times}}$
+$\to$ $\overbracket[.7pt][.7pt]{\text{fully connected}}^{\text{Perceptron ($m$ times)}}$ $\to$ out
+
+\textbf{Convolution}: for edge regions $\to$ 0-padding
+
+\textbf{pooling} (subsampling): e.g. `max' pooling
+
+\textbf{output dim's}:
+$\alpha = \frac{n+2p-f}{s}+1$\\
+{\small
+where $m$: \# $f\times f$ filters,\enskip
+$n$: img. dim.,\enskip
+$p$: padding, \# of added zeros,\enskip
+$s$: strides (amount by which filter shifts)
+}

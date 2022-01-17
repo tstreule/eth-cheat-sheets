@@ -1,0 +1,158 @@
+\columnbreak
+\section{Model Validation}
+
+% ===
+\subsection{Stability-based Validation}
+
+\emph{Stability:}\enspace
+Solutions on two data sets drawn from the same source should be similar.
+
+%\emph{(In-)Stability:} Expected (dis-)agreement of solutions from two data sets from the same source.
+
+% ===
+\subsection{Information-theoretic Validation}
+
+\subsubsection{Shannon's Channel Coding Thm.}
+
+\begin{itemize}
+    \item \textbf{Channel:}\enspace
+        $(\mathcal S, \{p(\cdot\mid s)\}_{s\in\mathcal S} )$,\enspace
+        $\mathcal S$: alphabet
+        \begin{itemize}
+            \item $\epsilon$-noisy binary channel:
+                $p(\hat s\mid s) = \big\{ \substack{
+                    1-\epsilon \:\:\text{if}\:\: \hat s=s \\
+                    \epsilon \phantom{1-} \:\:\text{if}\:\: \hat s\neq s}$
+        \end{itemize}
+        \vspace{-3pt}
+    \item \textbf{Capacity:}\enspace
+        \highlight{$\mathrm{cap} = \max_p I(S;\hat S)$}
+        $\rightsquigarrow p_S(s)$
+    \item \textbf{$\bm{(M,n)}$-code:}\enspace
+        is a pair $(Enc,Dec)$\hfill
+        $\color{gray} \leftarrow\text{scr. p.87}$\\\quad
+        where $M$: \#messages, $n$: code-length
+        \begin{itemize}
+            \item \textbf{Rate:}\enspace
+                $r = \frac{\log_2 M}{n}$
+                $\Leftrightarrow$ $M=\floor{2^{nr}}$
+            \item \textbf{Commu. err.:}\enspace
+                $p\ped{err} \coloneqq \max\limits_{i\leq M}
+                \P{ Dec(\widehat{ Enc(i) }) \neq i }$
+        \end{itemize}
+\end{itemize}
+
+Goal / \textbf{Best code:}\enspace
+\highlight*{$\lim\limits_{n\to\infty} \frac{\log M}{n}$\enspace s.t.\enspace $\lim\limits_{n\to\infty} p\ped{err} \to 0$}
+
+\emph{Asymptotic equiparition property (AEP):}
+\vspace{-2pt}
+\begin{itemize}
+    \item $A_\epsilon^{(n)}$:
+        Typical set of sequences $(s_1,\ldots,s_n) \in \mathcal S^n$\\\qquad
+        $\abs*{-\frac1n \log p_{S^n} (\bm s^n) - H[S]} < \epsilon$\hfill
+        $\color{gray} \leftarrow \text{scr. p.89}$
+    \item $\P*{(\bm S^n, \bm{\hat S}^n) \in A_\epsilon^{(n)}} \overset{n\to\infty}{\to} 1$\hfill
+        $\color{gray} \leftarrow \text{scr. p.90}$
+    \item \highlight{$p\ped{err} \leq 2^{-n(\mathrm{cap} - 3\epsilon -r)}$}
+        $\overset{n\to\infty}{\to} 0$\enspace if\enspace \highlight{$r<\mathrm{cap}$}
+\end{itemize}
+
+
+\subsubsection{Algorithm Validation}
+
+\textbf{Assumptions:}
+\begin{itemize}
+    \item Exponential solution space, i.e. $\log\abs{\mathcal C} = \mathcal O(n)$
+    \item $\mathcal A$'s output is probabilistic, i.e. $p(\cdot \mid X')$
+\end{itemize}
+
+\emph{Ideal variant:}
+
+\textbf{Messages:}\enspace
+$\mathcal M = \brace{ X'_1, \ldots, X'_m }$
+\vspace{-2pt}
+
+\textbf{Code:}\enspace
+$X'_i \xrightarrow{Enc_{\mathcal A}} p(\cdot\mid X'_i)
+\xrightarrow{\mathcal{C_A}} p(\cdot\mid X''_i)
+\xrightarrow{Dec_{\mathcal A}} \hat X$
+\iffalse
+    \begin{itemize}
+        \item $Enc_{\mathcal A}$:\enspace
+            encodes $X'_i \in \mathcal M$ as $p(\cdot\mid X'_i)$.
+        \item $Dec_{\mathcal A}$:\enspace
+            selects $\hat X = \arg\max\limits_X \kappa(X''_i, X)$\\
+            whereby $\kappa(X'', X') \coloneqq \sum_c p(c\mid X'') p(c\mid X')$
+    \end{itemize}
+\fi
+
+\emph{Empirical variant:}
+
+\textbf{Messages:}\enspace
+$\mathcal M = \brace{ \tau_1, \ldots, \tau_m }$
+drawn u.a.r. from $\mathbb T$
+\begin{itemize}
+    \item Require\enspace $\sum_\tau p(c\mid \tau\circ X') \approx \frac{\abs{\mathbb T}}{\abs{\mathcal C}} \pm \rho$\hfill
+        $\color{gray} \leftarrow \text{scr. p.95}$
+\end{itemize}
+\vspace{-2pt}
+
+\textbf{Code:}\enspace
+$\tau_i \xrightarrow{Enc} p(\cdot\mid \tau_i \circ X')
+\xrightarrow{\mathcal{C_A}} p(\cdot\mid \tau_i \circ X'')
+\xrightarrow{Dec} \hat\tau$
+\begin{itemize}
+    \item $Enc_{\mathcal A}$:\enspace
+        encodes $\tau_i \in \mathcal M$ as $p(\cdot\mid \tau_i \circ X')$
+    \item $Dec_{\mathcal A}$:\enspace
+        selects $\hat\tau = \arg\max\limits_{\color{red}\tau} \kappa(\tau_i \circ X'', {\color{red}\tau} \circ X')$\\
+        whereby \highlight{$\kappa(X'', X') \coloneqq \sum_c p(c\mid X'') p(c\mid X')$}
+\end{itemize}
+
+\emph{Asymptotic Equipartition Property (AEP):}
+
+\textit{AEP fulfilled}\enspace if\enspace \highlight*{$\log \kappa(X',X'') \overset{n\to\infty}{\to} \mathcal E$}\\
+\enspace whereby $\mathcal E \coloneqq \E[X',X'']{\log\kappa(X',X'')}$
+\begin{itemize}
+    \item $A^{(n)}_\epsilon$: set of $(\epsilon,n)$-typical pairs $X', X''$\\\qquad
+        $\abs*{ \log\kappa(X',X'') - \mathcal E } < \epsilon$
+    \item \highlight{$p\ped{err} \leq P_{(n)} \color{gray} \text{ c.f. scr. (6.19)}$}
+        $\overset{n\to\infty}{\to} 0$ \enspace if\enspace \highlight{$\frac{\log m}{\log\abs{\mathcal C}} < I$}\\
+        where $I \coloneqq \frac{1}{\log\abs{\mathcal C}} \E[X',X'']{\log(\abs{\mathcal C} \kappa(X',X''))}$
+\end{itemize}
+
+% ===
+\subsection{Applications of PA}
+
+\emph{PA:}\enskip
+\textit{quantifies the amount of information that algorithms extract from phenomena.}
+$\to$ quantified by \textbf{capacity} (max. \# distinguishable messages that can be communicated)
+
+\emph{Temperature:}\enspace
+$T^\ast = \arg\max_T \kappa(X',X'')$
+
+\emph{Cost functions:}\enspace
+Given $R_1(\cdot,\cdot),\ldots,R_s(\cdot,\cdot)$\\
+$\max\limits_{\ell\leq s} \kappa_\ell(X',X'') = \max\limits_{\ell\leq s} \frac{1}{Z_{X'} Z_{X''}} \sum\limits_c \eu^{-\frac1T R_\ell(c,X')} \eu^{-\frac1T R_\ell(c,X'')}$
+
+\emph{Algorithms:}\enspace
+%\textit{here for MST (min. span. tree)}
+Many MST (min. spanning tree) algo's are \textbf{contractive} ($\to$ sequence of candidate sol's).
+\\
+\textbf{Approximation Set Coding (ASC):}\\
+\quad $p\ap{ASC}(c\mid X') = \begin{cases}
+    1 / \abs*{G_\gamma(X')}  & \text{if}\enspace c\in G_\gamma(X') \\[-2pt]
+    0   & \text{otw.}
+\end{cases}$\\
+\quad $G_\gamma(X') \coloneqq \brace*{ c\in\mathcal C : R(c,X') - \min\limits_{c\in\mathcal C} R(c,X') \leq \gamma }$
+\begin{enumerate}
+    \item Run $\mathcal A$ to compute $G_t^{\mathcal A}(X')$ and $G_t^{\mathcal A}(X'')$,\enspace for all $t$
+    \vspace{2pt}
+    \item $t^\ast = \arg\max\limits_t \kappa(X',X'')
+        = \arg\max\limits_t \frac{\abs*{G_t^{\mathcal A}(X') \:\cap\: G_t^{\mathcal A}(X'')}}{\abs*{G_t^{\mathcal A}(X')} \:\cdot\: \abs*{G_t^{\mathcal A}(X'')}}$
+    \item $c^\ast \xleftarrow{\$\:\text{sample}} \mathrm{Unif}\paren*{G_{t^\ast}^{\mathcal A}(X') \cap G_{t^\ast}^{\mathcal A}(X'')}$
+\end{enumerate}
+
+
+% ===

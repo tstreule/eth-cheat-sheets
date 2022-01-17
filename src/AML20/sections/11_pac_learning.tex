@@ -1,0 +1,75 @@
+\section{PAC Learning}
+
+% ===
+\begin{highlightbox}
+    \textbf{Want:} Distribution indep. error guarantees!
+    % What we want: Distribution independent error guarantees!
+    % However, without prior knowledge, those bounds are quite loose.
+\end{highlightbox}
+
+Expec./\textbf{Gener. error:}\enskip
+$\mathcal R(\hat c_n) = \bm P_{X,Y}(\hat c_n(x) \neq c(x))$
+
+\textbf{Empirical error:}\enskip
+$\hat{\mathcal R}_n(\hat c_n) = \frac1n \sum_{i=1}^n \bm 1_{\brace{\hat c_n(x_i) \;\neq\; y_i}}$
+
+
+\emph{PAC learnable:} $\mathcal A$ can learn a concept class $\mathcal C$ from $\mathcal H$ if, given a \textcolor{Green}{suff. large sample}, it outputs a hypothesis that \textcolor{VioletRed}{generalizes well} \textcolor{OrangeRed}{w/ high prob}.
+
+\begin{highlightbox}
+\vspace{-\fboxrule}\vspace{-\fboxsep}
+    \begin{highlightbox}[white]
+        (1) $\color{VioletRed} 0 < \epsilon < \sfrac12$, $\color{OrangeRed} 0 < \delta < \sfrac12$,
+        (2) $\bm P_{X,Y}$ on $\mathcal X \times \brace{0,1}$:
+        
+        If\enskip $\color{Green} n \geq \mathit{poly} (\textcolor{VioletRed}{\sfrac1\epsilon},\; \textcolor{OrangeRed}{\sfrac1\delta},\; \mathit{dim}(\mathcal X))$,
+        
+        Then\enskip $\color{OrangeRed} \bm P_{X,Y}
+        \paren*{ \color{VioletRed}
+            \mathcal R(\hat c_n) - \inf\limits_{c\in\mathcal C} \mathcal R(c) \leq \epsilon
+        } \geq 1 - \delta$.
+    \end{highlightbox}%
+\vspace{-\fboxrule}\vspace{-\fboxsep}
+\end{highlightbox}
+
+% A concept class $\mathcal C$ is \emph{PAC learnable} from a hypothesis class $\mathcal H$ if \ldots\ldots\ldots
+If $\mathcal A$ runs in time polynomial in $\color{VioletRed} \sfrac1\epsilon$ and $\color{OrangeRed} \sfrac1\delta$, we say that $\mathcal C$ is \emph{efficiently PAC learnable}.
+
+% ===
+\subsection{VC Inequality
+\hfill $\bm P(\cdots \geq \begingroup\color{VioletRed}\epsilon\endgroup) \leq \ldots \leq \color{OrangeRed}\delta$}
+
+Select ERM:\enskip
+$\hat c_n^\ast = \arg\min_{c\in\mathcal C} \hat{\mathcal R}_n (c)$
+
+Under uniform convergence: %, the suboptimality of $\hat c_n^\ast$ can be bounded:
+\scalebox{.9}{${
+    \bm P \paren*{
+        \mathcal R(\hat c_n^\ast) - \inf\limits_{c\in\mathcal C} \mathcal R(c) > \epsilon
+    } \leq \bm P \paren*{
+        \sup\limits_{c\in\mathcal C} \abs*{\hat{\mathcal R}_n(c) - \mathcal R(c)} > \dfrac\epsilon2
+    }
+}$}
+
+\begin{tabular}{@{\textbullet\:} r @{$\:\leq\:$} l @{}}
+    \emph{$\abs{\mathcal C}$ Finite:}\enskip
+    $\bm P \paren*{ \sup \abs*{\cdots} > \epsilon }$
+    & $2 \abs{\mathcal C} \exp(-2n\epsilon^2)$
+    \\
+    \emph{$\abs{\mathcal C}$ Unbounded:}\hfill
+    $\bm P \paren*{ \cdots }$
+    & $9 n^{\mathrm{VC}_{\mathcal C}} \exp(-\frac{n \epsilon^2}{32})$
+\end{tabular}
+
+% ===
+\subsection{Rectangle Learning}
+
+$\bm P(\mathcal(\hat c_n^\ast > \epsilon)
+\leq \abs{\mathcal C} \cdot (1-\epsilon)^n
+\leq \abs{\mathcal C} \cdot \exp(-n\epsilon)
+\color{gray} < \delta$
+
+\textbf{Union bound:}\enskip
+$\bm P(\bigcup_i T_i) \leq \sum_i \bm P(T_i)$
+
+% ===

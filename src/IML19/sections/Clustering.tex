@@ -1,0 +1,34 @@
+\section{Clustering \textnormal{\sffamily --- Unsupervised}}
+
+% ===
+\emph{k-Means}
+%\emph{Assignement}: $C_i \!=\! \{ x\!\in\!\mathbb{R}^d \,\vert\, i\!\in\!\arg\min\limits_j \norm{x\!-\!\mu_j} \}$
+
+$\hat{R}(\mu) = \sum_{i=1}^n \min\limits_{j\in\{1,\ldots,k\}} \norm{x_i-\mu_j}_2^2 = \sum_i d(x_i,\mu_j)$
+
+$\hat{\mu} =  \arg\!\min\limits_\mu \hat{R}(\mu)$ {\color{gray}$\leftarrow$ non-convex, NP-hard}\vspace{3pt}
+
+\begin{highlightbox}
+	\vspace{-3pt}
+	\textbf{Lloyd's heuristic}: \textit{Initialize} centers $\mu_{1:k}^{(0)}$,\\
+	\textit{assign} points to closest center {\small\color{gray} $\to \arg\min$},
+	\textit{update centers} to mean of each cluster, repeat
+\end{highlightbox}
+
+% ===
+\emph{k-Means++:}
+\enskip $\to$ for initialization $2\ldots j$
+
+$\operatorname{P}(\textrm{pick }x_l) = \frac{1}{z} d(x_i - \mu_{1:j-1})$, \enskip $\mu_j^{(0)} \leftarrow x_i$
+
+%- Start with random data point as center\\
+%- Add centers 2 to k randomly, proportionally to squared distance to closest selected center\\
+%for $j=2$ to $k$:
+%$i_j$ sampled with prob.\\
+%$P(i_j=i) = \frac{1}{z} \underset{1\leq l<j}{min}||x_i-\mu_l||_2^2$; $\mu_j \leftarrow x_{i_j}$
+
+% ===
+\emph{Optimal \textit{k}-value:}
+\enskip $\to$ ``Elbow'' trick \textit{or}
+
+Regularization $L(\mu) = \min\limits_k \min\limits_{\mu_k} \hat R(\mu_{1:k}) + \lambda\,k$

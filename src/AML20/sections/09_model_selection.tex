@@ -1,0 +1,23 @@
+\section{Model Selection}
+
+% ===
+Derive posteriors $p^{(i)} (\theta \mid X')$ and $p^{(i)} (\theta \mid X'')$.
+
+
+\textbf{ERM:}\enskip
+\textit{linear} in noise fluctuations
+
+\quad $p^\ast (\cdot\mid\cdot) = \arg\min_i \E[\theta\mid X']{-\log p^{(i)} (\theta\mid X'')}$
+
+
+\textbf{PA:}\enskip
+(only) \textit{quadratic} in noise fluctuations
+
+\quad $p^\ast (\cdot\mid\cdot) = \arg\max_i \E[\theta\mid X']{p^{(i)} (\theta\mid X'')}$
+
+
+\textit{Note:}\enskip
+$\min_p \E[\theta\mid X']{-\log p(\theta\mid X'')} \overset{\small \text{Jensen}}{\geq}$
+\\\qquad $- \max_p \log \E[\theta\mid X']{p(\theta\mid X'')}$
+
+% ===

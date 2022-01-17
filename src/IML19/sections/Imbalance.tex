@@ -1,0 +1,30 @@
+\section{Imbalanced Data}
+
+% ===
+\emph{Cost Sensitive Classification}
+Replace loss by: $\ell_{CS}(w;x,y) = c_y \ell(w;x,y)$
+
+$\color{gray} \text{e.g. } \ell_{\pm} = c_\pm \ell(w;x,y)
+\to c_-\cdot \hat R(w; \frac{c_+}{c_-},c_-)$
+
+% ===
+\emph{Metrics}
+
+\begin{minipage}{.7\linewidth}
+	\textbf{acc} $= \frac{\textrm{TP}+\textrm{TN}}{n}$,
+	\textbf{prec} $= \frac{\textrm{TP}}{p_+}$
+	
+	\textbf{FPR} $= \frac{\textrm{FP}}{n_-}$,
+	\textbf{Recall/TPR} $= \frac{\textrm{TP}}{n_+}$
+\end{minipage}%
+\begin{minipage}{.3\linewidth}
+	\begin{tabular}{@{}l @{ }l | @{ }l}
+		TP & FP & $p_+$\\
+		FN & TN & $p_-$\\\hline
+		$n_+$ & $n_-$ & $n$
+	\end{tabular}
+\end{minipage}
+
+\textbf{Fβ score}: $F_\beta = \frac{(1+\beta)^2}{\frac{1}{\textrm{prec}} + \frac{\beta^2}{\textrm{rec}}}$,
+\enskip
+\textbf{ROC:} FPR vs. TPR

@@ -1,0 +1,96 @@
+\section{Gaussian Processes}
+
+% ===
+%\textbf{Idea:} Introduce non-linearity in lin.-reg. setting.
+
+% ===
+\subsection{Bayesian Linear Regression}
+
+\emph{Model:}\enskip
+$\bm y = \bm X^\top \beta + \epsilon$,\enskip
+with $\epsilon \sim \Gauss{\epsilon\mid 0, \sigma^2 \mathbb I}$
+
+Likelihood:\enskip
+$P(\bm y\mid \bm X, \beta,\sigma) = \Gauss{\bm y\mid \bm X^\top \beta, \sigma^2 \mathbb I}$
+
+Prior:\enskip
+$P(\beta\mid\bm\Lambda) = \Gauss[d]{\beta\mid 0, \bm\Lambda^{-1}}$\\\enskip
+(Ridge regr. if $\bm\Lambda = \lambda\mathbb I$ and $\sigma=1$)
+
+Posterior:\enskip
+$P(\beta\mid \bm X, \bm y, \bm\Lambda) = \Gauss{\beta\mid \bm\mu_\beta, \bm\Sigma_\beta}$\\\enskip
+with $\bm\mu_\beta = (\bm X^\top \bm X + \sigma^2 \bm\Lambda)^{-1} \bm X^\top \bm y$\\\enskip
+and $\bm\Sigma_\beta = \sigma^2 (\bm X^\top \bm X + \sigma^2 \bm\Lambda)^{-1}$
+
+$\implies$ $\bm y \sim \Gauss{\bm y \mid 0, \; \bm{X\Lambda}^{-1} \bm X^\top {+} \sigma^2 \mathbb I}$
+\hfill {\small using $\E[\beta,\epsilon]{}$}
+%With all these assumptions, you can say that $\bm y$ is Gaussian with $\mu_y = \E[\beta,\epsilon]{y} = 0$ and $\sigma_y = \Cov[\beta,\epsilon]{y} = \bm{X\Lambda}^{-1} \bm X^\top + \sigma^2 \mathbb I$.
+\\\enskip
+kernel $k(x_i, x_j) \coloneqq x_i^\top \bm\Lambda^{-1} x_j$
+
+% ===
+\subsection{Gaussian Process}
+
+$\bm y \sim \Gauss{\bm y \mid m(\bm X), K(\bm X, \bm X) + \sigma^2 \mathbb I}$
+
+\begin{minipage}{\linewidth}
+    \centering
+    $\begin{bsmallmatrix} \bm y \\ y_{n+1} \end{bsmallmatrix} \sim
+    \Gauss*{
+        \begin{bsmallmatrix} \bm y \\ y_{n+1} \end{bsmallmatrix} \mid
+        \begin{bsmallmatrix} m(\bm X) \\ m(x_{n+1}) \end{bsmallmatrix},
+        \begin{bsmallmatrix} \bm C_n & \bm k \\ \bm k^\top & c \end{bsmallmatrix}
+    }$
+\end{minipage}
+
+$p(y_{n+1} \mid x_{n+1}, \bm X, \bm y) = \Gauss{y_{n+1} \mid \mu_{n+1}, \sigma_{n+1}^2}$\\\enskip
+with $\mu_{n+1} = m(x_{n+1}) + \bm k^\top \bm C_n^{-1} (\bm y - m(\bm X))$\\\enskip
+and $\sigma_{n+1}^2 = c - \bm k^\top \bm C_n^{-1} \bm k$
+
+where
+$\bm K = k(\bm X, \bm X)$,\enskip
+$\bm k = k(x_{n+1}, \bm X)$,\\
+\phantom{where}
+$\bm C_n = \bm K + \sigma^2 \mathbb I$,\enskip
+$c = k(x_{n+1}, x_{n+1}) + \sigma^2$
+
+% ===
+\subsection{Kernels \normalfont\sffamily
+\quad scalar product
+\quad $K_{ij} = k(\bm x_i, \bm x_j)$}
+
+\emph{Valid kernel:}
+must be
+\textbf{symmetric}
+    %($\bm K^\top\! {=} \bm K$)
+and \textbf{p.s.d.}
+    ($\bm x^\top \bm{Kx} \geq 0 \; \forall\bm x$ \textit{\,or\,}
+    pos. eigenvalues \textit{\,or\,}
+    pos. principal minors).\enskip
+Must have a (pot. $\infty$-dim.) \textbf{feature vector} $\phi$ s.t. $k(\bm x, \bm x') = \phi(\bm x)^\top \phi(\bm x')$.
+
+\iffalse
+    Kernel $k(\bm x, \bm x')$ must be \emph{symmetric} ($\bm K^\top {=} \bm K$) and \emph{p.s.d.} ($\bm x^\top \bm{Kx} \geq 0 \; \forall\bm x$ \textit{\;or\;} pos. eigenvalues).
+    
+    A valid kernel $k$ must have a (potent. $\infty$-dim.) feature vector $\phi(\bm x)$ s.t. $k(\bm x, \bm x') = \phi^\top \! (\bm x) \phi (\bm x')$.
+\fi
+
+\emph{Common kernels:}\\
+\begin{tabular}{@{}l @{:\hfill\enskip}l}
+    Linear & $\bm x^\top \bm x'$ \\
+    Polynomial & $(\bm x^\top \bm x' + 1)^p$,\enskip $\color{gray} p\in\mathbb N$ \\
+    RBF (Gaussian) & $\exp(-\norm{\bm x - \bm x'}_2^2 / h^2)$ \\
+    Sigmoid & $\tanh(\kappa \cdot \bm x^\top \bm x' - b)$
+\end{tabular}
+
+\emph{Kernel construction:}
+\enskip\textbullet~$k_1 {+} k_2$
+\enskip\textbullet~$c\cdot k_1, \; \color{gray} c>0$
+\enskip\textbullet~$k_1\cdot k_2$
+\enskip\textbullet~$f(\bm x) k_1(\bm x, \bm x') f(\bm x')$
+\\\textbullet~$k(\phi(\bm x), \phi(\bm x'))$
+    \enskip with $\phi : \mathcal X \to \mathbb R^d$
+\\\textbullet~$g(k_1)$
+    \enskip with $g :$ exp. \textit{ or } polyn. w/ \underline{all} pos. coeff.
+
+% ===

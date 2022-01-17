@@ -1,0 +1,39 @@
+\section{Deterministic Annealing
+\hfill\normalfont\sffamily (\textit{\rmfamily Z} is tractable)}
+
+\emph{Lemma:}\enspace
+func's $\times$ domain $\to$ domain $\times$ co-dom.\\
+\quad $\textcolor{gray}{\mathcal O(K^N) \rightarrow\,}
+\highlight*{\sum_c \prod_i \epsilon_{i, \color{red} c(i)} = \prod_i \sum_k \epsilon_{ik}}
+\textcolor{gray}{\,\leftarrow \mathcal O(NK)}$
+
+$p(c\mid \theta, X) = \prod_{i\leq N} p_i(c(i) \mid \theta,X)$\\
+\quad where\enskip $p_i(k\mid \theta, X) \propto \exp(-\frac1T \norm{x_i - \theta_k}^2)$
+% $\phantom{p(c\mid \theta, X)} = \prod_{i\leq N} \frac{\exp(-\frac1T \norm{\bm x_i - \theta_{c(i)}}^2)}{\sum_{j\leq K} \exp(-\frac1T \norm{\bm x_i - \theta_j}^2)}$
+% $\substack{~\\[10pt]\textcolor{gray}{\leftarrow Z(X)}}$
+
+Max. entr.
+$\implies \pderiv{\log Z}{\theta_k} = 0
+\implies \highlight*{\theta_k^\ast = \frac{ \sum_i p_i(k\mid \theta^\ast, X) \:\cdot\: \bm x_i }{ \sum_i p_i(k\mid \theta^\ast, X) }}$
+
+\begin{highlightbox}
+\begin{itemize}
+    \item[] do
+    \begin{itemize}
+        \item[]
+            \vspace{-5pt}
+            \textbf{E-step:\;} $p_i(k\vert \theta\ap{old}, X) = \frac{\exp\paren*{ -\frac1T \norm{\bm x_i - \theta_k}^2 }}{\sum_{j\leq K} \exp\paren*{ -\frac1T \norm{\bm x_i - \theta_j }^2}}$
+            \vspace{-5pt}
+        \item[] \textbf{M-step:} $\theta_k \leftarrow \ldots$
+        \item[] $\theta\ap{old} \leftarrow \theta$
+    \end{itemize}
+    \item[] until convergence of $\theta$
+    \item[] $\theta_k \leftarrow \theta_k + \epsilon$
+        {\small\enspace\color{gray} (noise s.t. centroids can separate)}
+\end{itemize}
+\end{highlightbox}
+
+\emph{Phase transitions:}\enspace
+For $T {\to} \infty$ :\enspace $\theta_k^\ast = \overline{\bm X} \enspace \forall k\leq K$\\
+Once $T=2\lambda\ped{max}$, more centroids appear, where $\lambda\ped{max} = \textrm{max. eigenvalue}$ of $\frac1N \bm X^\top \bm X$.
+\enspace($\bm x_i$'s row-wise)

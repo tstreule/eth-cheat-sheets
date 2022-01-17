@@ -1,0 +1,61 @@
+\section{Basics}
+
+% ===
+\emph{Fundamental Assumption}
+
+Data is iid for unknown $P$: $(x_i, y_i) \sim P(X,Y)$
+
+\textbf{Empirical risk}: $\hat{R}_D(w) = \frac{1}{\abs{D}}\sum_{(x,y)\in D} (y-w^\top x)^2$ \\
+\textbf{True risk}: $R(w) = \int p(x,y)\, r_i^2 \,\partial x\partial y = \mathbb{E}_{x,y}[r_i^2]$
+
+%\subsection*{True risk and estimated error}
+%True risk: $R(w) = \int P(x,y) (y-w^\top x)^2 \partial x \partial y = \mathbb{E}_{x,y}[(y-w^\top x)^2]$ \\
+%%Est. error: $\hat{R}_D(w) = \frac{1}{\abs{D}}\sum_{(x,y)\in D} (y-w^\top x)^2$
+
+% ===
+\emph{Standardization:} \enskip
+{\color{gray} (for $x_k\!\in\! X$, $k=1,\ldots,d$)}
+
+Centered data with unit variance:
+\highlight*{$\!\widetilde{x}_{i,k} = \frac{x_{i,k}-\hat{\mu}_k}{\hat{\sigma}_k}\!\!$}
+
+\vspace{-2pt}$\hat{\mu}_k = \frac{1}{n}\sum_{i=1}^n x_{i,k}$, \enskip $\hat{\sigma}_k^2 = \frac{1}{n}\sum_{i=1}^n {(x_{i,k}-\hat{\mu}_k)}^2$ 
+
+% ===
+\emph{Parametric vs. Nonparametric:}
+
+\textbf{Parametric}: have finite set of parameters. 
+e.g. linear regression, linear perceptron\\
+\textbf{Nonparametric}: grow in complexity with the size of the data, more expressive.
+e.g. k-NN
+
+% ===
+\emph{Gradient Descent:}
+
+\begin{highlightbox}
+    \begin{enumerate}
+        \item Pick arbitrary $w_0 \in \mathbb{R}^d$
+        \item $w_{t+1} = w_t - \eta_t \nabla\!_w \hat{R}(w_t)$
+    \end{enumerate}
+    
+    \vspace*{-25pt}\hfill
+    \begin{highlightbox*}<.4>
+    	\footnotesize
+    	$\nabla\!_w = \begin{bmatrix}
+    		\pderiv{}{w_1} & \ldots & \pderiv{}{w_d}
+    	\end{bmatrix}$
+    \end{highlightbox*}
+\end{highlightbox}
+
+% ===
+\emph{Stochastic Gradient Descent (SGD):}
+
+\begin{highlightbox}
+\begin{enumerate}
+    \item Pick arbitrary $w_0 \in \mathbb{R}^d$
+	\item $w_{t+1} = w_t - \eta_t \nabla_w \ell(w_t;x',y')$, with u.a.r.\\ (random) data point $(x',y') \in D$
+\end{enumerate}
+\end{highlightbox}
+
+works if $\sum\limits_t \eta_t=\infty$ and $\sum\limits_t \eta_t^2 < \infty$,
+e.g. $\eta_t \!=\! \frac{1}{t}$

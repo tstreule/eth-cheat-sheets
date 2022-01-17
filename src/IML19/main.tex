@@ -1,0 +1,61 @@
+%! Author = tstreule
+%! Date = 17.01.22
+
+\documentclass[%
+    ,a4paper
+    ,fontsize=9.5pt
+    ,landscape
+    ,pagesize
+    ,headinclude
+    ]{scrartcl}
+\usepackage[margin=7mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\input{../preamble}
+\usepackage{../shortcuts}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphic path
+
+% >>> [BEGIN] (Re-)formatting >>>
+\providecommand*{\myiff}{\ensuremath{{\;\Leftrightarrow\;}}}
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Introduction to Machine Learning}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+    \input{../disclaimer}
+
+    \begin{multicols*}{4}
+
+        % Suppress enumeration of sections
+        %\setcounter{secnumdepth}{0}
+
+        \maketitle
+
+        \input{sections/Basics}
+        \input{sections/Regression}
+        \input{sections/Classification}
+        \input{sections/Kernels}
+        \input{sections/Imbalance}
+        \input{sections/Multi-class}
+        \input{sections/NeuralNetworks}
+        \input{sections/Clustering}
+        \input{sections/DimensionReduction}
+        \input{sections/ProbabilityModeling}
+        \input{sections/DecisionTheory}
+        \input{sections/Generative}
+        \input{sections/Latent}
+        \input{sections/Math}
+
+    \end{multicols*}
+\end{document}

@@ -1,0 +1,60 @@
+\section{Example Section}
+
+\subsection*{Subsection w/o Numbering}
+
+\subsection{Fonts}
+
+Normal --
+\textit{Italic} -- % \itshape
+\textbf{Bold} -- % \bfseries
+\textbf{\textit{BoldItalic}}
+\\
+{\minionpro MinionPro} --
+%{\whitney Whitney} ---
+\textrm{Serif} -- % \rmfamily
+\textsf{Sans Serif} -- % \sffamily
+\texttt{Mono} % \ttfamily
+\\
+{\tiny tiny} --
+{\scriptsize scriptsize} --
+{\footnotesize footnotesize} --
+{\small small} --
+{\normalsize normalsize} --
+{\large large} --
+{\Large Large} % -- LARGE -- huge -- Huge
+\\
+\begingroup%\whitney
+\tiny tiny --
+\scriptsize scriptsize --
+\footnotesize footnotesize --
+\small small --
+\normalsize normalsize --
+\large large --
+\Large Large % -- LARGE -- huge -- Huge
+\endgroup
+
+
+\subsection{General}
+
+\emph{Equation box:}\\
+\highlight{$a^2+b^2=c^2$}
+
+\emph{Algorithm:}\\
+\algobox[.5]{%
+    \begin{enumerate}
+        \item Do this
+        \item[$\bullet$] Then do that
+    \end{enumerate}
+}
+
+\emph{Table:}\\
+{
+\def\arraystretch{1.2}
+\begin{tabularx}{\linewidth}{XX}
+    \toprule
+    blah & blah \\
+    \midrule
+    blah & blah \\
+    \bottomrule
+\end{tabularx}
+}

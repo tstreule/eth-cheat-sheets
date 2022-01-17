@@ -1,0 +1,85 @@
+\section{Basics}
+% ===
+
+\begin{itemize}
+    \item General p-norm:\enskip
+        $\norm{x}_p = \paren{\sum_{i=1}^n \abs{x_i}^p}^{1/p}$
+    \item Taylor:\enskip
+        $f(a) + \frac{f'(a)}{1!}(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \ldots$
+        \begin{itemize}
+            \item $f(\bm a) + \pderiv{f(\bm x)}{\bm x}\big\vert_{\bm a} - \frac12 (\bm x - \bm a)^\top \paren*{\frac{\partial^2 f(\bm x)}{\partial \bm x \partial \bm x^\top}}\big\vert_{\bm a} (\bm x - \bm a)$
+            \vspace{-2pt}
+            \item Power series of exp.:\enskip
+                $\exp(x) \coloneqq \sum_{k=0}^\infty \frac{x^k}{k!}$
+        \end{itemize}
+    \item Entropy:\enskip
+        $H(X) = \E[X]{-\log \P{X=x}}$
+    \item Diverg.:\enskip
+        $D\ped{KL} (P\parallel Q) = \sum_{x\in\mathcal X}    P(x)\log\paren*{\frac{P(x)}{Q(x)}} \geq 0$
+    \item $1-z \leq \exp(-z)$
+    \item Cauchy-Schwarz:\enskip
+        $\abs*{\E{X,Y}}^2 \leq \E{X^2} \E{Y^2}$
+    \item Jensen, $f(X)$ convex:\enskip
+        $f(\E{X}) \leq \E{f(X)}$
+\end{itemize}
+
+% ===
+\subsection{Probability / Statistics}
+
+\vspace{-2pt}
+\begin{itemize}
+    \item Gaussian:
+        $\Gauss{x \mid \mu, \sigma^2} = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\paren*{-\frac12 \frac{(x-\mu)^2}{\sigma^2}}$
+        \\
+        $\Gauss{\bm{x \vert \mu,\!\Sigma}} {=} \frac{1}{\!\!\!\!\!\!\!\sqrt{(2\pi)^d \abs{\bm\Sigma}}} \exp \left( {-}\frac{1}{2} (\bm x {-} \mu)^\top \bm \Sigma^{-1}\! (\bm x {-} \mu) \right)$
+        % \\
+        % $\ln(\Gauss{}) {=} {-} \frac{\ln\abs{\bm\Sigma}}{2} {-} \frac12 (\bm x{-}\bm\mu)\!^\top \bm\Sigma^{-1} (\bm x{-}\bm\mu) + const$%{-} \frac{d}{2} \ln(2\pi)
+        \\
+        $X{\sim}\Gauss{\bm{\mu,\Sigma}}, Y{=}A{+}BX \Rightarrow Y{\sim}\Gauss{A{+}B\bm\mu, B\bm\Sigma B\!^\top}$
+    \item Binom.: $f(k,n;p) = \P{X=k} = \binom nk p^k (1-p)^{n-k}$
+    \item $\V{X} = \E{(X-\E{X})^2} = \E{X^2} - \E{X}^2$
+        \\
+        $\V{X+Y} = \V{X} + \V{Y} + 2\Cov{X,Y}$
+    \item $\Cov{X,Y} = \E{(X-\E{X})(Y-\E{Y})}$\\
+        $\phantom{\Cov{X,Y}} = \E{XY} - \E{X}\E{Y}$
+        \\
+        $\Cov{aX,bY} = ab\Cov{X,Y}$
+\end{itemize}
+
+% ===
+\subsection{Calculus}
+
+\begin{itemize}
+    \item $\int u v' \diff x = u v - \int u' v \diff x$
+        \quad\textbullet\,
+        $\pderiv{}{x} \frac{g}{h} = \frac{g'h}{h^2} - \frac{gh'}{h^2}$
+    \item $\pderiv{}{\bm x} (\bm b^\top \bm{Ax}) = \bm A^\top \bm b$
+        \quad\textbullet\,
+        $\pderiv{}{\bm x} (\bm b^\top\bm  x) = \pderiv{}{\bm x} (\bm x^\top\bm  b) = \bm b$
+    \item $\pderiv{}{\bm X} (\bm c^\top \bm X^\top \bm b) = \bm{bc}^\top$
+        \quad\textbullet\,
+        $\pderiv{}{\bm X} (\bm c^\top \bm{Xb}) = \bm{cb}^\top$
+    \item $\pderiv{}{\bm x} (\bm x^\top \bm{Ax}) = (\bm A^\top + \bm A)\bm x \overset{\bm A\textrm{ sym.}}{=} 2\bm{Ax}$
+    \item $\pderiv{}{\bm X} T\!r(\bm X^\top \bm A) = \bm A$
+        \quad\textbullet\,
+        Tr. trick: $\bm x^\top \bm{Ax} \overset{\small\substack{\textrm{inner prod.}}}{=} T\!r (\bm x^\top \bm{Ax}) \overset{\small\substack{\textrm{cyclic permut.}}}{=} T\!r(\bm{xx}^\top \bm A) = T\!r(\bm{Axx}^\top)$
+    \item $\abs{\bm X^{-\!1}} = \abs{\bm X}^{-\!1}$
+        \hfill\textbullet\,
+        $\pderiv{}{\bm X} \log \abs{\bm X} = \bm X^{-\top}$
+        \hfill\textbullet\,
+        $\deriv{}{x} \abs x = \frac{x}{\abs x}$
+    \item $\pderiv{}{\bm x} \norm{\bm x}_2 = \pderiv{}{\bm x} (\bm x^\top \bm x) = 2\bm x$
+        \quad\textbullet\,
+        $\pderiv{}{\bm x} \norm{\bm x - \bm b}_2 = \frac{\bm x-\bm b}{\norm{\bm x-\bm b}_2}$
+    \item $\pderiv{}{\bm x} \norm{\bm x}_1 = \mathrm{sgn}(\bm x)$
+        \quad {\small $\color{gray}\mathrm{sgn}(\bm x) {\in} \{\pm1\}^p \text{ is row-wise}$}
+    \item $\sigma(x) = \frac{1}{1 + \exp(-x)} \implies \nabla\sigma(x) = \sigma(x)(1-\sigma(x))$
+    %\item $\sigma(x) {=} \frac{1}{1 + \eu^{-x}} = \frac{\eu^x}{\eu^x + 1}$
+    %    \hfill\textbullet\,
+    %    $\sigma'(x) {=} \sigma(x) (1 {-} \sigma(x)) {=} \sigma(x) \sigma(-x)$
+    \item $\tanh x {=} \frac{2\sinh x}{2\cosh x} {=} \frac{\eu^x - \eu^{-x}}{\eu^x+\eu^{-x}}$
+        \;\textbullet\,
+        $\nabla\!\tanh x {=} 1\!-\tanh^2\! x$
+\end{itemize}
+
+% ===

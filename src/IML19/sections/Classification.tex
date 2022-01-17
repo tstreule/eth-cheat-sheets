@@ -1,0 +1,47 @@
+\section{Classification}
+
+Solve $w^* = \arg\min\limits_w \hat R(w)$, \highlight{$y=\operatorname{sign}(w^\top x)$}
+
+$\hat R(w) = \frac{1}{n} \sum_{i=1}^n \ell(w;x_i,y_i)$, \enskip $\nabla\!_w \hat R = \frac{1}{n} \sum_n \nabla\!_w \ell$%\enskip$\ell$: loss function
+
+% ===
+\emph{0/1 loss:}
+$\normalcolor\to$ intractable
+
+$\ell_{0/1} (w;x_i,y_i) = [y_i \neq \operatorname{sign}(w^Tx_i)] \color{gray}\in \{0,1\}$
+
+% ===
+\emph{Perceptron algorithm:}
+$\normalcolor\to$ use $\normalcolor\ell_P$ and SGD
+
+$\ell_P (w;x_i,y_i) = \max(0, -y_i w^\top x_i)$
+
+%$\nabla\!_w \hat R(w) = \frac{1}{n}\sum_{i=1}^n \nabla\!_w \ell_P(w;x_i,y_i)$
+
+$\nabla\!_w \ell_P(w;x_i,y_i) = 
+\begin{cases}
+    0 &\text{if } y_i w^\top x_i \geq 0\\
+    -y_i x_i &\text{otw. \color{gray}(incorrect)}
+\end{cases}$
+
+Data lin. separable $\Rightarrow$ obtains a lin. separator
+
+% ===
+\emph{Support Vector Machine (SVM):}
+$\normalcolor\to$ \textbf{Hinge}
+
+$\ell_H(w;x_i,y_i) = \max(0,{\color{red}1}-y_i w^T x_i)$
+
+$\hat R(w) = \frac{1}{n}\sum_n \ell_H + \lambda\norm{w}_2^2$, \enskip $\nabla\!_w \hat R = \ldots + 2\lambda w$
+
+%$\nabla\!_w \hat R(w) = \frac{1}{n}\sum_{i=1}^n \nabla\!_w \ell_P(w;x_i,y_i) + 2\lambda w$
+
+$\nabla_w \ell_H(w;x_i,y_i) = 
+\begin{cases}
+    0 &\text{if } y_iw^\top x_i \geq {\color{red}1}\\
+    -y_i x_i &\text{otw.}
+\end{cases}$
+
+$w_{t+1} \leftarrow w_t(1-2\eta_t\lambda) + y_ix_i\eta_t\,[y_iw^\top x_i < 1]$
+
+For \textbf{L1-SVM} (feature selection) use $\norm{w}_1$ 

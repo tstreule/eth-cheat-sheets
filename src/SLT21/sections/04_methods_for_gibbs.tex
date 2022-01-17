@@ -1,0 +1,174 @@
+\section{Methods for intractable Gibbs distr.}
+
+% Problem: How to sample from $p(c) = \frac{1}{\textcolor{red}{Z}} f(c)$?
+
+% ===
+\subsection{Sampling and SA}
+
+\textit{Well behaving} \emph{Markov Chains} are
+\begin{itemize}
+    \item \textbf{irreducible:} can go from/to any state, and
+    \item \textbf{aperiodic:} doesn't go ``back\&forth'' forever.
+\end{itemize}
+
+$\implies$ \textbf{Stationary dist.} \highlight{$p(c') = \sum_c \pi(c\mid c') p(c)$}
+
+$\iff$ \textbf{det. balance} \highlight*{$\pi(c'\mid c) p(c) = \pi(c\mid c') p(c')$}
+
+\emph{Metropolis-Hastings:}
+Assume $p(c) \propto f(c)$.
+
+$\pi(c'\mid c) \coloneqq
+\begin{cases}
+    q(c'\mid c) \: A(c,c') & c\neq c'\\
+    1 - \sum_{c'\neq c} q(c'\mid c) \: A(c,c') & \text{otw.}
+\end{cases}$
+
+where\enskip
+$q(c'\mid c) :$ prob. to propose the move $c \to c'$,\\
+and\enskip
+$A(c,c') \coloneqq \min\brace*{ 1, \frac{q(c\mid c') \: f(c') \: / \: \cancel{Z}}{q(c'\mid c) \: f(c) \: / \: \cancel{Z}} }$ prob. accept move
+
+\emph{Metropolis Algorithm:}\enspace
+Assume $p(c) \propto f(c)$ and $q(c'\mid c) = q(c\mid c')$, i.e. symmetric.
+
+\begin{highlightbox}
+\begin{enumerate}
+    \item Define symmetric $\brace{ q(\cdot\mid c) }_{c\in\mathcal C}$ s.t. graph $G_q$ is connected and every vertex in $G_q$ has edge to itself.
+    \item $c_0 \leftarrow \$$
+        \qquad Then, for $t=1,2,\ldots$, do:
+    \begin{itemize}
+        \item $\tilde c \leftarrow q(\cdot\mid c_{t-1})$ \quad // sample
+        \item $b \leftarrow \mathrm{Bern}\paren*{\min\brace*{ 1, \eu^{-\frac1T [R(\tilde c, X) - R(c_{t-1}, X)]} }}$ % A(c_{t-1}, c)
+        \item If $b=1$ then $c_t \leftarrow \tilde c$ else $c_t \leftarrow c_{t-1}$.
+    \end{itemize}
+\end{enumerate}
+\end{highlightbox}
+
+$\pi(c'\mid c) = \{ \substack{\cdots\\\cdots} \enskip\color{gray} \leftarrow \text{c.f. scr. (2.7)}$
+
+\iffalse
+    % ===
+    \subsection{Sampling Gibbs distributions}
+    
+    \emph{Markov Chains:}
+    \textit{``Well behaving''} MC's are\\
+    \textbf{irreducible}: can go from/to any state, and
+    \textbf{aperiodic}: chain doesn't go ``back\&forth'' forever.% $\to p(c\vert c) > 0.5$.
+    %\:\:$\Rightarrow$\:\:
+    \\$\Rightarrow$
+    \textbf{Stationary dist.} \highlight{$\sum_c \pi(c ) p(c\vert c') = \pi(c')$}\\ %$\pi P {=} \pi$
+    iff. \textbf{det. balance:} \highlight{$\pi(c) p(c'\mid c) = \pi(c') p(c\mid c')$} %, $\forall c, c' {\in} \mathcal C$.
+    
+    \emph{Metroplolis Scheme:}
+    $P(i,j) = q(i,j) A(i,j)$ for $i\neq j$ where $q(i,j)$ is the probability to propose move $i\to j$ and $A(i,j)$ is the probability to accept the move.
+    
+    \emph{Metropolis-Hastings (MCMC):}\\
+    $\to$ disadvantage: is only fast when $T$ is high\\
+    \begin{minipage}{\linewidth}
+        \algobox{
+            \begin{enumerate}
+                \item Define $\brace{ q(\cdot\mid c) }_{c\in\mathcal C}$ s.t. $G_q$ is connected, and $q(c\mid c) > 0$, for $c \in \mathcal C$.
+                \item
+                    \begin{itemize}
+                        \item $c_0 \leftarrow \$$
+                        \item \texttt{for t=1,2,\ldots}
+                        \begin{itemize}
+                            \item $\tilde c \leftarrow q(\cdot\mid c_{t-1})$
+                            \item $b \leftarrow \mathrm{Bern}\paren*{\min\brace*{1, \frac{q(c_{t-1}\,\vert\,\tilde c) \;\cdot\; f(\tilde c)}{q(\tilde c\,\vert\, c_{t-1}) \;\cdot\; f(c_{t-1})}}}$
+                            \item if $b=1$ then $c_t \leftarrow \tilde c$ else $c_t \leftarrow c_{t-1}$
+                        \end{itemize}
+                    \end{itemize}
+            \end{enumerate}
+        }
+        % ===
+        \begin{minipage}{\linewidth}
+            \vspace{-75pt}
+            \hspace*{58pt}
+            $\overbrace{
+                \phantom{a\qquad\qquad\!\! a)}
+            }^{
+                \substack{
+                    \text{acceptance}\\
+                    \hspace{30pt}
+                    A(c,\tilde c) \,=\, \exp(-\frac1T \brack{ R(\tilde c, X) - R(c,X)})
+                }
+                %A(c,\tilde c) \,\triangleq\, \text{acceptance}
+            }$
+        \end{minipage}
+    \end{minipage}
+\fi
+
+\emph{Simulated annealing:}
+Gradually decrease temp. $T$ to escape bad local minima.
+$\to$ MH-sampling from Gibbs (DA does not sample!).
+
+% ===
+\subsection{Laplace's Method \quad\normalfont\sffamily (Least angle clust.)}
+
+\begin{enumerate}
+    \item \textit{Square the cost:}\quad
+        $\eu^{-\frac1T R(c,X)} = \mathit{const} \cdot \eu^{g(c)^\top g(c)}$
+    \item \textit{Complete the square:}\quad
+        \highlight{$\int \eu^{-\frac1T (y - g(c))^2} \diff y = (\pi T)^{d/2}$}\\
+        $\Rightarrow$ $\eu^{g(c)^\top g(c)} = (\pi T)^{-d/2} \int \exp^{-y^\top y + 2 y^\top g(c)} \diff y$
+    \item \textit{Rewrite normalisation constant:}\\
+        $Z = \sum_c \eu^{-\frac1T R(c,X)} = \ldots = \mathit{const} \int \eu^{-\frac1T f(y)} \diff y$
+    \item \textit{Apply Laplace's method:}\\\vspace{-2pt}
+        If $f$ has unique min. $y_0$ and Hessian $H\coloneqq \pderiv[2]{f}{y}\big\vert_{y_0}$\\\vspace{-2pt}
+        \highlight*{$\int \eu^{-\frac1T f(y)}\diff y \overset{\scriptstyle(T\to0)}{\approx} \eu^{-\frac1T f(y_0)} \abs*{\frac{H}{2\pi T}}^{-1/2}$}
+\end{enumerate}
+
+% \todo{\texttt{slt21\_lecture05\_1.pdf}}
+
+% ===
+\subsection{Mean-field Approximation}
+
+\textbf{Idea:}\enskip
+Approximate $p_\beta$ (Gibbs) with a ``simple'', \\\phantom{\textbf{Idea:}}\enskip
+factorisable distribution $p = p_1 \cdots p_N$.
+
+\textbf{Approach:}\enskip
+Minimise $D\ped{KL}(p\parallel p_\beta)$\\
+$\iff$ Minimise \emph{Gibbs free energy:}\\
+\hfill \highlight*{$G(p) = \frac1\beta D\ped{KL} (p\parallel p_\beta) + F(\beta) = \E[c\sim p]{R(c)} - \frac1\beta H[p]$}
+
+\quad \textit{Note:}\enskip
+\highlight{$H[p] = \sum_{i=1}^N H[p_i]$} \enskip \textit{and} \enskip \highlight{$F(\beta) \leq G(p)$}
+
+\emph{Ising model:}\enskip
+$R(c\mid J) = -\frac12 \sum_{i,j} J_{ij} c_i c_j - \sum_i h_i c_i$
+\\
+where $J_{ij}$:\, interaction between particles,\\\phantom{where}
+$h_i$:\, noisy image,\enskip
+$\sigma_i$:\, denoised image
+
+\textbf{Problem:} \quad $\pderiv{G(p)}{p_{i\ell}} = 0$ \enspace s.t.\enspace $\sum_{\ell'} p_{i\ell'} = 1 \: \forall i$
+
+\textbf{Solution:}\quad
+with the \textit{mean field} $h_i = [\cdots h_{i\ell} \cdots]^\top$
+\\
+\highlight*{$h_{i\ell} \coloneqq \pderiv{\E{R(c)}}{p_{i\ell}} = \E[c\sim p_{\mid i\to\ell}]{R(c)}$} $\leftarrow \substack{\text{object }i\text{ chooses}\\\text{class } \ell}$
+\\
+\highlight*{$p_{i\ell} = \eu^{-\beta h_{i\ell}} / Z_i$}
+
+\textbf{EM-like Algo:}\enspace
+Iteratively \enspace
+1.~Pick~random $i$ \enspace
+2.~$h_i^{\mathrm{new}} {\leftarrow} p_j^{\mathrm{old}}$ \enspace
+3.~$p_i^{\mathrm{new}} {\leftarrow} h_i^{\mathrm{new}}$ \enspace
+until converged.
+
+\subsubsection{Smooth \textit{\rmfamily k}-means
+\qquad\normalfont\sffamily\color{gray}scr.20 (p. 39)}
+
+$R(c\mid X) =
+{\color{Green} \sum_i \lVert x_i - y_{c_i} \rVert^2}
++
+{\color{OrangeRed} \frac\lambda2 \sum_i \sum_{j\in N(i)} \mathbb I_{\{c_i \neq c_j\}}}$
+\\
+where the second term measures {\color{OrangeRed} \#violations} of these neighbourhood constraints.
+
+$\implies h_{i\ell} = \norm{x_i - y_\ell}^2 + \lambda \sum_{j\in N(i)} p_{j\ell} + \mathit{const}_i$
+
+% ===

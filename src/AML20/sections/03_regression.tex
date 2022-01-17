@@ -1,0 +1,51 @@
+\section{(Linear) Regression \quad
+{\normalfont\sffamily model: $\color{section-text-color} \hat{\mathbf y} = \bm X \beta$}}
+
+% ===
+
+Assuming $\bm X^\top \bm X$ non-singular. %$\hat\beta\ped{Linear}$ has smallest variance among linear \underline{unbiased} estimates.
+
+Bayesian view:\;
+$(Y \mid X,\beta) \sim \Gauss{\bm x^\top \beta, \sigma^2 \mathbb I}$
+
+Distrib. of estimator
+$\hat\beta\ped{LS} \sim \Gauss{\beta, (\bm X^\top \bm X)^{-1} \sigma^2}$
+
+
+\emph{Ridge:}
+$\epsilon\ped{RSS}(\beta,{\color{OrangeRed}{\lambda}}) = \paren{\bm y - \bm X^\top \!\beta}^\top \paren{\bm y - \bm X^\top \!\beta} \color{OrangeRed} {+} \lambda \beta^\top \!\beta$
+\\
+$\hat\beta = (\bm X^\top \bm X \begingroup \color{OrangeRed} + \lambda \mathbb I \endgroup)^{-1} \bm X^\top \bm y$,
+\quad prior: $\beta \sim \Gauss{0, \frac{\sigma^2}{\lambda} \mathbb I}$
+
+\emph{(Ridge) Shrinkage:}
+Decompose $\bm X = \bm{UDV}^\top$\\
+$\bm X \hat\beta = \bm{UD} (\bm D^2 {+} \begingroup \color{OrangeRed} \lambda \mathbb I \endgroup)^{-1} \bm{DU}^\top \bm y = \sum\limits_{j\leq d} \bm u_j \frac{d_j^2}{d_j^2 \begingroup \color{OrangeRed} + \lambda \endgroup} \bm u_j^\top \bm y$
+
+\emph{Lasso:}
+%$\epsilon\ped{RSS}(\beta,\lambda) = \sum_{i\leq n} (y_i - x_i^\top \beta)^2 + \lambda \norm{\beta}_1$
+$\hat\beta = \arg\min_\beta \sum_{i\leq n} (y_i - x_i^\top \beta)^2 \color{OrangeRed} + \lambda \norm{\beta}_1$
+\\
+\textit{(no closed form)},
+\hfill prior: $p(\beta_i) {=} \frac{\lambda}{4\sigma^2} \exp(-\abs{\beta_i} \frac{\lambda}{2\sigma^2})$
+
+
+\emph{Bias-variance:}
+$\E[D]{ \E[Y\mid X=x]{ (\hat f(x) - Y)^2 } }$
+{\small ${=} \E[D]{ (\hat f(x) {-} \E[D]{\hat f(x)})^2 } + \paren*{ \E[D]{\hat f(x)} {-} \E{Y\vert X=x} }^2$}
+$+ \E{ (Y - \E{Y\vert X=x})^2 }$
+$= variance + bias^2 + noise$
+
+
+\emph{Gauss-Markov Theorem:}\\
+For any linear estimator $\widetilde\theta = c\!^\top \bm y = a\!^\top (\hat\beta {+} \bm{Dy})$ that is unbiased for $a^\top \beta$, it holds: $\V{a^\top \hat\beta} \leq \V{c^\top \bm y}$.
+
+Among all linear \textbf{u}-estimators, $\hat\beta\ped{LS}$ minimises the gen. error!
+\enskip
+What about \textbf{biased} estimators? We \rotatebox[origin=c]{45}{$\to$} bias a bit in the hope that the variance \rotatebox[origin=c]{-45}{$\to$}.
+
+\emph{Combining Regressors:} $\hat f(x) \coloneqq \frac1B \sum_{i\leq B} \hat f_i(x)$\\
+$\mathrm{bias} [\hat f(x)] = \frac1B \sum \mathrm{bias} [\hat f_i(x)]$\\
+$\V{\hat f} = \frac{1}{B^2} \sum \V[D]{\hat f_i} + \frac{1}{B^2} {\sum\sum}_{i\neq j} \Cov{\hat f_i, \hat f_j} \approx \frac{\sigma^2}{B}$
+
+% ===

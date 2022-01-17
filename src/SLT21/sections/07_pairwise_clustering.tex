@@ -1,0 +1,147 @@
+\section{Graph-based Clustering}
+
+% ===
+%\textbf{Metric} relational data:
+%relations correspond to Euclidean distances.
+
+\textbf{Non-metric relations:}
+might assume negative values or violate the triangular inequality.
+
+% ===
+\emph{Setting:}\enspace
+objects $\bm o_i, \bm o_j \in \mathcal O$;\:
+relations with weights $\mathcal D \coloneqq \{ D_{ij} \}$ on the edges $(i, j)$.
+\\
+\begin{itemize}
+    \item Cluster $\alpha$:\enskip
+        $\mathcal G_\alpha \equiv \brace{\bm o\in \mathcal O : c(\bm o) = \alpha}$
+    \item Inter-cluster edges:\enskip
+        $\mathcal E_{\alpha\beta} = \brace{(i,j) \in \mathcal E : \bm o_i \in \mathcal G_\alpha \land \bm o_j \in \mathcal G_\beta}$
+    \item $\mathrm{cut}(A,B) = \sum_{i\in A, j\in B} W_{ij}$\enskip
+        {\small $\to$ weight matrix $W$}
+    \item $\mathrm{assoc}(A,\mathcal V) = \sum_{i\in A, j\in \mathcal V} W_{ij}$
+        \enskip{\small $\to$ total connection strength from nodes in $A$ to all nodes in the graph}
+\end{itemize}
+
+\emph{Correlation clustering:}\\
+%Maximise agreement within cluster and disagr. between clusters.
+Minimise the sum of \textit{pairwise} intracluster distances.
+
+\begin{tabular}{@{} l @{} l @{}}
+    $R\ap{cc} (c; \mathcal D)$ &
+        $= - \sum\limits_{\nu\leq k} \: \sum\limits_{(i,j) \in \mathcal E_{\nu\nu}} S_{ij} + \sum\limits_{\nu\leq k} \: \sum\limits_{\substack{\mu\leq k \\ \color{red}\mu\neq\nu}} \: \sum\limits_{(i,j) \in \mathcal E_{\nu\mu}} S_{ij}$
+    \\ &
+        $= - \textcolor{red}{2}\sum\limits_{\nu\leq k} \: \sum\limits_{(i,j)\in \mathcal E_{\nu\nu}} S_{ij} + \cancel{ \sum\limits_{(i,j)} S_{ij} }$
+    \\ &
+        \quad $\hookrightarrow$ intra-cluster
+        \quad $\hookrightarrow$ const
+    \\
+    \multirow{2}{*}{\small \shortstack{up to \\ thresh. $u$}} &
+        $\overset{\ast}{=}- \frac12 \sum\limits_{\nu\leq k} \: \sum\limits_{(i,j) \in \mathcal E_{\nu\nu}} (\abs{S_{ij} {-} u} + S_{ij} {-} u)$
+    \\ &
+        $\phantom{=} + \frac12 \sum\limits_{\nu\leq k} \: \sum\limits_{\substack{\mu\leq k \\ \color{red}\mu\neq\nu}} \: \sum\limits_{(i,j) \in \mathcal E_{\nu\mu}} (\abs{S_{ij} {+} u} - S_{ij} {-} u)$
+    \\ \multicolumn{2}{@{\quad}l}{
+        \small $\ast :$ altern. def. where $\frac12 (\abs{X} \pm X) = \max \{ 0, \pm X \}$
+    }
+\end{tabular}
+
+\columnbreak
+\emph{Graph partitioning:}
+\quad $D_{ij} \in \mathbb R$\\
+\begin{tabular}{@{} l @{} l @{}}
+    $R\ap{gp} (c; \mathcal D)$ &
+        $= \mathit{const} - \sum_{\nu\leq k} \mathrm{cut} \paren{ \mathcal G_\nu (\mathcal D), \mathcal V \setminus \mathcal G_\nu (\mathcal D) }$
+    \\ &
+        $= \mathit{const} + \sum_{\nu\leq k} \mathrm{cut} \paren{ \mathcal G_\nu (\mathcal S), \mathcal V \setminus \mathcal G_\nu (\mathcal S) }$
+\end{tabular}
+
+\emph{Bias in \textit{\rmfamily R(c;D)}:}\enspace
+Cost should scale prop. to \#objects,\\
+i.e. $R(c;D) = \mathcal O(n)$.
+\qquad $\ast: \text{ use } D_{ij} = D(1 - \delta_{ij})$
+
+\textbf{Tipp:}\enspace
+$\frac{\mathrm{cut}(\mathcal G_\alpha, \mathcal V \backslash \mathcal G_\alpha)}{\mathrm{assoc}(\mathcal G_\alpha, \mathcal V)}
+\overset\ast= \frac{n\cdot p_\alpha \cdot n(1-p_\alpha) \cdot D}{n\cdot p_\alpha \cdot n \cdot D} = 1 - p_\alpha$
+
+% ===
+\subsection{Pairwise Clustering}
+
+\emph{Cost:}\enspace
+$R\ap{pc} (c; \mathcal D)
+= \sum\limits_\alpha \sum\limits_{(i,j) \in \mathcal E_{\alpha\alpha}} \frac{D_{ij}}{\abs{\mathcal G_\alpha}}
+\color{gray}
+= \sum\limits_\alpha \sum\limits_{(i,j) \in \mathcal E_{\alpha\alpha}} \abs{\mathcal G_\alpha} \frac{D_{ij}}{\abs{\mathcal E_{\alpha\alpha}}}$
+
+\emph{Equivariance to \textit{\rmfamily k}-means:}
+{\small\color{gray}\quad(if $\color{gray} D_{ij} = \norm{\bm x_i - \bm x_j}^2$)}\\
+$\sum\limits_{i\leq n} \norm{\bm x_i - \bm y_{c(i)}}^2 = \sum\limits_{i\leq n} \sum\limits_{j\leq n} \sum\limits_{\alpha\leq k} \frac{\mathbb I_{\brace{c(i) = \alpha}} \mathbb I_{\brace{c(j) = \alpha}}}{\abs{\mathcal G_\alpha}} D_{ij}$
+
+
+\emph{Invariance properties:}\\
+\begin{itemize}
+    \item Symmetrisation:
+        \enskip $R\ap{pc} (c; \mathcal D\ap{s}) \equiv R\ap{pc} (c; \mathcal D)$
+    \item Off-diagonal shift:
+        \enskip $R\ap{pc} (c; \tilde{\mathcal D}) = R\ap{pc} (c; \mathcal D) - \lambda\ped{min}\cdot n$
+\end{itemize}
+
+\emph{Theorem:}\enspace
+If $S\ap{c}$ is p.s.d., then $D$ derives from squared Eucl. space.
+$\implies$ Make $S$ \textbf{p.s.d.}: \enskip $\tilde S \coloneqq S - \lambda\ped{min} \mathbb I$
+
+\emph{Constant Shift Embedding:}\\
+\begin{enumerate}
+    \item \textbf{Symmetrise} $D \to D\ap{s}$:
+        \enskip $\highlight*{D_{ij}\ap{s}} \coloneqq \frac12 (D_{ij} + D_{ji})$
+    \item \textbf{Centralise} $D$, then $S$:
+        \enskip $X\ap{c} \coloneqq Q X\ap{s} Q^\top$\\
+        $Q = \mathbb I - \frac1n \bm e_n \bm e_n^\top$
+        \qquad \highlight*{$S\ap{c} = -\frac12 D\ap{c}$}\\
+        $X\ap{c}_{ij} = X_{ij} - \frac1n \sum_k X_{ik} - \frac1n \sum_k X_{kj} + \frac{1}{n^2} \sum_{k,\ell} X_{k\ell}$\\
+        $\implies$ sum over column/rows = 0
+    \item \textbf{(Off-)Diagonal shift}:
+        \enskip Find $\lambda\ped{min}$ of $S\ap{c}$\\
+        $\highlight*{\tilde S} \coloneqq S\ap{c} - \lambda\ped{min} \mathbb I$
+        \qquad $\tilde D \coloneqq D - \lambda\ped{min} (\bm 1 - \mathbb I)$\\
+        $\highlight*{\tilde D_{ij}} = \tilde S_{ii} + \tilde S_{jj} - 2 \tilde S_{ij} \color{gray} = \norm{\bm x_i - \bm x_j}^2$
+\end{enumerate}
+
+\emph{Reconstruction:}\\
+\begin{enumerate}
+    \item EVD:
+        \enskip \highlight*{$\tilde S = \bm V \Lambda \bm V^\top$}
+        \enskip via \enskip $(\tilde S - \lambda \mathbb I) \bm v \overset!= 0$
+        \enskip $\color{gray} (\abs{\bm v} = 1)$\\
+        where \: $\Lambda {=} \mathrm{diag}(\lambda_1 \ldots \lambda_n)$
+        \: and \: $\bm V {=} [\bm v_1 \ldots \bm v_n]$
+    \item Find $p$ s.t. $\lambda_1 \geq \ldots \lambda_p > \lambda_{p+1} = \ldots = \lambda_n = 0$
+    \item $\implies \highlight*{\bm X_p} = \bm V_p (\Lambda_p)^{1/2}$
+        \enskip (each row is a vector)
+    \item $\implies \bm X_t = \bm V_t (\Lambda_t)^{1/2}$
+        \enskip (approx. \& denoising)
+\end{enumerate}
+
+\columnbreak
+\emph{Cluster membership of new data:}\\
+\textit{Note:}\enspace $S\ap{new}$ is def. by\enspace $D_{ij}\ap{new} = S_{ii}\ap{new} + \tilde S_{jj} - 2 S_{ij}\ap{new}$
+\begin{enumerate}
+    \item $\begin{aligned}[t]
+        (S\ap{new})\ap{c} = -\tfrac12 \big[ &
+            D\ap{new} (\mathbb I_n - \tfrac1n \bm e_n \bm e_n^\top)
+        \\[-3pt] &
+            - \tfrac1n \bm e_m \bm e_n^\top + \tilde D (\mathbb I_n - \tfrac1n \bm e_n \bm e_n^\top) \big]
+    \end{aligned}$
+    \item Project:
+        \enspace $X_p\ap{new} = (S\ap{new})\ap{c} \bm V_p (\Lambda_p)^{-1/2}$
+    \item Assign:
+        \enskip $\hat c_i = \arg\min_c \norm*{(x_p\ap{new})_i - y_{c(i)}}$
+\end{enumerate}
+
+% ===
+\iffalse
+    \subsection{Alternative Costs}
+    \todo{}
+\fi
+
+% ===

@@ -1,0 +1,57 @@
+\columnbreak
+
+\section{Maximum Entropy Inference}
+
+% ===
+\iffalse
+    Max. entropy via $\partial\mathcal L / \partial p(x) {=} 0$.
+    \quad $\mathcal L$ given by
+    \\
+    $\sup_{p(X)} \left\{ -\sum_x p(x) \log p(x) \right\}$,\;
+    s.t. $\sum_x p(x) = 1$,\;
+    $p(x) \geq 0$,\;
+    $\sum_x p(x) r_j(x) = \mu_j, 1\leq j\leq m$.
+    \\
+    $\implies$
+    \emph{Gibbs dist.:}
+    $p(x) {=} \frac{ \exp(-\sum_j \lambda_j r_j(x)) }{ \sum_{x'} \exp(-\sum_j \lambda_j r_j(x')) }$
+\fi
+
+Sample $c \sim p(\cdot\mid X)$\enspace s.t.\enspace $H[p(\cdot\mid x)]$ is maximal, $\E[C\mid X]{R(C,X)} = \mu$ and $\sum_c p(c\mid X) = 1$.
+\\
+$\implies$
+\emph{Gibbs dist.:}\enspace
+$\highlight*{p(c\mid X) = \frac{1}{Z(X)} \exp(-\beta R(c,X))}$
+%$p(c\vert X) = \frac{ \exp(-\beta R(c,X)) }{ \sum_{\tilde c\in \mathcal C} \exp(-\beta R(\tilde c,X)) }$%$\substack{\\\\ \eqqcolon Z(X)}$
+\\
+\textbf{Free energy:}\enspace $F(X) \coloneqq - \frac1\beta \log Z(X)$ % = -\frac1\beta \log \sum_c \eu^{-\beta R(c,X)}
+\\
+$\iff \highlight*{p(c\mid X)} = \exp\paren*{-\beta [R(c,X) - F(X)]}$
+\\
+$\implies$ \textbf{entropy:}\enspace $H[c\mid X] = \beta \underbracket[.7pt][.7pt]{\E[C\mid X]{R(C,X)}}_{=\mu} - \beta F(X)$
+
+\emph{ME:}\enspace
+\highlight*{$\max H[c\mid X] \iff \max Z(X) \iff \min F(X)$}
+\begin{itemize}
+    \item Exp. generalisation costs:\enspace
+        $\mathbb E_{X''} \cancelto{\mathbb E_C}{\mathbb E_{X'} \mathbb E}_{C\mid X'} \brack{ R(c,X'') }$
+    \item Min. out-of-sample descr. length per deg. of freedom\\
+        $\min\limits_{p(\cdot\mid\cdot)} \mathbb E_{X',X''} \E*[C\mid X']{-\log \frac{p(c\mid X'')}{p(c)}}$\hfill $\color{gray} p(c) = \E[X]{p(c\mid X)}$\\
+        \enspace $\overset{\text{Jensen}}{\geq} \min_{p(\cdot\mid\cdot)} \E*[X',X'']{ -\log \E[C\mid X']{p(c\mid X'')} } - H[c]$\\
+        \enspace $\overset{\phantom{\text{Jensen}}}{=} \max_{p(\cdot\mid\cdot)} \E[X',X'']{\eu^{H[c]} \cdot \kappa(X',X'')}$
+\end{itemize}
+
+%\emph{Goal:}
+%$p(c\mid X) \propto \exp(-\frac1T \mathcal R(c,X))$, \quad $T>0$
+
+
+%\todo{Below to be reviewed \\\hfill $\to$ \texttt{slt21\_lecture03\_notes.pdf}}
+
+\emph{PA:}\enspace
+\highlight*{$T^\ast = \arg\max_T \kappa(X', X'')$}
+\begin{itemize}
+    \item PA-kernel:\enskip $\kappa (X', X'') \coloneqq \sum_c p(c\mid X') p(c\mid X'')$
+    \item combined:\enskip $p(c\mid X', X'') \propto p(c\mid X') p(c\mid X'')$
+\end{itemize}
+
+% ===

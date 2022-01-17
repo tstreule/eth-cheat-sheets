@@ -1,0 +1,71 @@
+%! Author = tstreule
+%! Date = 17.01.22
+
+\documentclass[%
+    ,a4paper
+    ,fontsize=9.5pt % must be 11pt
+    ,landscape
+    ,pagesize
+    ,headinclude
+    ]{scrartcl}
+\usepackage[margin=5mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\usepackage{kpfonts}
+\input{../preamble}
+\usepackage{../shortcuts}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphic path
+
+% >>> [BEGIN] (Re-)formatting >>>
+\setlength\columnsep{7pt}% Column spacing for multicols
+\setstretch{0.9}
+% Sections format
+\def\sectionboxheight{.6em}
+\def\sectionboxvspace{-.3ex}
+\RedeclareSectionCommands[%
+    beforeskip=0ex plus .5ex,
+]{section,subsection,subsubsection}
+% Math color
+\everymath\expandafter{\the\everymath\color{MediumBlue}}
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Advanced Machine Learning}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+    \input{../disclaimer}
+
+    \begin{multicols*}{4}
+
+        % Suppress enumeration of sections
+        %\setcounter{secnumdepth}{0}
+
+        \maketitle
+
+        %\input{sections/_example_}
+        \input{sections/01_basics}
+        \input{sections/02_density_estimation}
+        \input{sections/03_regression}
+        \input{sections/04_gaussian_process}
+        \input{sections/05_linear_classification}
+        \input{sections/06_support_vector}
+        \input{sections/07_ensembles}
+        \input{sections/08_deep_learning}
+        \input{sections/09_model_selection}
+        \input{sections/10_clustering}
+        \input{sections/11_pac_learning}
+
+        \input{sections/99_appendix}
+
+    \end{multicols*}
+\end{document}

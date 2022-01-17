@@ -1,0 +1,118 @@
+\section{Linear Classification
+\hfill $\color{section-text-color} y, \bm z \in\brace{\pm 1}, \enskip \bm z \equiv c(\bm x)$}
+
+% ===
+\begin{tabular}{@{}>{\bfseries}l @{\enskip}l @{\enskip+}l}
+    (1) Prob. gener. & $p(\bm x,y)$ & outlier det. \\
+    (2) Prob. discr. & $p(y\mid\bm x)$ & deg. of belief \\
+    (3) Purely discr. & $c: \bm X \to \bm y$ & easiest
+\end{tabular}
+
+\emph{Loss Functions:}
+\enskip $\mathcal L(y, \bm z)$
+\enskip{$\color{gray} \bm z \coloneqq \bm w^\top \bm x$}\\
+\begin{tabular}{>{$\mathcal L\!$}l @{$\:=\:$}l}
+    $~\ap{CE}$ & $- \brack{ y' \log\bm z' + (1-y') \log (1-\bm z') }$ \\
+    $~\ap{0/1}$ & $\mathbb I \brace{\mathrm{sign}(\bm z) \neq y}$ \\
+    $~\ap{hinge}$ & $\max(0, 1-y\bm z)$ \enskip \textcolor{gray}{for SVM's}\\
+    $~\ap{percep}$ & $\max(0, -y\bm z)$ \\
+    $~\ap{logistic}$ & $\log(1 + \exp(-y\bm z))$ \\
+    $~\ap{exp}$ & $\exp(-y\bm z)$ \enskip \textcolor{gray}{for AdaBoost} \\
+\end{tabular}
+for CE (log loss):\; $y' {=} (1 {+} y) / 2$,\; $\bm z' {=} (1 {+} \bm z) / 2$
+
+% ===
+\subsection{Linear Discriminant Analysis \hfill(1)}
+
+Assume $Y \sim \mathrm{Ber}(\beta)$,\; $P(X\vert Y{=}i) = \Gauss{\mu_i, \Sigma_i}$.
+
+$\Rightarrow P(y_i\mid \bm x_i) = \sigma( \cancel{\bm x_i^\top \bm W \bm x_i} + \bm w\!^\top \bm x_i + w_0)$
+\hfill{$\scriptstyle\color{gray}\text{if }\Sigma_0=\Sigma_1$}
+%$\Rightarrow P(y_i\mid \bm x_i) = \sigma( \underbracket[.7pt][.7pt]{\cancel{\bm x_i^\top \bm W \bm x_i}}_{=0 \text{, if } \Sigma_0=\Sigma_1} + \bm w^\top \bm x_i + w_0)$
+
+\textbf{Min. gener. error.:}\enskip
+$\min_f \E[X,Y]{\mathcal L(y, c(\bm x))}$\\
+\enskip $\rightsquigarrow$
+$c^\ast(\bm x) = \argmin_c \sum_y p(y\mid\bm x) \mathcal L(y, c(\bm x))$
+
+% ===
+\subsection{Prob. discr. approach \hfill(2)}
+
+Assume $P(y{=}1 \mid \bm x_i, \bm w) = \sigma(\bm w^\top \bm x)$,\enskip
+$\implies L(\bm w)$ via
+$P(\bm X, \!\bm Y \mid \bm w)
+= \prod_i P(y_i \mid \bm x_i , \bm w) \color{gray} {\underbracket[.7pt][.7pt]{\the\everymath P(\bm x_i \mid \bm w)}}_{\:\mathit{const} \text{ w.r.t. } \bm w}$
+
+\enskip $\propto \prod_i \sigma(\bm w^\top \!\bm x_i)^{y_i} (1 {-} \sigma(\bm w^\top \!\bm x_i))^{1-y_i}$
+
+\textit{Note:}\enskip
+$\bm w^\ast$ intractable but diff'able $\to$ \textbf{GD}!
+
+% ===
+\subsection{Purely discriminative \hfill(3)}
+\label{purely-discriminative}
+
+\iffalse
+\begin{minipage}{\linewidth}
+    \centering
+    $\E[X,Y]{\mathcal L(Y, c(X))}$
+    \enskip$\rightsquigarrow$\enskip
+    $\frac1n \sum_n \mathcal L(y_i, c(\bm x_i))$
+\end{minipage}
+\fi
+
+\emph{Perceptron:}
+$f(x) = \mathrm{sgn}(\bm w^\top \bm x)$\\
+\textbf{Loss:} $L(\bm w) = \sum_{i : \text{misclass.}} (-y_i \bm w^\top \bm x_i)$
+\enskip use (S)GD
+
+\textbf{Converges if} data is linearly separable,\\\enskip
+and\enskip $\eta(k) {\geq} 0$,\; $\sum_k \eta(k) {\to} \infty$,\; $\sum_k \eta^2(k) {<} \infty$.
+
+% ===
+\emph{Gradient Descent:}
+$N\!L(\bm w) \coloneqq -L(\bm w)$\\
+$\highlight*{\bm w^{(k+1)} \leftarrow \bm w^{(k)} - \eta(k) \cdot \nabla_{\bm w} N\!L(\bm w^{(k)})}$
+
+\textit{Opt. learning rate:} $\eta(k) = \argmin_\eta N\!L(\bm w^{(k+1)})$\\\vspace{-3pt}\enskip
+\scalebox{.75}{$\textrm{(Taylor \& } \pderiv{}{\eta(k)} \overset!= 0)$}\enskip
+$= \frac{\norm{ \nabla N\!L(\bm w^{(k)}) }^2}{ \nabla N\!L(\bm w^{(k)})^\top H_{N\!L}(\bm w^{(k)}) \nabla N\!L(\bm w^{(k)}) }$
+
+\emph{Newton's Method:}
+$\bm w^{(k+1)} \leftarrow \argmin_{\bm w} N\!L(\bm w)$\\\enskip
+\scalebox{.75}{$\textrm{(Taylor \& } \pderiv{}{\bm w} \overset!= 0)$}\enskip\enskip
+$= \bm w^{(k)} - H_{N\!L}^{-1} (\bm w^{(k)}) \nabla N\!L (\bm w^{(k)})$
+
+% ===
+\emph{Fisher's LDA:}
+% Find projection that max. the distance of the projections AND min. the variance
+\\\vspace{-5pt}\hfill
+$J(\bm w) = \frac{\bm w\!^\top \bm\Sigma_B \bm w}{\bm w\!^\top \bm\Sigma_W \bm w}$
+\enskip$\xrightarrow{\color{gray}(\ast)}$\enskip
+$\bm w^\ast \propto \bm\Sigma_W^{-1} (\overline{\bm x}_1 - \overline{\bm x}_2)$
+
+{\everymath\expandafter{\the\everymath\color{gray}}
+\enskip $\ast :
+    {\scriptstyle \pderiv{J(\bm w)}{\bm w} \overset!= 0}
+    \:\rightsquigarrow\:
+    (\cancel{\color{gray} \bm w\!^\top \bm\Sigma_B \bm w}) \bm\Sigma_W \bm w =
+    (\cancel{\color{gray} \bm w\!^\top \bm\Sigma_W \bm w}) \bm\Sigma_B \bm w
+$}
+
+$\bm\Sigma_B = (\overline{\bm x}_1 - \overline{\bm x}_2) (\overline{\bm x}_1 - \overline{\bm x}_2)\!^\top$
+    \hfill{\scriptsize between-class covariance}\\
+$\bm\Sigma_W \!= \sum_k \sum_{\bm x \in \mathcal C_k} (\bm x - \overline{\bm x}_k) (\bm x - \overline{\bm x}_k)\!^\top$\!\!
+    \hfill{\scriptsize within-class covariance}
+
+\iffalse
+    \emph{Fisher's linear discriminant:}
+    Find projection that max. the distance of the projections \;AND\; min. the variance
+    $\Rightarrow \max_w \frac{(\bm w^\top (\overline{\bm x}_0 - \overline{\bm x}_1))^2}{\widetilde{\mathrm{Var}}(\bm w^\top C_0) + \widetilde{\mathrm{Var}}(\bm w^\top C_1)}$
+    \\\enskip
+    where $\widetilde{\mathrm{Var}}(\bm w^\top C_i) = \sum_{i\in C_i} (\bm w^\top \bm x_i - \bm w^\top \overline{\bm x}_0)^2$.
+    \\
+    Solution: $\bm w^\ast \propto S_{\bm W}^{-1} (\overline{\bm x}_0 - \overline{\bm x}_1)$
+    where $S_{\bm W} = \widetilde{\mathrm{Var}}(C_0) + \widetilde{\mathrm{Var}}(C_1)$
+\fi
+
+% ===

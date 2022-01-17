@@ -1,0 +1,85 @@
+\section{Empirical Risk Minimisation (ERM)}
+
+% ===
+\emph{Cost:}\enspace
+$R(c,X,Y) = \sum_{i\leq N} \norm{y_i - c^\top \bm x_i}^2$\quad (regr.) \\
+\quad\textit{or}\quad
+$R(c,X,Y) = \sum_{i\leq N} \max(0, -y_i c^\top \bm x)$\quad (class.) \\
+\quad\textit{or}\quad
+$R(c,\theta,X) = \sum_{i\leq N} \norm{\bm x_i - \theta_{c(i)}}^2$\quad (clust.)
+
+\emph{Goal:}\enspace
+$\arg\min\limits_c \E[\mathcal{X}]{ R(c,\mathcal{X} } \approx \arg\min\limits_c \frac1N R(c, X)$
+
+% ===
+\subsection{Bayesianism / Frequentism}
+
+\emph{Bayesianism:}\enspace
+Define prior $P(\theta)$, define likelihood $P(X\mid\theta)$, compute posterior $P(\theta\mid x_{1...n})$.
+\\
+\textbf{Bayes:}\enspace
+$P(\theta\mid X) = \frac{P(X\mid\theta)P(\theta)}{P(X)}$,
+{\footnotesize $P(X) {=} \sum_\theta P(X\vert\theta_i) P(\theta_i)$}
+
+\emph{Frequentism:}\enspace
+%Define a parametric model $\theta$ (e.g. $\Gauss{\theta,1}$), compute likelihood of data and compute MLE: $\hat\theta\ped{MLE} = \arg\max_\theta P(y_{1...n}\mid\theta)$.
+Define param. model $P(Y\vert X,\theta)$, compute likelihood of data $P((X,Y)\mid\theta)$ and compute $\hat\theta\ped{MLE}$ via $\arg\max_\theta$ of likelihood.
+
+% ===
+\subsection{Linear Regression
+\hfill{\normalfont\sffamily model:\enspace $\color{subsection-text-color} \hat{\mathbf y} = \bm X \beta$}}
+
+\emph{Ridge:}\enspace
+$\epsilon\ped{RSS}(\beta,{\color{OrangeRed}{\lambda}}) = \paren{\bm y - \bm X^\top \beta}^\top \paren{\bm y - \bm X^\top \beta} \color{OrangeRed} + \lambda \beta^\top \beta$ \\\quad
+$\hat\beta = (\bm X^\top \bm X {\color{OrangeRed} + \lambda \mathbb I})^{-1} \bm X^\top \bm y$,
+\quad prior: $\beta \sim \Gauss{0, \frac{\sigma^2}{\lambda} \mathbb I}$
+
+\emph{Lasso:}\enspace
+%$\epsilon\ped{RSS}(\beta,\lambda) = \sum_{i\leq n} (y_i - x_i^\top \beta)^2 + \lambda \norm{\beta}_2$ \\\quad
+$\hat\beta = \arg\min_\beta \sum_{i\leq n} (y_i - x_i^\top \beta)^2 \color{OrangeRed} + \lambda \norm{\beta}_2$ \\\quad
+\textit{(no closed form)},
+\quad prior: $p(\beta_i) = \frac{\lambda}{4\sigma^2} \exp(-\abs{\beta_i} \frac{\lambda}{2\sigma^2})$
+
+
+
+% ===
+% === === === === === === ===
+% ===
+\iffalse
+    \subsection{Estimation - MLE Properties}
+    
+    \emph{Consistency:}
+    $\forall\epsilon>0, \; \mathbb P\{ \abs{\hat\theta_n - \theta^\ast} > \epsilon \} \overset{n\to\infty}{\longrightarrow} 0$
+    
+    \emph{Equivariance:}
+    If $\hat\theta_n$ is MLE of $\theta$, then $g(\hat\theta_n)$ is MLE of $g(\theta)$.
+    
+    \emph{Asympt. normality:}\\
+    $\sqrt{N} (\hat\theta_n - \theta^\ast) \to \Gauss{0,\, J^{-1}(\theta^\ast) I(\theta^\ast) J^{-1}(\theta^\ast)}$%, where $J = -\E*[x\mid\theta^\ast]{\frac{\partial^2 \log \P{x\mid\theta}}{\partial\theta\partial\theta^\top}}$ and $I(\theta_0) \triangleq \textrm{Fisher info}$.
+    
+    \emph{Asympt. efficiency:}
+    $\hat\theta_n$ minimises $\E{(\hat\theta_n - \theta^\ast)^2}$ as $n\to\infty$, i.e. $\E{(\hat\theta_n - \theta^\ast)^2} = \frac{1}{I^{(n)}(\theta^\ast)}$ (Rao Cr.)\\
+    Among all consistent estimators $\hat\theta_n$ has \textit{smallest variance}: $\lim_{n\to\infty} (\V{\hat\theta_n} I^{(n)}(\theta^\ast))^{-1} = 1$
+\fi
+
+% ===
+\iffalse
+    \subsection{Rao Cramer inequality \hfill {\normalfont\footnotesize all $\mathbb E$ w.r.t. $P(x\mid\theta^\ast)$}}
+    %(all $\E{}$ w.r.t. $\P{x\mid\theta^\ast}$)
+    
+    Score func.: $\bm\Lambda = \pderiv{\log\P{x\mid\theta}}{\theta}$,\; $\E[x\mid\theta^\ast]{\bm\Lambda} = 0$\\
+    Fisher info.: $I^{(n)}(\theta) = \V[x\mid\theta^\ast]{\bm\Lambda}$\\
+    $J(\theta) = \E[x\mid\theta^\ast]{\bm\Lambda^2} = -\E*{\frac{\partial^2 \log \P{x\mid\theta}}{\partial\theta\partial\theta^\top}} = -\E*{\pderiv{\bm\Lambda}{\theta}}$
+    
+    \emph{General bound:} $\E{(\hat\theta - \theta^\ast)^2} \geq \frac{\paren*{ 1 + \partial \mathrm{b}_{\hat\theta} / \partial\theta }^2}{\E{\bm\Lambda^2}} + \mathrm{b}_{\hat\theta}$
+    
+    \emph{Unbiased case:} $\E{(\hat\theta - \theta^\ast)^2} = \V{\hat\theta_n} \geq \frac{1}{I^{(n)}(\theta^\ast)}$
+    
+    \emph{Tradeoff:}
+    $\E{(\hat\theta_n - \theta^\ast)^2} = \V{\hat\theta_n} + \mathrm{bias}^2(\hat\theta_n)$
+    
+    \emph{Bias:}
+    $\mathrm{bias}(\hat\theta_n) \equiv \mathrm{b}_{\hat\theta}(\theta^\ast) = \E{\hat\theta_n} - \theta^\ast \overset{\textrm{unbiased}}{=} 0$
+\fi
+
+% ===

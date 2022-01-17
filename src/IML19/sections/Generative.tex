@@ -1,0 +1,103 @@
+\section{Discriminative / generative modeling}
+
+\textbf{Discr.:} estimate $P(y\vert x)$, \enskip\textbf{Generative:} $P(y,x)$
+
+\textbf{Chain rule:} \highlight*{$P(x,y) = P(y) P(x\vert y)$}
+
+%\begin{highlightbox}
+%	1. Estimate prior on labels $P(y)$\\
+%	2. Est. cond. distr. for \textit{each class} $y$: $P(x\vert y)$\\
+%	3. Predict using Bayes: \highlight*{$\textstyle P(y\vert x) = \frac{1}{Z} P(x,y)$},\\
+%	\phantom{3.} $Z \!=\! P(x)  \!=\! \sum_{y'} P(x,y')$
+%\end{highlightbox}
+
+% ===
+\emph{Deriving Decision Rules}\vspace{1pt}
+\begin{highlightbox}
+	1. Estimate prior on labels $P(y)$\\
+	2. Est. cond. distr. for \textit{each class} $y$: $P(x\vert y)$\\
+	\phantom{2.} $\rightsquigarrow Z \!=\! P(x)  \!=\! \sum_{y'} P(x,y')$\\
+	3. Predict using Bayes: \highlight*{$\textstyle P(y\vert x) = \frac{1}{Z} P(x,y)$},\\
+	4. Minimize misclassification error:\\
+	\phantom{4.} $\hat y = \arg\!\max P(y\vert x) = \arg\!\max\limits_y P(y)P(x\vert y)$\vspace{-7pt}\\
+	\phantom{4. $\hat y$}$\;= ... \prod_{i=1}^d P(x_i,y)$%\vspace{-7pt}
+\end{highlightbox}
+
+%\begin{highlightbox}
+%	1. Est. $P(y)$ and $P(x\vert y)$ \enskip $\rightsquigarrow P(x) = \sum_{y'} ...$\\
+%	2. $P(y\vert x) = ...$\\
+%	3. Predict using Bayesian decision theory\\
+%	4. Minimize misclassification error:\\
+%	\phantom{4.} $\hat y = \arg\!\max\limits_y P(y)P(x\vert y)$ $\to ... \prod_{i=1}^d P(x_i,y)$\vspace{-3pt}
+%\end{highlightbox}
+
+\textbf{Binary:}
+\highlight*{$y=\operatorname{sign}(f(x))$},
+$f(x) = \log \frac{P(Y=+\!1\vert x)}{P(Y=-\!1\vert x)}$\\
+{\small
+$y\ped{pred} = [P(X, 1) \geq P(X, 0)] = [p_1P(X\vert) 1 \geq p_0P(X\vert 0)]$
+}
+
+%\subsection*{Example: Naive Bayes Model}
+%cond. ind.:$P(X_1,...,X_d|Y) = \prod_{i=1}^d P(X_i|Y)$
+
+% ===
+\emph{Examples}
+
+\textbf{MLE for Class.}: $P(y) = \highlight{p_y} = \frac{\operatorname{Count}(Y=y)}{n} = \frac{\highlight{\scriptstyle n_y}}{n}$
+
+\textbf{MLE for $\mathbf{P(x\vert y)}$:}
+$P(x_i\vert y) = \mathcal{N}(x_i;\mu_{y,i}, \sigma_{y,i}^2)$\\
+{\small
+$\highlight{\hat{\mu}_{y,i}} = \frac{1}{n_y} \sum_{j:y_j=y} x_{j,i}$\hfill
+$\highlight{\hat{\sigma}_{y,i}^2} = \frac{1}{n_y} \sum_{j:y_j=y} (x_{j,i} - \hat{\mu}_{y,i})^2$
+}\\
+$x_{j,i}$: value of feature $i$ for instance $j$ ($x_j,y_j$)
+
+\textbf{MLE for Poi.:} $\lambda = \operatorname{avg}(x_i) $\\
+$\mathbb{R}^d$: $P(X \!\!=\! x\vert Y \!\!=\! y) = \prod_{i=1}^d Pois(\lambda_y^{(i)},x^{(i)})$
+
+% ===
+\emph{Gaussian Bayes Classifier}
+
+$\hat{P}(x|y) = \mathcal{N}(x ; \hat{\mu}_y, \hat{\Sigma}_y)$
+
+\textbf{MLE:}
+$\hat{\mu}_{y} = \frac{1}{n_y} \sum_{j:y_j=y} x_j \color{gray}\in \mathbb{R}^d$\\
+\phantom{\textbf{MLE:}}
+$\hat{\Sigma}_{y} = \frac{1}{n_y} \sum_{j:y_j=y} (x_j - \hat{\mu}_{y})(x_j-\hat{\mu}_y)^T \color{gray}\in \mathbb{R}^{d \times d}$
+
+\textbf{$\normalcolor\mathbf{c\!=\!2}$:}
+{\small
+$f(x) = \log\frac{p}{1-p}
++ \frac{1}{2} \Big[ \log\frac{\abs{\hat\Sigma_-}}{\abs{\hat\Sigma_+}} + \ldots$
+}\\
+\phantom{\textbf{$\normalcolor\mathbf{c\!=\!2}$:}}
+{\small
+$ \big( (x\!-\!\hat\mu_-)^\top \hat\Sigma_-^{-1} (x\!-\!\hat\mu_-) \big)
+- \big( (x\!-\!\hat\mu_+)^\top \hat\Sigma_+^{-1} (x\!-\!\hat\mu_+) \big) \Big]$
+}
+
+\textbf{$\normalcolor\mathbf{c\!=\!2}$ -- Fisher's LDA:}\\
+\phantom{\textbf{$\mathbf{c\!=\!2}$:}}
+Assume:\enskip $p = 0.5$;\enskip $\hat{\Sigma}_- \!= \hat{\Sigma}_+ \equiv \hat{\Sigma}$\\
+\phantom{\textbf{$\mathbf{c\!=\!2}$:}}
+$\implies f(x) = w^\top x + w_0$\\
+\phantom{\textbf{$\mathbf{c\!=\!2}$:}} where
+$w = \hat{\Sigma}^{-1}(\hat{\mu}_+ - \hat{\mu}_-)$ and\\
+\phantom{\textbf{$\mathbf{c\!=\!2}$:} where}
+$w_0 = \frac{1}{2}(\hat{\mu}_-^\top\hat{\Sigma}^{-1}\hat{\mu}_- - \hat{\mu}_+^\top \hat{\Sigma}^{-1}\hat{\mu}_+)$
+
+\columnbreak
+
+% ===
+\emph{Outlier Detection}
+
+$P(x) \leq \tau$
+
+% ===
+\emph{Categorical (Naive) Bayes Classifier}
+
+MLE for feature distr.:
+$\hat{P}(X_i \!=\! c\vert Y \!=\! y) = \theta_{c\vert y}^{(i)}$\\
+$\theta_{c\vert y}^{(i)} = \frac{\operatorname{Count}(X_i = c, Y = y)}{\operatorname{Count}(Y=y)}$, \enskip $\hat p_y = \frac{\operatorname{Count}(Y=y)}{n}$

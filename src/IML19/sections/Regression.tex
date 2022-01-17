@@ -1,0 +1,28 @@
+\section{Regression}
+
+Solve $w^* = \arg\min\limits_w \hat{R}(w)+ \lambda C(w)$, \highlight*{$y=w^\top x$}
+
+\textbf{residual:} \highlight*{$r_i = y_i - w^\top x_i$}, \enskip
+\textbf{cost:} $\hat R(w)$
+
+\emph{Linear Regression}
+
+%$\hat{R}(w) = \sum_{i=1}^n (y_i - w^\top x_i)^2 = ||Xw-y||^2_2$
+$\hat{R}(w) = \sum_{i=1}^n r_i^2 = \norm{Xw-y}^2_2$
+
+$\nabla\!_w \hat{R}(w) = -2 \sum_{i=1}^n r_i \cdot x_i$
+
+\textbf{closed form:} $w^* = (X^\top X)^{-1} X^\top y$
+
+
+\emph{Ridge regression}
+
+%$\hat{R}(w) = \sum_{i=1}^n (y_i - w^\top x_i)^2 + \lambda ||w||_2^2$
+$\hat{R}(w) = \sum_{i=1}^n r_i^2 + \lambda \norm{w}_2^2$
+
+$\nabla\!_w \hat{R}(w) = -2 \sum_{i=1}^n r_i \cdot x_i + 2 \lambda w$
+
+\textbf{closed form:} $w^*=(X^\top X + \lambda I)^{-1} X^\top y$
+
+\emph{L1-regularized regression (Lasso)}\\
+$\hat{R}(w) = \sum_{i=1}^n r_i^2 + \lambda \norm{w}_1$

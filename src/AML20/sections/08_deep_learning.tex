@@ -1,0 +1,96 @@
+\section{Deep Learning}
+
+% ===
+%\textbf{Sigm.:}\enskip
+%$\sigma(x) = \frac{1}{1+\eu^{-x}} = \frac{\eu^x}{\eu^x + 1}$;\enskip
+%$\sigma'(x) = \sigma(x) \sigma(-x)$
+
+\textbf{Sigmoid:}\enskip
+$\sigma(x) = \frac{1}{1+\exp(-x)} = \frac{\eu^{x}}{\eu^{x}+1}$ \\
+\phantom{\textbf{Sigmoid:}}
+$\sigma'(x) = \sigma(x) (1{-}\sigma(x)) = \sigma(x) \sigma(-x)$
+
+\textbf{Softmax:}\enskip
+$y_i \propto \exp(\beta z_i)$
+
+
+\emph{Backpropagation:}
+\hfill
+Gradient:
+$\pderiv{\ell}{w_{jk}} = \delta_j^{(l)} v_k^{(l-1)}$
+
+\vspace{-4pt}
+Error signal for unit $k$ on layer $l$:\\
+\enskip $\delta^{(L)} = [ \cdots \delta_k^{(L)} \cdots ] = [ \cdots \ell'_k(f_k) \cdots ]$\\
+\enskip $\delta_k^{(l)} = \sigma'(z_k) \sum_{j \in \mathrm{layer}(l+1)} w_{jk} \delta_j$
+
+% Error signal for each unit $k$ on output layer $L$: \\\enskip
+% $\delta^{(L)} = [ \cdots \delta_k^{(L)} \cdots ] = [ \cdots \ell'_k(f_k) \cdots ]$
+
+% Error signal on layer $l = L{-}1, \ldots, 1$: \\\enskip
+% $\delta_k^{(l)} = \sigma'(z_k) \sum_{j \in \mathrm{layer}(l+1)} w_{jk} \delta_j$
+
+
+\emph{Robbins-Monro Algorithm {\textnormal\sffamily for SGD}:}
+
+\textbf{Goal:}\enskip
+$\min_\theta \E[Z]{f(Z; \theta)}
+\color{gray} \approx \frac1n \sum_i \mathcal L(y_i, \mathrm{NN}_\theta(\bm x_i))$
+
+\textit{Input:}\enskip
+learn. rate $\eta(k)$,\enskip samples $\bm z_1, \bm z_2, \ldots \sim Z$
+
+\textit{Iteratively:}\enskip
+$\theta^{(k)} \leftarrow \theta^{(k-1)} - \eta(k) f(\bm z_k; \theta^{(k-1)})$ \\\enskip
+$\color{gray}\text{for SGD:}\enskip f(\bm z, \theta) = \nabla_\theta \mathcal L(y, \mathrm{NN}_\theta(\bm x))$
+
+\textbf{Convergence:}\enskip
+if $\E[Z]{f(\bm z, \theta)}$ satisfies some regulatory conditions and $\eta(k)$ c.f. section \ref{purely-discriminative}.
+
+% ===
+\subsection{Variational Autoencoders}
+
+%\textbf{Define} prior $p_{\theta'}(z)$, likelihood $\mathrm{dec}_\theta(z) = p_\theta(x\mid z)$ and approx. posterior $\mathrm{enc}_\phi(x) = q_\phi(z\mid x)$.
+
+\textbf{Def:}
+$\xrightarrow[\text{prior}]{p_{\theta'}(z)} \mathcal Z
+\xrightarrow[\text{likelihood}]{\mathrm{dec}_\theta(z) = p_\theta(x\mid z)} \mathcal X
+\xrightarrow[\text{approx. posterior}]{\mathrm{enc}_\phi(x) = q_\phi(z\mid x)} \mathcal Z$
+
+\hfill sample/obs. $\mathcal X_i$ from latent representation $\mathcal Z$
+
+\textbf{Train:}\enskip
+$\max\limits_{\theta', \theta, \phi} \sum_{i} \color{OrangeRed} { \underbracket[.7pt][2pt]{\the\everymath \log p_{\theta', \theta} (x_i)} }_{\:(\ast) \text{ indep. of } Z}$
+
+%$\log p_{\theta', \theta, \phi} (x_i) = \ldots$
+\begin{itemize}[leftmargin=20pt,parsep=0.2pt]
+    \item[${\color{OrangeRed}(\ast)} =$]
+        $\E*[Z \sim q_\phi(\cdot \mid x_i)]{\log\paren*{ \frac{p_{\theta', \theta}(x_i,Z)}{p_{\theta', \theta}(Z\mid x_i)} \; \frac{q_\phi(Z\mid x_i)}{q_\phi(Z\mid x_i)} }}$
+    \item[$=$]
+        $\overbracket[.7pt][2pt]{
+            \E*{\log p_\theta(x_i\mid Z)}
+            - D\ped{KL}\paren*{q_\phi(\cdot\mid x_i) \parallel p_{\theta'}(\cdot)}
+        }^{\begingroup\color{Green} \mathcal L(x_i,\theta,\phi) \endgroup \:\equiv\: \text{\textbf{ELBO} = Infomax -- Regularisation term}}$
+    \item[]
+        $+ D\ped{KL}\paren*{q_\phi(\cdot\mid x_i) \parallel p_{\theta', \theta}(\cdot\mid x_i)}
+        \color{Green} \geq \mathcal L(x_i, \theta, \phi)$
+\end{itemize}
+
+\textbf{Train:}\enskip
+\highlight{$\theta^\ast, \phi^\ast = \arg\max_{\theta,\phi} \mathcal L(x_i, \theta, \phi)$}
+
+Requirements for good representation:
+\begin{itemize}
+    \item \textbf{informative:}\enskip
+        $\theta^\ast = \arg\max_\theta I(X;Z)$\\
+        $\enskip \color{gray} = \arg\max_\theta \E[X,Z]{\log p(X\mid Z)} - \textit{const}_{\textit{w.r.t. } \theta}$\\
+        $\enskip \approx \arg\max_\theta \sum_i \E[Z\mid X]{\log p(x_i\mid Z)}$
+    \item \textbf{disentangled:}\enskip
+        components in $\mathcal Z$ associated with distinct feature in $\mathcal X$
+        (see $D\ped{KL}$ in ELBO).
+    \item \textbf{robust:}\enskip
+        noise in $\mathcal Z$ doesn't substantially affect $\mathcal X$ (and vice versa).
+        $\to$ choice of approx. post.!
+\end{itemize}
+
+% ===

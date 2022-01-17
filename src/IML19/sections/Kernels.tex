@@ -1,0 +1,78 @@
+\section{Kernels
+\hfill\normalfont $\color{section-text-color}\widehat{=} \text{ \sffamily scalar prod. in feature space } \phi$}
+
+\textbf{K. trick:}\;
+$\bm{x}_i\!^\top \bm{x}_j \overset{\text{Mercer}}{\rightsquigarrow}$
+\highlight*{$ k(\bm{x}_i, \bm{x}_j) = \phi(\bm{x}_i)\!^\top \phi(\bm{x}_j)$}
+
+% ===
+\emph{Properties of kernel}
+
+$k: \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ is an inn. prod. (symm., pos.-def.).
+
+Need: \enskip \highlight{$K \succeq 0 \;\forall \bm{x}_i$}, \enskip where $K_{i,j} = k(\bm{x}_i,\bm{x}_j)$
+
+Hence:
+\enskip $\bullet$ check pos. eigenvalues \textit{or better} \par
+\enskip $\bullet$ $vKv^\top = \sum_i\sum_j \alpha_i\alpha_j\, k(\bm{x}_i,\bm{x}_j) \geq 0$ \par
+\enskip $\to$ check for $i\!=\!j\!=\!1$ for \textit{counter example}
+
+% ===
+\emph{Important kernels}
+{\setstretch{0.9}
+\begin{tabular}{@{}>{\normalcolor}l l}
+	Constant:	& $k(x,y)=c \text{ \normalcolor with } c \geq 0$\\
+	Linear: 	& $k(x,y)=x^\top y$\\
+	Polynomial:	& $k(x,y)=(x^\top y + 1)^d$\\
+	Gaussian:	& $k(x,y) = \exp(-\norm{x-y}_2^2/h^2)$\\
+	Laplacian:	& $k(x,y) = \exp(-\norm{x-y}_1/h)$
+\end{tabular}
+}
+
+% ===
+\emph{Composition rules}\\
+$\circ$ $k=k_1+k_2$
+\enskip
+$\circ$ $k=c\cdot k${\footnotesize $\color{gray},\; c>0$}
+\enskip
+$\circ$ $k=k_1\!\cdot\! k_2$
+
+$\circ$ $k=f(k_1)${\footnotesize \color{gray}, $f$: exp. \textit{or} polyn. with \underline{all} pos. coeff.}
+
+% ===
+\emph{Kernelized Perceptron / \color{OrangeRed} SVM}
+\vspace{-1pt}
+
+\textbf{Ansatz:} $w^* \in \operatorname{span}(X) \Rightarrow$ \highlight*{$w = \sum_{j=1}^n \alpha_j y_j x_j$}
+
+\vspace{-1pt}
+{\small $\alpha^\ast {=}
+\arg\min\limits_\alpha \frac{1}{n}\sum_n \max\{ 0, {\color{OrangeRed}1}{-}y_i\alpha^\top k_i \} {\color{OrangeRed}+ \lambda\alpha^\top \bm{D}_y\bm{K}\bm{D}_y \alpha}$}
+
+$\color{gray} \text{with } k_i\!=\![.., y_j\,k(x_i,x_j), ..] \text{ and } D_y\!=\!\operatorname{diag}(y_i)$
+
+\textbf{Predict:} $\hat y = \operatorname{sign}(\sum_{i=1}^n \alpha_iy_ik(x_i, x))$
+
+% ===
+\emph{Kernelized linear regression (KLR)}
+
+\textbf{Ansatz:} \highlight*{$w=\sum_{j=1}^n \alpha_j x_j$} $= \sum_{j=1}^n \alpha_j\phi(x_j)$
+
+$\alpha^\ast =
+\arg\min\limits_\alpha \frac{1}{n} \norm{\alpha^\top K-y}_2^2 + \lambda\alpha^\top K\alpha$
+\vspace{-1pt}
+
+\textbf{closed form:} $\alpha^\ast = (K+\lambda I)^{-1}y$
+
+\textbf{Predict:} $\hat y = \sum_{i=1}^n \alpha_i k(x_i,x)$
+
+% ===
+\emph{Kernelized LogReg}
+
+$\hat\alpha \!=\! \arg\!\min\limits_\alpha \sum_{i=1}^n \log(1\!+\!\exp(-y_i\alpha^\top\! K_i)) \!+\! \lambda\alpha^\top\! K\alpha$\vspace{-3pt}\\
+$P(y\vert x,\hat\alpha) = \big( 1+\exp(-y\sum_{j=1}^n\alpha_j k(x_j,x)) \big)^{-1}$
+
+% ===
+\emph{Semi-parametric kernel}
+
+additive combination of linear and non-linear kernel fct's, e.g. $x\leftrightarrow \sin(x\!\cdot\!\gamma)$ {\small\color{gray} ``periodic'' kernel}

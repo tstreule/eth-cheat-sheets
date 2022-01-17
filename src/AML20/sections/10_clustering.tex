@@ -1,0 +1,174 @@
+\section{Clustering}
+
+% ===
+\emph{\textit{k}-means:}\enskip
+$\arg\min_\theta \sum_{i\leq n} \norm{\bm x_i - \theta_{c(\bm x_i)}}^2$
+
+% ===
+\subsection{Mixture Models}
+
+\textit{Assume:}\enskip
+$\bm x \sim p(\bm x\mid \pi_{1\ldots k}, \theta_{1\ldots k}) = \sum_{c\leq k} \pi_c p(\bm x \mid \bm\theta_c)$
+
+\textbf{Find:}
+$\highlight{\hat\theta = \arg\max_\theta  p(\mathcal X\mid \pi,\theta)}
+\color{gray} = \prod_{\bm x} p(\bm x\mid \pi,\theta)$
+
+\emph{Gaussian Mixtures:}\enskip
+$\to$\enskip
+$p(\bm x \mid \theta_c) = p(\bm x \mid \bm\mu, \bm\Sigma)$
+
+Introduce \textit{latent indicator variables} for mode assignments $M_{\bm x c} \in \{0,1\}$. Then, the \textbf{log-likelihood:}
+
+$L(\mathcal X, \bm M \mid \bm\theta) = \sum_{\bm x} \sum_{c\leq k} M_{\bm x c} \log (\pi_c p(\bm x \mid \bm\theta_c))$
+
+% ===
+\subsubsection{EM-Algorithm \normalfont\sffamily for Gaussian Mixtures}
+
+\begin{highlightbox}
+    \textbf{E-step:}\enskip
+    Calculate
+    
+    $Q(\bm\theta; \bm\theta^{(t)}) = \E[\bm M \mid \mathcal X, \bm\theta^{(t)}]{L(\mathcal X, \bm M \mid \bm\theta)} = \ldots$ \\
+    $= \sum\limits_{\bm x} \sum\limits_{c\leq k} \paren[\big]{
+    \begingroup
+        \color{OrangeRed} \underbracket[.7pt][2pt]{\the\everymath \E*[\bm M \mid \mathcal X, \bm\theta^{(t)}]{M_{\bm x c}}}%_{\gamma_{\bm x c}}
+    \endgroup
+    \cdot \log \pi_c p(\bm x\mid \bm\theta_c) }$
+    
+    where \highlight*{$\begingroup\color{OrangeRed} \gamma_{\bm x c} \endgroup = \frac{p(\bm x \mid c, \bm\theta^{(t)}) \: p(c\mid \bm\theta^{(t)})}{p(\bm x \mid \bm\theta^{(t)})}$}, \enskip
+    $\sum_{c\leq k} \gamma_{\bm x c} = 1$
+    
+    
+    \textbf{M-step:}\enskip
+    $\bm\theta^{(t+1)} \in \arg\max_{\bm\theta} Q(\bm\theta; \bm\theta^{(t)})$
+    
+    s.t. $\sum_c \pi_c = 1$. \enskip
+    Solve via Lagrangian, yields
+    
+    \begin{highlightbox*}
+        $\pi_c {=} \frac{1}{\abs{\mathcal X}} \sum\limits_{\bm x} \gamma_{\bm x c}$,\hfill
+        $\bm\mu_c {=} \frac{\sum_{\bm x} \gamma_{\bm x c} \bm x}{\sum_{\bm x} \gamma_{\bm x c}}$,\hfill
+        $\sigma^2_c {=} \frac{\sum_{\bm x} \gamma_{\bm x c} (\bm x - \bm\mu_c)^2}{\sum_{\bm x} \gamma_{\bm x c}}$
+    \end{highlightbox*}
+\end{highlightbox}
+
+% ===
+\subsection{Non-parametric Bayesian Methods}
+
+$\mathrm{Dir}(\bm x \mid \bm\alpha) = \frac{1}{B(\alpha)} \prod_{k=1}^n x_k^{\alpha_k - 1}$,\enskip
+$B(\bm\alpha) = \frac{ \prod_{k=1}^n \Gamma(\alpha_k)}{\Gamma(\sum_{k=1}^n \alpha_k)}$
+
+Rewrite \textbf{Finite mixture models:}
+
+$p(x) = \sum_{k=1}^K \pi_k p(x\mid \theta_k)
+= \int p(x\mid\theta) G(\theta) \diff\theta$
+
+where $G(\theta) = \sum_{k=1}^\infty \pi_k \delta_{\theta_k}\!(\theta)$
+$\color{gray} \leftarrow \text{ discrete distr.}$
+
+
+\emph{Stick-breaking process:}
+
+Draw $\theta_k \sim H$ and $\beta_k \sim \mathrm{Beta}(1,\alpha)$ for $k{=}1,2,\ldots$
+
+$\pi_k = \beta_k (1 - \sum_{k=1}^{k-1} \pi_i)$
+$\implies \highlight{\!\pi {=} \{ \pi_k \}_{k=1}^\infty \sim \mathrm{GEM}(\alpha)\!\!}$
+
+\vspace{-2pt}$\implies
+\begingroup \color{gray}
+    \sum_{k=1}^\infty \pi_k \delta_{\theta_k}\!(\theta) =
+\endgroup
+\highlight{G(\theta) \sim \mathrm{DP}(\alpha, H)}$
+
+Sample $\theta^{(1)}, \theta^{(2)}, \ldots$ from $G$.\enskip
+Denote $\theta^{(i)} {=} \theta_{k_i}$.
+
+$\implies \theta^{(i)}, \theta^{(j)}$ with $k_i {=} k_j$ belong to same ``cluster''
+
+
+\emph{Chinese Rest. Process:}
+\vspace{-5pt}
+
+$P(\text{cust}_{n+1} \text{ joins table } \tau \mid \mathcal P) =
+\begin{cases}
+    \frac{\abs{\tau}}{\alpha + n} & \text{if } \tau \in \mathcal P, \\
+    \frac{\alpha}{\alpha + n} & \text{new table}
+\end{cases}$
+
+$P(\text{partition } \mathcal P)
+= \frac{\alpha^{\abs{\mathcal P}}}{\alpha^{(n)}} \prod_{\tau\in\mathcal P} (\abs{\tau} - 1)!$
+
+\textbf{expec. \#clusters:}\enskip
+$\E{\bm 1} = \sum_{i\leq N} \frac{\alpha}{\alpha + i} \sim \mathcal O(\alpha \log N)$
+
+
+\emph{De Finetti:}
+$(X_1, \ldots, X_n)$ are inftly \textbf{exchangable} RVs \textit{if}
+$P(X_1, \ldots, X_n) = \int \paren*{\prod_{i=1}^n p(X_i \mid G)} \diff P(G)$
+
+% Equivalent formulations (?)
+\iffalse
+    $P(X_1, \ldots X_n) = \int P(G) \prod_{i=1}^n p(X_i \mid G) \diff G$
+    
+    $P(X_1, \ldots X_n) = \int P(\theta) \prod_{i=1}^n p(X_i \mid \theta) \diff\theta$
+\fi
+
+
+\subsubsection{Finite GMM}
+\begin{enumerate}
+    \item Cluster centers:\enskip
+        $\mu_k \sim \Gauss{\mu_0, \sigma_0}$
+    \item Prob's of clusters:\enskip
+        $\pi_{1\ldots K} \sim \mathrm{Dir}(\alpha_{1\ldots K})$
+    \item Cluster assignments:\enskip
+        $z_i \sim \mathrm{Categorical}(\pi_{1\ldots K})$
+    \item Coordinates of data:\enskip
+        $x_i \sim \Gauss{\mu_{z_i}, \sigma_{z_i}}$
+\end{enumerate}
+
+
+\subsubsection{DP Mixture Model (DP-GMM)}
+\begin{enumerate}
+    \item Cluster centers:\enskip
+        $\mu_k \sim \Gauss{\mu_0, \sigma_0}$,\enskip
+        $\color{gray} k {=} 1, 2, \ldots$
+    \item Prob's of clusters:\enskip
+        $\pi = (\pi_1, \pi_2, \ldots) \sim \mathrm{GEM}(\alpha)$
+    \item Cluster assignments:\enskip
+        $z_i \sim \mathrm{Categorical}(\pi)$
+    \item Coordinates of data:\enskip
+        $x_i \sim \Gauss{\mu_{z_i}, \sigma}$,\enskip
+        $\color{gray} i {=} 1 \ldots N$
+\end{enumerate}
+
+\emph{Fitting a DP-MM:}\enskip
+\textbf{Collapsed Gibbs sampler}
+
+$p(z_i {=} k \mid \bm z_{-i}, \bm x, \alpha, \bm\mu) \propto
+\begingroup \color{OrangeRed} \text{Prior} \endgroup \times
+\begingroup \color{Green} \text{Likelihood} \endgroup$
+\\\hfill
+$\propto \begin{cases}
+    \begingroup \color{OrangeRed}
+        \frac{\abs{\bm x_{-i,k}}}{\alpha+N-1}
+    \endgroup
+    \begingroup \color{Green}
+        p(x_i \vert \bm x_{-i, k}, \bm\mu)
+    \endgroup
+    & \text{for existing } k
+    \\
+    \begingroup \color{OrangeRed}
+        \frac{\alpha}{\alpha+N-1}
+    \endgroup
+    \begingroup \color{Green}
+        p(x_i\vert \bm\mu)
+    \endgroup
+    & \text{otw.}
+\end{cases}$
+
+$\bm x_{-i,c} \coloneqq \brace{ x_j \mid z_j {=} c, j {\neq} i }$ data assigned to clust. $c$
+
+
+
+% ===

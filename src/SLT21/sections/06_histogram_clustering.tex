@@ -1,0 +1,118 @@
+\section{Histogram Clustering}
+
+% ===
+\emph{Least Angle Clust. (LAC): {\normalfont\sffamily[Idea]}}\\
+Similarity\enspace $S(\bm x_i, \bm x_j) = w_{ij} \cos(\phi_{ij}) = w_{ij} \bm e_i \cdot \bm e_j$\enspace with unit vectors\enspace $\bm e_i \coloneqq \bm x_i / \norm{\bm x_i}$,\enspace e.g. choice $w_{ij} = \norm{\bm x_i} \cdot \norm{x_j}$.
+
+% ===
+\columnbreak
+\emph{Dyadic data:}\enspace
+$\mathcal Z = \brace{ (x_{i(r)}, y_{j(r)}) ; 1\leq r\leq \ell }$
+
+\begin{itemize}
+    \item prototype / ``centroid'':\enspace
+        $q(y_j \mid \alpha)$
+    \item empirical dist.:\enspace
+        $\hat p(y_j\mid x_i)
+        = \frac{\hat p(x_i, y_j)}{\hat p(x_i)}
+        \:\substack{
+            \color{gray} \leftarrow \text{scr. (5.10)} \\[2pt]
+            \color{gray} \leftarrow \text{scr. (5.11)}
+        }$
+    \iffalse
+    $= \frac{
+        \frac1\ell \sum_{r\leq\ell} \delta_{x_i, x_{i(r)}} \delta_{y_j, y_{j(r)}}
+        %\frac1\ell \sum_{r\leq\ell} \bm 1 \brace{(x_{i(r)}, y_{j(r)} = (x_i, y_i)}
+        %\frac1\ell \sum_{r\leq\ell} \Delta_{x_i, x_{i(r)}} \Delta_{y_j, y_{j(r)}}
+      }{
+        \sum_{j\leq m} \hat p(x_i, y_j)
+        %\frac1\ell \sum_{r\leq\ell} \sum_{j\leq m} \Delta_{x_i, x_{i(r)}} \Delta_{y_j, y_{j(r)}}
+    }$
+    \fi
+    %\item $p(x_i,y_j \mid c,q) = p(x_i) q(y_j\mid c(i))$
+\end{itemize}
+
+Likelihood:\enspace
+$P(\mathcal Z\mid c,q) = \prod_{r\leq\ell} p(x_{i(r)}, y_{j(r)} \mid c,q)$\\\quad
+$= \overset{\text{\color{gray} scr. (5.12)}}{\ldots}
+= \prod_i \prod_j \brack{ q(y_j\vert c(i)) \cdot p(c(i)) }^{\ell \hat p(x_i, y_i)}$
+
+\textit{Assume} $p(\alpha)=1/k$ \textit{and} $\hat p(x_i) = 1/n$
+
+$\Rightarrow$ \emph{Cost:}
+$R\ap{hc} (c, q, \mathcal Z) = \cancel{\frac{\ell}{n}} \sum_{i\leq n} D\ped{KL} \brack*{\hat p(\cdot\mid x_i) \parallel q(\cdot\mid c(i))}$
+
+Solving the \textbf{Gibbs dist.} $p(c \mid q, \hat p) = \prod_{i\leq n} P_{i, c(i)}$\\
+via Lagrange yields \highlight*{$q^\ast(y_j\mid\alpha) = \frac{\sum_{i\leq n} P_{i\alpha} \cdot \hat p(y_j\mid x_i)}{\sum_{i\leq n} P_{i\alpha}}$}
+{\color{gray}\scriptsize \shortstack{Lemma 2\\ch.3 p.36}}
+
+% ===
+\subsection{Information Bottleneck Method}
+
+Find efficient code $X \mapsto \hat X$ (codebook vector) and preserve relevant info. about context $Y$.
+
+\emph{Criterion:}\enskip
+$R\ap{IB}(q(\hat x\mid x)) = I(X; \hat X) - \beta I(\hat X; Y)$
+
+\emph{Markov chain:}\enskip
+$\hat X \xrightarrow{q(\hat x\mid x)} X \xrightarrow{p(y\mid x)} Y$
+
+\emph{Generation process:}\enskip
+w/ \textit{distortion} $d(x,\hat x) = D\ped{KL}[\cdot]$\\
+$\begin{cases}\begin{matrix*}[l]
+    q_{\color{OrangeRed} t}(\hat x\vert x) &
+        \propto q_{\color{OrangeRed} t}(\hat x) \cdot \exp\paren{ -\beta \: D\ped{KL}\brack*{p(y\vert x) \parallel p_{\color{red} t}(y\vert \hat x)} }
+    \\
+    q_{\color{OrangeRed} t{+}1}(\hat x) &
+        = \sum_x p(x) \cdot q_{\color{OrangeRed} t}(\hat x \mid x)
+    \\
+    p_{\color{OrangeRed} t{+}1}(y\vert \hat x) &
+        = \sum_{x} p(y\mid x) \cdot p(x) \cdot q_{\color{OrangeRed} t}(\hat x\mid x) \,/\, q_{\color{OrangeRed} t}(\hat x)
+\end{matrix*}\end{cases}$
+
+% ===
+\subsection{Parametric Distributional Clustering}
+
+\textbf{Idea:} Use a mixture of Gaussian prototypes, i.e.\\ \phantom{\textbf{Idea:}} $\textcolor{gray}{p(y_j\mid\nu)\equiv\:} p(b\mid\nu) = \sum_{\alpha\leq s} p(\alpha\vert\nu) \; G_\alpha(b)$ .
+
+\begin{minipage}{\linewidth}
+    \centering
+    $x_i \xrightarrow{c(i) = \nu} \nu \xrightarrow{p(b\mid\nu)} \hat p(b\mid i)$
+\end{minipage}
+
+\textit{Note:}\enspace
+Feature values $y_j$ (``bins'' $b$) only depend on cluster index $\nu$ and not explicitly on the site $x_i$!
+
+\textbf{Notation:}\enspace
+$x_i \leftarrow i$, \enskip
+$y_j \leftarrow b$ (\textit{bins}), \enskip
+$\nu \leftarrow$ clusters
+
+\emph{Likelihood:}\enspace
+(both equivalent if $p(i)=\frac1n$)\\
+\enspace $P(X\mid c,\theta) = \prod_{i\leq n} p(\textcolor{red}{c(i)}) \prod_{b\leq m} [p(b\mid \textcolor{red}{c(i)})]^{\ell \hat p(i,b)}$,\\
+\enspace $P(X,M\mid \theta) = \prod_{i\leq n} \textcolor{red}{\prod_{\nu\leq k}} \big[ p(\textcolor{red}{\nu}) \cdot \prod_{b\leq m} p(b\mid\textcolor{red}{\nu})^{n_{ib}} \big]^{M_{i\nu}}$
+\\
+where\enskip
+\begin{minipage}[t]{\linewidth-\widthof{where\enskip}}
+    $n_{ib}$ : \#occur. an observ. at site $i$ is inside $I_b$ \\
+    $M_{i\nu} = p(\nu\mid i) \in \{0,1\}$ \enskip clust. membersh. assign.
+\end{minipage}
+
+\emph{Cost (IB):}\enspace
+$R\ap{PDC}(c, p_{\cdot\mid c}) = -\log P(X,M\theta) = \ldots$
+\hfill $\ldots = -\sum_{i\leq n} \big[ \log p_{c(i)} + \frac{\ell}{n} \sum_{b\leq m} \hat p(b\mid i) \log p(b\mid c(i)) \big]$
+
+\begin{highlightbox}
+\begin{tabularx}{\linewidth}{@{} l @{\:\:} X @{}}
+    \textbf{E-step:}
+        & $h_{i\nu} \!= {-}\log p_\nu {-} \sum_b \frac{\ell}{n} \hat p(b\mid i) \log p(b\mid\nu)$\\
+        & $q_{i\nu} = \E{\mathbb I_{\brace{c(i) = \nu}}} \propto \exp(- h_{i\nu} / T)$\\
+    \textbf{M-step:}
+        & $p_\nu = \frac1n \sum_{i\leq n} q_{i\nu}$
+        \\
+        & No closed form sol. for $p(\alpha\mid\nu)$. Thus, iteratively optimize pairs s.t. $\sum_\alpha p(\alpha\mid\nu) = 1$.
+\end{tabularx}
+\end{highlightbox}
+
+% ===

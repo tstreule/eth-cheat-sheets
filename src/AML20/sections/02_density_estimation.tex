@@ -1,0 +1,52 @@
+\section{Density Estimation}
+
+% ===
+%\subsection{Bayesianism / Frequentism}
+
+\emph{Bayesianism:}
+Define prior $P(\theta)$, define likelihood $P(X\mid\theta)$, compute posterior $P(\theta\mid x_{1...n})$.
+\\
+\textbf{Bayes:}
+$P(\theta\mid X) = \frac{P(X\mid\theta)P(\theta)}{P(X)}$,
+{\footnotesize $P(X) {=} \sum_\theta P(X\vert\theta_i) P(\theta_i)$}
+
+\emph{Frequentism:}
+%Define a parametric model $\theta$ (e.g. $\Gauss{\theta,1}$), compute likelihood of data and compute MLE: $\hat\theta\ped{MLE} = \argmax_\theta P(y_{1...n}\mid\theta)$.
+Define param. model $P(Y\mid X,\theta)$, compute likelihood of data $P(X,Y\mid\theta)$ and compute $\hat\theta\ped{MLE}$ via $\argmax_\theta$ of likelihood.
+
+% ===
+\subsection{Estimation - MLE Properties}
+
+\emph{Consistency:}
+$\forall\epsilon>0, \; \mathbb P\{ \abs{\hat\theta_n - \theta^\ast} > \epsilon \} \overset{n\to\infty}{\longrightarrow} 0$
+
+\emph{Equivariance:}
+If $\hat\theta_n$ is MLE of $\theta$, then $g(\hat\theta_n)$ is MLE of $g(\theta)$.
+
+\emph{Asympt. normality:}\\
+$\sqrt{n} (\hat\theta_n - \theta^\ast) \to \Gauss{0,\, J^{-1}(\theta^\ast) I_n(\theta^\ast) J^{-1}(\theta^\ast)}$%, where $J = -\E*[x\mid\theta^\ast]{\frac{\partial^2 \log \P{x\mid\theta}}{\partial\theta\partial\theta^\top}}$ and $I(\theta_0) \triangleq \textrm{Fisher info}$.
+
+\emph{Asympt. efficiency:}
+$\hat\theta_n$ minimises $\E{(\hat\theta_n - \theta^\ast)^2}$ as $n{\to}\infty$, i.e. $\E{(\hat\theta_n - \theta^\ast)^2} \overset{n\to\infty}{=} \frac{1}{I_n(\theta^\ast)}$ (Rao Cr.)\\
+Among all consistent estimators $\hat\theta_n$ has \textit{smallest variance}: $\lim_{n\to\infty} (\V{\hat\theta_n} I_n(\theta^\ast))^{-1} = 1$
+
+% ===
+\subsection{Rao Cramer inequality \hfill {\normalfont\footnotesize all $\mathbb E$ w.r.t. $P(x\mid\theta^\ast)$}}
+%(all $\E{}$ w.r.t. $\P{x\mid\theta^\ast}$)
+
+Score func.: $\bm\Lambda = \pderiv{\log\P{\bm x\mid\theta}}{\theta}$,\; $\E{\bm\Lambda} = 0$
+
+Fisher info.: $I_n(\theta) = \V{\bm\Lambda}$\\
+$J(\theta) = \E{\bm\Lambda^2} = -\E*{\frac{\partial^2 \log \P{x\mid\theta}}{\partial\theta\partial\theta^\top}} = -\E*{\pderiv{\bm\Lambda}{\theta}}$
+
+\emph{General bound:} $\E{(\hat\theta_n - \theta^\ast)^2} \geq \frac{\paren*{ 1 + \frac{\partial}{\partial\theta} \mathrm{b}_{\hat\theta} }^2\!\!}{\E{\bm\Lambda^2}} + \mathrm{b}_{\hat\theta}^2$
+
+\emph{Unbiased case:} $\E{(\hat\theta_n - \theta^\ast)^2} = \V{\hat\theta_n} \geq \frac{1}{I_n(\theta^\ast)}$
+
+\emph{Tradeoff:}
+$\E{(\hat\theta_n - \theta^\ast)^2} = \V{\hat\theta_n} + \mathrm{bias}^2(\hat\theta_n)$
+
+\emph{Bias:}
+$\mathrm{bias}(\hat\theta_n) \equiv \mathrm{b}_{\hat\theta}(\theta^\ast) = \E{\hat\theta_n} - \theta^\ast \overset{\textrm{unbiased}}{=} 0$
+
+% ===

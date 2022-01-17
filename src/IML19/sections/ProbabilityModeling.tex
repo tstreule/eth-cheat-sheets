@@ -1,0 +1,53 @@
+\section{Probability modeling}
+Find $h(x)$ that min. pred. error:\\
+$\highlight*{R(h) = \mathbb{E}_{x,y}[\ell(y;h(x))]} = \int\!P(x,y)\,\ell(y;h) \diff x \!\diff y$
+
+% ===
+\emph{Bayes optimal predictor
+\normalfont\sffamily $\normalcolor\to \hat y = h^\ast(x)$}
+
+$\deriv{\ell(\hat y)}{\hat y} = 0 \to \highlight*{\hat y = \mathbb{E} [Y\vert X\!\!=\!x] = \int\!y\!\cdot\!\hat P(y\vert X\!\!=\!x) \diff y}$
+
+%\subsection*{For least squares regression}
+%Best $h$: $h^*(x) = \mathbb{E}[Y|X=x]$ \\
+%Pred.: $\hat{y} = \hat{\mathbb{E}}[Y|X=\hat{x}] = \int \hat{P}(y|X=\hat{x}) y \partial y$
+
+% ===
+\emph{MLE \enskip $-\log P(y\vert x,w)$}
+
+{\small $\theta^* \!=\! \arg\!\max\limits_\theta \hat{P}(y_{1:n}\vert x_{1:n},\theta) \overset{\textrm{iid}}{=} \highlight*{\arg\!\min\limits_\theta \!-\!\sum_{i=1}^n \ln P(y_i\vert x_i,\theta)} $}
+
+e.g. lin. Gauss: $y_i = w^\top \!x_i + \varepsilon_i$, \enskip $\varepsilon_i \!\sim\! \mathcal{N}(0, \sigma^2)$\\
+i.e. $y_i \!\sim\! \mathcal{N}(w^\top \!x_i, \sigma^2)$
+$\xrightarrow{\text{MLE and}\,\log\;}$ LS regression
+
+% ===
+\emph{Bias/Variance/Noise}
+
+Prediction error = $\normalcolor \textrm{Bias}^2 + \textrm{Variance} + \textrm{Noise}$\\
+- Noise: risk incurred by the optimal model,\\
+\phantom{- Noise:} $P(y\vert x)$ loss/likelihood fct.\\
+- Variance: est. model from limited data\\
+- Bias: incurred by regularizer\\
+higher bias implies much lower variance
+
+% ===
+\emph{MAP \enskip $-\log P(w)$}
+
+\textbf{Prior:} bias on param's, e.g. $w_i \!\sim\! \mathcal{N}(0, \beta^2)$\\
+$\xrightarrow{\text{\!Bay.}}$ $P(w|x_{1:n},y_{1:n}) = \frac{P(w|x) P(y|x,w)}{P(y|x)} = \frac{P(w) P(y|x,w)}{P(y|x)}$
+
+% ===
+\emph{Logistic regression (Classification)}
+
+\textbf{Link fct.:} $\sigma(w^\top x) = \frac{1}{1+\exp(-w^\top x)}$ \enskip \textbf{(Sigmoid)}\\
+$P(y\vert x,w) = Ber (y; \sigma(w^\top\!x)) = \sigma(yw^\top x)$
+
+\textbf{MLE:}
+$\hat w = \arg\!\min\limits_w \sum_i \log(1+\exp(-y_iw^\top\!x_i))$\vspace{-3pt}\\
+\phantom{\textbf{MLE:}} with $\hat R(w) = \sum_{i=1}^n \ell\ped{logistic} (w; x_i, y_i)$
+
+\textbf{Grad.:} $\nabla\!_w \ell(w) = P(Y\!\!\neq\!y \vert x) \; (-yx)$
+\hfill {\color{gray}\small $\to (Y\!\!=\!-\!y)$}
+
+\textbf{MAP:} Gauss. prior $\to \norm{w}_2^2$, \enskip Lap. $\to \norm{w}_1^1$

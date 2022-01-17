@@ -1,0 +1,81 @@
+\section{Appendix}
+
+% ===
+\emph{Complete the square:}
+If $p(\bm x) \propto \exp(-\frac12 \bm x\!^\top \!\bm{{\color{OrangeRed} A}x} + \bm x\!^\top \begingroup \color{OrangeRed} \bm b \endgroup)$,
+then $p(\bm x) = \Gauss{\bm x \mid \bm A^{-1} \bm b, \bm A^{-1}}$
+
+% ===
+\emph{Constrained optimisation:}
+\\
+\textit{primal}: \enspace $\min_{\bm x} f(\bm x)$ \enspace s.t. \enspace $g_i(\bm x) = 0$; \enspace $h_j(\bm x) \leq 0$
+\\
+\textbf{Lagrangian:} \enspace with each $\alpha_j \geq 0$\\
+\enspace $\mathcal L(\bm x,\lambda,\alpha) = f(\bm x) + \sum_i \lambda_i g_i(\bm x) + \sum_j \alpha_j h_j(\bm x)$
+\\
+Solve: \: $\pderiv{\mathcal L}{\bm x} = 0$; \: $g_i(\bm x) = 0$; \: $\alpha_j \geq 0$; \: $h_j(\bm x) \leq 0$
+\\
+If \textbf{Slater's cond.} holds, $\exists \bm x : g_i(\bm x) = 0, h_j(\bm x) {\color{red}\,<\,} 0$, then we can solve the \textit{dual} instead:\\
+\enskip $\max_{\bm \lambda, \bm \alpha} \brace{ \min_{\bm x} \mathcal L(\bm x, \bm \lambda, \bm \alpha) }$ \: s.t. \: $\alpha_j \geq 0$\\
+Solve: \: $\pderiv{\mathcal L}{\bm x} = 0$; \: $\pderiv{\mathcal L}{\bm \lambda} = 0$; \: $\alpha_j h_j(\bm x) {\color{red}\,=\,} 0$; \: $\alpha_j \geq 0$
+
+\iffalse
+    \emph{Lagrange Multipliers: \color{red} OLD VERSION}
+    \\
+    Problem $\mathcal P : \begin{cases}
+        \min f(\bm x),      & \bm x\in\mathbb R^d \\
+        \text{s.t. } g_i(\bm x)=0,      & i\leq m \\
+        \phantom{\text{s.t. }} h_j(\bm x) \leq 0,       & j\leq n
+    \end{cases}$
+    \\
+    Lagrangian: $\mathcal L(\bm x,\lambda,\alpha) = f(\bm x) + \sum_{i\leq m} \lambda_i g_i(\bm x) + \sum_{j\leq n} \alpha_j h_j(\bm x)$ with each $\alpha_j \geq 0$.
+    \\
+    Solution must satisfy
+    $\pderiv{\mathcal L}{\bm x} = 0$ and $\pderiv{\mathcal L}{\lambda} = 0$,
+    $\alpha_j h_j(\bm x) = 0$, and
+    $\alpha_j \geq 0, \forall j\leq n$.
+\fi
+
+\iffalse
+    \emph{Euler-Lagrange:}
+    Find extrema of functional $\mathcal F[f] = \int G(x, f(x), f’(x)) \diff x$,
+    thus $\pderiv{\mathcal F}{f} \overset!= 0$.
+    \\
+    If $G$ is twice diff'able, then
+    \\
+    $\pderiv{\mathcal F}{f} = \pderiv{G}{f(x)} - \deriv{}{x} \paren*{ \pderiv{G}{f'(x)} } \overset{(\ast)}= \pderiv{G}{f(x)}$.
+    \\
+    $(\ast)$ : when $G$ does not depend on $f'$.
+\fi
+
+
+% ===
+\emph{Metrics:}
+$\mathit{acc} = \frac{\mathrm{TP} + \mathrm{TN}}{n}$
+$\mathit{prec} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FP}}$
+$\mathit{FPR} = \frac{\mathrm{FP}}{\mathrm{FP} + \mathrm{TN}}$
+$\mathit{Recall/TPR} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FN}}$
+$\mathit{balanced\:acc} = \frac1n \sum_i \mathit{TPR}_i$
+$\mathit{F1\!-\!score} = \frac{2 \mathrm{TP}}{2 \mathrm{TP} + \mathrm{FP} + \mathrm{FN}}$
+$\mathit{ROC} = \mathit{FPR} / \mathit{TPR}$
+
+
+% ===
+\emph{Conditional Gaussians:}\\
+$P_{X,Y} = \begin{bmatrix} \bm X \\ \bm Y \end{bmatrix} \sim
+\Gauss*[~]{
+    \begin{bmatrix} \bm\mu_X \\ \bm\mu_Y \end{bmatrix} ,
+    \begin{bmatrix} \bm\Sigma_{XX} & \bm\Sigma_{XY} \\ \bm\Sigma_{YX} & \bm\Sigma_{YY} \end{bmatrix}
+}$,\enspace $\bm\Sigma_{ij}$ p.s.d.
+
+\iffalse
+    $\implies X\vert Y \sim \Gauss{\tilde{\bm\mu}, \tilde{\bm\Sigma}}$,\enskip where
+    $\tilde{\bm\mu} = \bm\mu_X + \bm\Sigma_{XY} \bm\Sigma_{YY}^{-1} (Y - \bm\mu_Y)$,\enskip
+    $\tilde{\bm\Sigma} = \bm\Sigma_{XX} - \bm\Sigma_{XY} \bm\Sigma_{YY}^{-1} \bm\Sigma_{YX})$
+\fi
+
+$\implies Y\vert X \sim \Gauss{\tilde{\bm\mu}, \tilde{\bm\Sigma}}$,\enskip where
+$\tilde{\bm\mu} = \bm\mu_Y + \bm\Sigma_{YX} \bm\Sigma_{XX}^{-1} (X - \bm\mu_X)$,\enskip
+$\tilde{\bm\Sigma} = \bm\Sigma_{YY} - \bm\Sigma_{YX} \bm\Sigma_{XX}^{-1} \bm\Sigma_{XY})$
+
+% ===

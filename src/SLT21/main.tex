@@ -1,0 +1,61 @@
+%! Author = tstreule
+%! Date = 17.01.22
+
+\documentclass[%
+    ,a4paper
+    ,fontsize=12pt % must be 12pt
+    ,landscape
+    ,pagesize
+    ,headinclude
+    ]{scrartcl}
+\usepackage[margin=7mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\usepackage{kpfonts}
+\input{../preamble}
+\usepackage{../shortcuts}
+\usepackage{color}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphic path
+
+% >>> [BEGIN] (Re-)formatting >>>
+\everymath\expandafter{\the\everymath\color{MediumBlue}}
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Statistical Learnint Theory}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+    \input{../disclaimer}
+
+    \begin{multicols*}{3}
+
+        % Suppress enumeration of sections
+        %\setcounter{secnumdepth}{0}
+
+        \maketitle
+
+        %\input{sections/_example_}
+        \input{sections/01_basics}
+        \input{sections/02_emp_risk_min}
+        \input{sections/03_max_entropy}
+        \input{sections/04_methods_for_gibbs}
+        \input{sections/05_deterministic_annealing}
+        \input{sections/06_histogram_clustering}
+        \input{sections/07_pairwise_clustering}
+        \input{sections/08_model_selection}
+        \input{sections/09_model_validation}
+
+        \input{sections/99_appendix}
+
+    \end{multicols*}
+\end{document}

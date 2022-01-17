@@ -1,0 +1,77 @@
+\vfill~\columnbreak
+
+\section{Useful math}
+
+% ===
+\emph{Probabilities}
+
+$\mathbb{E}_x[X] = \begin{cases}
+   \int x \cdot p(x) \diff x  & \text{if continuous}\\
+   \sum_x x \cdot p(x) & \text{discrete}
+  \end{cases}$
+
+$\operatorname{Var}[X] = \mathbb{E}[(X-\mu_X)^2] = \mathbb{E}[X^2] - \mathbb{E}[X]^2$
+
+\textbf{Bayes Rule:} (using \textbf{chain} rule)
+
+\highlight*{$P(A\vert B) = \frac{P(B\vert A) \cdot P(A)}{P(B)}$},
+\enskip
+$P(Z\vert X,\theta) = \frac{ P(X,Z\vert\theta) }{ P(X\vert\theta) }$
+
+% ===
+\emph{p-Norm:}
+$\norm{x}_p = (\sum_{i=1}^n \abs{x_i}^p)^{\frac{1}{p}}$, $1 \leq p < \infty$
+
+% ===
+\emph{Some gradients}
+
+$\nabla\!_x \norm{x}_2^2 = 2 x$
+
+$f(x) = x^\top A x$; $\nabla\!_x f(x) = (A + A^\top) x$
+
+E.g. $\nabla\!_w \log(1+\exp(-y w^\top x)) = ...$\\
+\phantom{E.g.} $=\frac{1}{1+\exp(-y w^\top x)} \cdot \exp(-y w^\top x) \cdot (-y x)$\\
+\phantom{E.g.} $=\frac{1}{1 + \exp(y w^\top x)} \cdot(-yx)$
+
+% ===
+\emph{Convex / Jensen's inequality}
+
+$f(x) \textbf{ \normalcolor convex }
+\myiff f''(x)\!>\!0
+\myiff x_i\!\in\!\mathbb{R}, \lambda\!\in\![0,1]: 
+f(\lambda x_1 + (1\!-\!\lambda) x_2) \leq \lambda f(x_1) + (1\!-\!\lambda) f(x_2)$
+
+\textbf{Jensen's inequality:}
+$g(\mathbb{E}[X]) \leq \mathbb{E}[g(X)]$
+
+% ===
+\emph{Gaussian / Normal distribution}
+
+$\highlight{\mathcal{N}(\mu,\sigma^2)} \sim \frac{1}{\sqrt{2\pi\sigma^2}} \exp\big( \!-\frac{(x-\mu)^2}{2\sigma^2} \big)$
+
+\textbf{Multivariate Gaussian:}\\
+$f(x) = \frac{1}{2\pi\sqrt{\abs{\Sigma}}} \exp\left( \frac{1}{2} (x-\mu)^\top \Sigma^{-1} (x-\mu) \right)$\\
+with $\textstyle \Sigma =
+\begin{bmatrix}
+	\sigma_{11}^2	& \sigma_{12}\\
+	\sigma_{21}		& \sigma_{22}^2
+\end{bmatrix}$
+and $\mu =
+\begin{bmatrix}
+	\mu_1 \\ \mu_2
+\end{bmatrix}$
+
+% ===
+\emph{Multivariate Gaussian}
+
+$\Sigma =$ covariance matrix, $\mu$ = mean\\
+$f(x) = \frac{1}{2\pi \sqrt{|\Sigma|}} e^{- \frac{1}{2} (x-\mu)^T \Sigma^{-1} (x-\mu)}$\\
+Empirical: $\Sigma = \frac{1}{n}\sum_{i=1}^n x_i x_i^T$ (needs centered data points)
+
+% ===
+\emph{Positive semi-definite matrices}
+
+$M \in \mathbb{R}^{n\times n}$ is psd $\Leftrightarrow$\\
+$\forall x \in \mathbb{R}^n: x^TMx \geq 0 \Leftrightarrow$\\
+all eigenvalues of $M$ are positive: $\lambda_i\geq 0$
+

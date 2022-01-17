@@ -1,0 +1,165 @@
+%! Author = tstreule
+%! Date = 17.01.22
+
+% Language package
+% \usepackage[utf8]{inputenc} % Not to use with Xe-LaTeX!
+\usepackage{fontspec}
+% \usepackage{kpfonts}
+% \usepackage[T1]{fontenc}
+\usepackage[english,ngerman]{babel}
+\usepackage[svgnames]{xcolor}
+
+% Flush left
+\usepackage[document]{ragged2e}
+
+% Set date format
+\usepackage[useregional=numeric]{datetime2}
+
+% Arithmetic / Coding package
+\usepackage{ifthen}
+\usepackage{calc}
+
+% Spacing
+\usepackage[nodisplayskipstretch]{setspace}
+\setlength\intextsep{0pt}% no spacing above and below figures/tables
+\setlength\columnsep{10pt}% Column spacing for multicols
+% \setstretch{1.1}
+% Move operators tighter together
+\thinmuskip=2mu                     % default: 3mu
+\medmuskip=3mu plus 1mu minus 3mu   % default: 4mu plus 2mu minus 4mu
+\thickmuskip=4mu plus 3mu minus 3mu % default: 5mu plus 5mu
+% \setlength{\thickmuskip}{5mu}     % not possible due to \usepackage{calc}
+% Array and matrix spacing
+\setlength\arraycolsep{1pt}
+% Hack to remove vertical spacing in equations
+\usepackage{etoolbox}
+\newcommand{\setdisplayskips}{%
+    \setlength{\abovedisplayskip}{1pt}%
+    \setlength{\belowdisplayskip}{1pt}%
+    \setlength{\abovedisplayshortskip}{1pt}%
+    \setlength{\belowdisplayshortskip}{1pt}}
+\appto{\normalsize}{\setdisplayskips}
+\appto{\small}{\setdisplayskips}
+\appto{\footnotesize}{\setdisplayskips}
+
+% Control (primitive) list items
+\usepackage{enumitem}
+\setlist{leftmargin=*,nosep,labelsep=2pt,parsep=-0.2pt}  % reduce spaces
+\setlist[itemize,2]{label=$\circ$}
+
+% Formatting
+\usepackage{multicol, multirow, tabularx}
+\usepackage{makecell}
+\usepackage{ulem} % for custom underline/strikethrough/...
+\usepackage{float}
+
+% Images
+\usepackage{graphicx}
+
+% Custom emphasizing
+\colorlet{emph-text-color}{MediumOrchid}
+\DeclareTextFontCommand{\emph}{\color{emph-text-color}\bfseries\sffamily}
+
+
+% =============
+% === FONTS ===
+
+% Font sizes
+\setkomafont{section}{\normalsize}
+\setkomafont{subsection}{\normalsize}
+\setkomafont{subsubsection}{\normalsize}
+%\setkomafont{paragraph}{\normalsize}
+%\setkomafont{subparagraph}{\normalsize}
+
+% Set fonts
+\setmainfont[LetterSpace=-1.5,WordSpace=0.8,Scale=1.0,
+    BoldFont=* SemiBold,BoldItalicFont=* SemiBold Italic]{Noto Serif}
+\setsansfont[LetterSpace=-1.8,WordSpace=0.8,Scale=1.0]{Open Sans}
+
+\defaultfontfeatures{Mapping=tex-text}
+\defaultfontfeatures{Ligatures=TeX}
+\addfontfeature{LetterSpace=-20.0}
+
+
+% ====================
+% === TITLE FORMAT ===
+
+\usepackage{titling}
+
+% Reduce default vertical space before and after
+\setlength{\droptitle}{-3.5em}
+\renewcommand{\maketitlehookd}{\vspace{-1.3em}}
+
+% Title
+\pretitle{\centering\sffamily\large\bfseries}
+\posttitle{\par}
+% Author
+\preauthor{\centering\sffamily\small}
+\postauthor{\ifx\thedate\empty{\par}\else{}\fi}
+% Date - remove spacing above and below
+\predate{\centering\sffamily\small\ifx\thedate\empty{}\else{\;-\;}\fi\itshape}
+\postdate{\ifx\thedate\empty{}\else{\par}\fi}
+
+
+% =======================
+% === SECTIONS FORMAT ===
+
+% Make spacing tight
+\RedeclareSectionCommands[%
+    runin=false,
+    beforeskip=1ex plus .5ex,
+    afterskip=0ex plus .1ex,
+]{section,subsection,subsubsection}
+
+% Define colors
+\colorlet{section-color}{RoyalBlue!90}
+\colorlet{subsection-color}{RoyalBlue!40}
+\colorlet{subsubsection-color}{RoyalBlue!20}
+\colorlet{section-text-color}{white}
+\colorlet{subsection-text-color}{black}
+\colorlet{subsubsection-text-color}{black}
+
+% Put in colored box with fixed height
+\def\sectionboxheight{.7em}
+\def\sectionboxvspace{-.1ex}
+\makeatletter
+\renewcommand\sectionlinesformat[4]{%
+    \colorbox{#1-color}{%
+        \begin{minipage}[b][\sectionboxheight][t]{\dimexpr\linewidth-2\fboxsep\relax}
+            \vspace{\sectionboxvspace}%
+            \raggedsection\color{#1-text-color}\@hangfrom{#3}{#4}%
+            \vspace{\sectionboxvspace}%
+        \end{minipage}%
+    }}
+\makeatother
+
+
+% ===========================
+% === HEADERS AND FOOTERS ===
+
+\usepackage[footsepline]{scrlayer-scrpage}
+
+\pagestyle{plain.scrheadings}
+
+% Clear and set styles
+\clearpairofpagestyles
+%\clearscrheadfoot
+\setkomafont{pageheadfoot}{\color{gray}\sffamily}
+
+% Reset pagination format
+\setkomafont{pagination}{}
+
+% Set content
+%\ihead*{}
+%\chead*{}
+%\ohead*{tstreule $\vert$ Page \pagemark}
+%\ifoot*{}
+%\cfoot*{}
+%\ofoot*{}
+
+
+% =====================
+% === COLOR STYLING ===
+% \everymath\expandafter{\the\everymath\color{MediumBlue}}
+% --> use "\the\everymath" for default math color
+% --> use "\normalcolor" for other way around

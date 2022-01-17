@@ -1,0 +1,76 @@
+\section{Missing data
+\normalfont\sffamily, w/o labels $\color{section-text-color}\to$ unsupervised}
+
+% ===
+\emph{Mixture modeling}
+
+Model each class as prob. distribution $P(x|\theta_j)$\\
+$P(D|\theta) = \prod_{i=1}^n \sum_{j=1}^c w_j P(x_i|\theta_j)$\\
+$L(w, \theta) = - \sum_{i=1}^n \log  \sum_{j=1}^c w_j P(x_i| \theta_j)$\\
+$\implies \theta^\ast = \arg\!\min L(\theta)$\enskip\emph{$\to$ non convex}
+
+% ===
+\emph{Gaussian-Mixture Bayes classifiers}
+
+Estimate prior $P(y)$; Est. cond. distr. for each class:
+$P(x|y) = \sum_{j=1}^{k_y} w_j^{(y)} \mathcal{N}(x; \mu_j^{(y)}, \Sigma_j^{(y)})$\\
+
+% ===
+\emph{Hard-EM algorithm}\vspace{1pt}
+\begin{highlightbox}
+	Initialize $\theta^{(0)}$; \enskip Let $Q^{(t)} (z) = P(z\vert x,\theta^{(t)})$\\
+	\textbf{For $t=1,2,...$ do:}\\
+	$\bullet$ \textbf{E-step}: estimate log-likelihood\\
+	\phantom{$\bullet$} Predict most likely class for each point $x_i$\\
+	\phantom{$\bullet$} $\circ$
+		$z_i^{(t)} = \arg\!\max\limits_z P(z\vert x_i,\theta^{(t-1)})$\vspace{-5pt}\\
+	\phantom{$\bullet$ $\circ$}
+		\phantom{$z_i^{(t)}$}$\;= \arg\!\max\limits_z P(z\vert\theta^{(t-1)}) \, P(x_i\vert z,\theta^{(t-1)})$\\
+	$\bullet$ \textbf{M-step}: Maximize (MLE)\\
+	\phantom{$\bullet$} $\circ$
+		$L^{(t)} (\theta) = \mathbb{E}_{Q^{(t)}} [\log P(x,y\vert \theta^{(t)})]$\\
+	\phantom{$\bullet$} $\circ$
+		$\theta^{(t)} = \arg\!\max\limits_\theta L^{(t)}$
+		$\to \pderiv{~}{\theta}L = 0$
+		$\to \theta^{(t)} = ...$
+\end{highlightbox}
+$\theta^{(t)} = \underset{\theta}{\operatorname{argmax}} P(D^{(t)}|\theta)$, i.e. $\mu_j^{(t)} = \frac{1}{n_j} \sum_{i: z_i = j x_j}$
+
+% ===
+\emph{Soft-EM algorithm}
+
+E-step: Calc p for each point and cls.: $\gamma_j^{(t)}(x_i)$\\
+M-step: Fit clusters to weighted data points:\\
+$w_j^{(t)} = \frac{1}{n} \sum_{i=1}^n \gamma_j^{(t)} (x_i)$; 
+$\mu_j^{(t)} = \frac{\sum_{i=1}^n \gamma_j^{(t)} (x_i) x_i}{\sum_{i=1}^n \gamma_j^{(t)} (x_i)}$\\
+$\sigma_j^{(t)} = \frac{\sum_{i=1}^n \gamma_j^{(t)}(x_i) (x_i - \mu_j^{(t)})^T (x_i - \mu_j^{(t)})}{\sum_{i=1}^n \gamma_j^{(t)}(x_i)}$
+
+% ===
+\emph{Soft-EM for semi-supervised learning}
+
+labeled $y_i$: $\gamma_j^{(t)}(x_i) = [j = y_i]$,
+unlabeled:\\ $\gamma_j^{(t)}(x_i) = P(Z=j|x_i, \mu^{(t-1)}, \Sigma^{(t-1)}, w^{(t-1)})$
+
+%If enough space put this on summary.
+\iffalse
+\subsection*{Log-likelihood}
+$l(\theta) = log P(\mathcal{D})$ \\
+$=\sum_{\overset{i=1}{y_i=\times}}^n log P(x_i;\theta) + \sum_{\overset{i=1}{y_i\not=\times}}^n log P(x_i,y_i;\theta)$\\
+$=\sum_{\overset{i=1}{y_i=\times}}^n log \sum_{i=1}^m P(x_i, Y=j;\theta) +$\\
+$ \sum_{\overset{i=1}{y_i\not=\times}}^n log P(x_i,y_i;\theta)$\\
+$=\sum_{\overset{i=1}{y_i=\times}}^n log \sum_{i=1}^m P(x_i|Y=j;\theta)P(Y=j|\theta) +$\\
+$ \sum_{\overset{i=1}{y_i\not=\times}}^n log P(x_i,y_i;\theta)$
+
+\subsection*{Latent variable}
+We denote the latent variable indicating the component the point is sampled from by Z, which takes on values in $\{1,...,k\}$.
+
+\subsection*{E-step: Posterior probabilities}
+$\gamma_j^t(x_i) = P(Z=j|x_i, \theta_t) = \frac{P(x_i|Z=j, \theta_t) P(Z=j|\theta_t)}{P(x_i;\theta_t)}$
+
+\subsection*{M-step: maximizing expected log likelihood}
+$\mathbb{E}_{\gamma^t}[\log P(\mathcal{D;\theta})] = 
+\mathbb{E}_{\gamma^t}[\log \Pi_{i=1}^nP(x_i,z_i;\theta)] = $ \\
+$\sum_{i=1}^n \mathbb{E}_{\gamma^t}[\log P(x_i,z_i;\theta)] = $ \\
+$\sum_{i=1}^n \sum_{j=1}^k \gamma_j^t(x_i) \log (P(x_i|z_i=j;\theta) P(z_i=j;\theta))$ \\
+$\theta_{t+1} = \underset{\theta}{\operatorname{argmax}} \mathbb{E}_{\gamma^t}[\log P(\mathcal{D;\theta})]$
+\fi

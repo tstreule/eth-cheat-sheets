@@ -1,0 +1,57 @@
+\section{Support Vector Machine (SVM)}
+
+\iffalse
+    % Here: Data is assumed linearly separable
+    % Below: additionally (orange) soft margin when not
+    % ===
+    \textit{Primal}: \: $\min\limits_{\bm w, w_0} \frac12 \norm{\bm w}^2$ \: s.t. \: $y_i(\bm w^\top \bm x_i + w_0) \geq 1$\\
+    \quad $\hookrightarrow$ intractable if $\varphi(\bm x_i)$ instead of $\bm x_i$
+    
+    \textit{Dual}: \: $\max\limits_{\bm\alpha} \sum_i \alpha_i - \frac12 \sum_{i,j} \alpha_i \alpha_j y_i y_j \bm x_i^\top \bm x_j$\\
+    \qquad\qquad s.t. \: $\alpha_i \geq 0$; \: $\sum_i \alpha_i y_i = 0$\\
+    \quad $\hookrightarrow$ solve $\alpha$ via quadratic optimisation
+    
+    Optimal hyperplane: \: $\bm w^\ast = \sum_i \alpha_i^\ast y_i \bm x_i$\\
+    \quad $\hookrightarrow$ $\alpha_i^\ast \neq 0$ only for \textit{support vectors}
+\fi
+
+% ===
+\textit{Primal} \textcolor{OrangeRed}{(soft margin)}: \: $\min\limits_{\bm w, w_0 \color{OrangeRed}, \xi} \frac12 \norm{\bm w}^2 \color{OrangeRed} + C\sum_i \xi_i$\\
+\qquad s.t. \: $y_i(\bm w^\top \bm x_i + w_0) \geq 1 \color{OrangeRed} - \xi_i$ \: and \: $\color{OrangeRed} \xi_i \geq 0$\\
+\quad $\hookrightarrow$ intractable if $\varphi(\bm x_i)$ instead of $\bm x_i$\\
+\quad $\hookrightarrow$ $\xi_i = 0$ means $\bm x_i$ was \underline{not} neglected
+
+\textit{Dual}: \: $\max\limits_{\bm\alpha} \sum_i \alpha_i - \frac12 \sum_{(i,j)} \alpha_i \alpha_j y_i y_j \bm x_i^\top \bm x_j$\\
+\qquad\qquad s.t. \: $0 \leq \alpha_i \color{OrangeRed} \leq C$; \: $\sum_i \alpha_i y_i = 0$\\
+\quad $\hookrightarrow$ solve $\alpha$ via quadratic optimisation
+
+Optimal hyperplane: \: $\bm w^\ast = \sum_i \alpha_i^\ast y_i \bm x_i$\\
+\quad $\hookrightarrow$ $\alpha_i^\ast \neq 0$ only for \textit{support vectors}
+
+Optimal slack: \: $\xi_i^\ast = \max(0, 1 - y_i(\bm w^{\ast\top} \!\bm x_i {+} w_0^\ast))$
+
+% ===
+\subsection{Structural SVMs}
+
+$\min\limits_{\bm w \color{OrangeRed}, \xi} \frac12 \norm{\bm w}^2 \color{OrangeRed} + \frac{C}{n} \sum\limits_{i\leq n} \xi_i$
+\quad s.t. $\color{OrangeRed} \xi_i \geq 0$ and $\forall y' \neq y_i :$\\
+\quad $\bm w^\top \Psi(x_i, y_i) \geq \Delta(y_i, y') + \underbracket[.7pt][.7pt]{\bm w^\top \Psi(x_i, y')}_{\hookrightarrow \text{ mislabelings}} \color{OrangeRed} - \xi_i \color{Green} - \epsilon$\\
+
+% ---
+%\columnbreak
+% ---
+
+$\Psi$ : \textit{joint-feature map}; \:
+$\Delta$ : loss / class dissimilarity func.; \:
+$\bm w^\top \Psi(x,y)$ : compatibility score btw. $x$ and $y$; \:
+$\color{Green} \epsilon$ : tolerance / universal slack variable.
+
+\textbf{Prediction:} \: $c(x) = \argmax_y \bm w^\top \Psi(x,y)$
+\vspace{-3pt}
+
+\textit{Note:} For optimal $\bm w^\ast$, $\xi^\ast$, $\textrm{emp. risk}(\bm w^\ast) \leq \frac1n \sum_i \xi_i^\ast$
+
+\textbf{Training:} Start without any constraints.\\
+In each iteration, add for each $(x_i,y_i)$ the constraint with $y' {\neq} y_i$ that is the ``most violated'' and solve again with quadr. optimisation.
+
+% ===
