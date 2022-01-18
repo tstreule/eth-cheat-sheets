@@ -2,11 +2,11 @@
 
 This is a collection of some of my cheat sheets that I created during my studies at ETH Zurich.
 
-Cheat Sheet | Link
-:-----------|:----
-Advanced Machine Learning | [:memo:](pdfs/AML20.pdf) |
-Introduction to Machine Learning | [:memo:](pdfs/IML19.pdf) |
-Statistical Learning Theory | [:memo:](pdfs/SLT21.pdf) |
+- [Advanced Machine Learning](pdfs/AML20.pdf)
+- [Bioelectronics and Biosensors](pdfs/BE18.pdf)
+- [Biomedical Imaging](pdfs/BMI18.pdf)
+- [Introduction to Machine Learning](pdfs/IML19.pdf)
+- [Statistical Learning Theory](pdfs/SLT21.pdf)
 
 
 ## Getting started
