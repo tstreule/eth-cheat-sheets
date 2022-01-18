@@ -1,0 +1,90 @@
+%! Author = tstreule
+%! Date = 18.01.22
+
+\documentclass[%
+,a4paper
+,fontsize=8.6pt
+,landscape
+,pagesize
+,headinclude
+]{scrartcl}
+\usepackage[margin=5mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\input{../preamble}
+\usepackage{../shortcuts}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphic path
+
+% >>> [BEGIN] (Re-)formatting >>>
+\setmainfont[LetterSpace=-2,WordSpace=0.8,Scale=1.0,
+	BoldFont=* SemiBold,BoldItalicFont=* SemiBold Italic]{Noto Serif}
+\let\degree\relax\usepackage{mathabx}
+\usepackage{siunitx,amscd,esint,svg,wasysym}
+\usepackage[version=4]{mhchem}
+\newlength{\boxmargin}
+\setlength{\boxmargin}{2pt}
+%\parskip\boxmargin
+% same parskip inside minipage
+\makeatletter
+\let\org@parboxrestore\@parboxrestore
+\def\@parboxrestore{%
+	\edef\restore@parsettings{%
+		\parindent=\the\parindent\relax
+		\parskip=\the\parskip\relax
+	}%
+	\org@parboxrestore
+	\restore@parsettings
+}
+\makeatother
+\parindent0pt
+\unitlength10mm
+\newcommand{\formulaEnvironment}[3][]{\par
+	\parbox{0.3\columnwidth}{\raggedright#2}\hspace{\boxmargin}#3%
+	\ifthenelse{\not\equal{#1}{}}{%
+		\hspace{\boxmargin}$\left[#1\right]$}{}}
+\newcommand{\formula}[3][]{%						'\formula'		% formula
+	\formulaEnvironment[#1]{#2}{$#3$}}
+\newcommand{\formbox}[3][]{%						'\formbox'		% eqbox in formula style
+	\formulaEnvironment[#1]{#2}{\highlight{$\!\!#3\!\!$}}}
+\newcommand{\formtex}[2]{%						'\formtex'		% text in formula style
+	\formulaEnvironment{#1}{#2}}
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Bioelectronics}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+	\input{../disclaimer}
+
+	\begin{multicols*}{3}
+
+		% Suppress enumeration of sections
+		%\setcounter{secnumdepth}{0}
+
+		\maketitle
+
+		\input{sections/01_general}
+		\input{sections/02_biosensors}
+		\input{sections/03_optical_microscopy}
+		\input{sections/04_mechanical_sensors}
+		\input{sections/05_fluorescent}
+		\input{sections/06_detection_and_noise}
+		\input{sections/07_optical_biosensors}
+		\input{sections/08_electron_transfer}
+		\input{sections/09_potentiometric_biosensors}
+		\input{sections/10_amperometric_sensors}
+		\input{sections/11_membranes_and_transport}
+		\input{sections/12_action_potential}
+
+	\end{multicols*}
+\end{document}

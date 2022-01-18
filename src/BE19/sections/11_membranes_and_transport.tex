@@ -1,0 +1,116 @@
+%! Author = tstreule
+
+\section{Membranes and Transport}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Diffusion}
+%
+\formula[\unitfrac{mol}{l}=\unitfrac{mol}{10^3\,cm^3}]{Concentration}{c(x,t)}
+\formula[\unitfrac{mol}{cm^2\,s}]{Flux}{\phi(x,t)}
+
+\formbox{\textbf{Fick's law}}{\phi(x,t) = -D_n \pderiv{c_n(x,t)}{x}}
+$= \phi_0$ in \textbf{steady state}
+\formtex{~}{$D_n$: diffusion coeff $[\unitfrac{cm^2}{s}]$}
+\formbox{Continuity eq.}{-\pderiv{\phi_n(x,t)}{x} = \pderiv{c_n(x,t)}{t}}
+\formtex{\hfill \vspace{-1mm}e.g.}{\textbf{Delta initial condition} $c(x,t)\vert_{t=0}=n_0\delta(x)$}
+\formtex{~}{%
+    $c(x,t) {=} \frac{n_0}{\sqrt{2\pi\sigma}} \eu^{-x^2\!/\sigma^2}$,\hfill
+    $\sigma {=} \sqrt{2D_nt}$,\hfill
+    $t_{\unitfrac{1}{2}} {=} \frac{1}{D_n} x_{\unitfrac{1}{2}}^2$
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Diffusion across membrane}
+%
+\formtex{\includegraphics[width=.3\columnwidth]{Transport_Diffusion}}{%
+%    \hspace{1cm}%
+    \parbox{.7\columnwidth}{%
+        $\phi_n(t) = P_n\,(c_n^i(t) - c_n^o(t))$\\
+        with permeability: $P_n = \frac{D_nk_n}{d}$\\[1em]
+        state space (inside membrane)\\
+        after $\tau\ped{SS} = \frac{d^2}{\pi^2D_n}$
+    }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Osmosis}
+%
+\vspace{-2mm}
+\formbox{\vspace{2mm}Osmotic (back-)pressure}{\pi(x,t) = RT\; \sum\limits_n c_n(x,t)}
+\vspace{2mm} {\small\enskip $c_\Sigma(x,t)$: \parbox{.2\columnwidth}{osmolarity/\\total conc.}}
+\formula{Zero pressure if}{\pi_i - \pi_o = 0}
+\formula{Volume of the cell}{v_c(\infty) = v_c' + \frac{N_\Sigma^i}{c_\Sigma^o}}
+\quad $v_c'$: non-water volume
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Carrier mediated Transport}
+%
+\formtex{Hints for their}{$\bullet$ Saturation of solute trsp. (\lightning~Fick's law)}
+\formtex{existance}{$\bullet$ Competitive inhib. \quad $\bullet$ Structure specificy}
+
+\textbf{4-state carrier model}
+
+\begin{minipage}{.5\columnwidth}
+    \includegraphics[width=.9\columnwidth]{Transport_Carriers}
+\end{minipage}%
+\begin{minipage}{.5\columnwidth}
+    \begin{enumerate}
+        \item Conservation\par
+        \quad $N_E^i + N_E^o + N_{ES}^i + N_{ES}^o = N_{ET}$
+        \item Fast binding (always steady state)\par
+        \quad $K = \frac{c_S^i N_E^i}{N_{ES}^i} = \frac{c_S^o N_E^o}{N_{ES}^o}$
+        \item Translocation (char. by flux)\par
+        \quad $\phi_{E(S)} = \alpha N_{E(S)}^i - \beta N_{E(S)}^o$
+        \item Zero net flux\par
+        \quad $\phi_E + \underbrace{\phi_{ES} \vspace{-1mm}}_{\phi_S} = 0$
+    \end{enumerate}
+\end{minipage}
+\scalebox{.9}{
+    \formula{Net flux \underline{out} of cell}{\phi_S {=} \frac{\alpha\beta}{\alpha+\beta}N_{ET} \paren*{\frac{c_s^i}{c_s^i + K} {-} \frac{c_s^o}{c_s^o + K}}
+    \enskip (\phi_S)\ped{max} {=} \frac{\alpha\beta}{\alpha+\beta}N_{ET}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Ion Transport}
+%
+\formbox{\textbf{Continuity eq.}}{\pderiv{J_n(x,t)}{x} = -z_n F \pderiv{c_n(x,t)}{t}}
+\enskip $z_n$: valency
+\formbox{\textbf{Poisson eq.}}{\pderiv[2]{\psi(x,t)}{x} = -\frac{1}{\epsilon} \sum_n z_nFc_n(x,t)}
+\formtex{\centering i.e.}{electric field potential = local charge density}
+\formbox{\vspace{3mm}\textbf{Nernst-Planck eq.}\\$u_n$: molar mobility}{\scriptsize
+    \underbrace{J_n(x,t) \vspace{-1mm}}_\mathrm{current}
+    =- \underbrace{z_nFD_n\pderiv{c_n(x,t)}{x} \vspace{-1mm}}_\textrm{diffusion of charge}
+    - \underbrace{u_nz_n^2F^2c_n(x,t)\pderiv{\psi(x,t)}{x} \vspace{-1mm}}_\textrm{mobility of charge in E-field}
+}
+
+Debye Length ``depletion width'': $\lambda_D \simeq \unit[1]{nm}$ within $\tau_r \simeq \unit[1]{ns}$
+\formbox{\textbf{Nernst Equi. Pot.}}{V_n = \frac{\unit[59]{mV}}{z_n} \log_{10}Q}
+\enskip with
+\enskip \highlight{$\!\!\textstyle Q = \frac{c_s^o}{c_s^i}\!\!$},
+\enskip $\frac{D_n}{u_n} = RT$
+\formula{~}{V\ped{K} \simeq \unit[-75]{mV}, \quad V\ped{Na} \simeq \unit[55]{mV}}
+\formula{Donnan equil.}{V_m {=} V_n \Rightarrow I_n=0}
+\textcolor{gray}{\enskip $\left(\frac{c_n^o}{c_n^i}\right)^{\pm\frac{1}{z_n}} {=} \eu^\frac{FV_m}{RT}$, $+$: anodic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Resting (membrane) potential}
+%
+\begin{minipage}{.35\columnwidth}
+    \centering
+    Resting $\leftrightarrow$ $I_m = 0$\par
+    \includegraphics[width=\columnwidth]{Transport_Resting}
+\end{minipage}
+\hfill
+\begin{minipage}{.25\columnwidth}
+    \includegraphics[width=\columnwidth]{Transport_Current}
+\end{minipage}
+\hfill
+\begin{minipage}{.35\columnwidth}
+    \includegraphics[width=\columnwidth]{Transport_Multiple_Ion}
+\end{minipage}
+
+\formtex{\textbf{3-ion model}}{permeable to \ce{K}, \ce{Na} and some others}
+\formbox{Resting potential}{V_m\ap{rest} {=} \frac{V\ped{K}\;G\ped{K}}{G\ped{tot}} {+} \frac{V\ped{Na}\;G\ped{Na}}{G\ped{tot}} {+} \frac{V_o\;G_o}{G\ped{tot}}}
+{\scriptsize $G\ped{tot} {\equiv} G_m {=} \mathrm{slope}$}
+\formtex{$J_m = J\ped{K} \!+\! J\ped{Na} \!+\! J_o = 0$}{where $J_n\!\neq\!0$ (only momentarly rest)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Active Transport}
+%
+Rest is only momentarly $\to$ maintain conc. grad with \textit{act. transport}
+\begin{itemize}
+    \item Ions moving against its conc. gradient $\to$ ATP needed
+    \item Active pumps for $J_m\!=\!0$ (rest) and $J_{n,\mathrm{in}} \!+\! J_{n,\mathrm{out}} = 0$ (quasi equilib.)
+\end{itemize}
