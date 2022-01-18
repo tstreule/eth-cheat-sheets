@@ -1,0 +1,60 @@
+%! Author = tstreule
+%! Date = 18.01.22
+
+\documentclass[%
+,a3paper
+,fontsize=10.5pt
+,landscape
+,pagesize
+,headinclude
+]{scrartcl}
+\usepackage[margin=7mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\input{../preamble}
+\usepackage{../shortcuts}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphic path
+
+% >>> [BEGIN] (Re-)formatting >>>
+\let\degree\relax\usepackage{mathabx}
+\usepackage{siunitx,amscd,esint,svg}
+\usepackage[version=4]{mhchem}
+%\let\oldhighlight\highlight
+%\RenewDocumentCommand\highlight{s O{} m}{%
+%	IfBooleanTF#1{\oldhighlight*{#2}{#3}}{\oldhighlight{#2}{#3}}}
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Biomedical Imaging}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+	\input{../disclaimer}
+
+	\begin{multicols*}{4}
+
+		% Suppress enumeration of sections
+		%\setcounter{secnumdepth}{0}
+
+		\maketitle
+
+		\input{sections/01_general}
+		\input{sections/02_generation_xrays}
+		\input{sections/03_imaging_xrays}
+		\input{sections/04_computed_tomography}
+		\input{sections/05_spect}
+		\input{sections/06_pet}
+		\input{sections/07_mri}
+		\input{sections/08_ultrasound}
+
+	\end{multicols*}
+\end{document}
