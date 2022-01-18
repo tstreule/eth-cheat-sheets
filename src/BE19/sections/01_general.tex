@@ -1,0 +1,103 @@
+%! Author = tstreule
+
+\section*{General}
+
+\subsection*{Formeln}
+%
+\textbf{Circle}: $U\ped{circle} = 2\pi r$, $A\ped{circle} = \pi r^2$
+
+%	\textbf{Laplace}:\\
+%	\begin{tabular}{ c@{$\;\laplace\;$}c c c@{$\;\laplace\;$}c }
+%		$f(at)$			& $\frac{1}{\abs{a}}F(s/a)$	&& $f(t-a)$		& $\eu^{-as}F(s)$\\
+%		$f(t)\eu^{at}$	& $F(s-a)$					&& $f'(t)$		& $sF(s) - f(0^+)$\\
+%		$t^n$			& $n!/s^{n+1}$				&& $t^n f(t)$	& $(-1)^n F^{(n)}(s)$\\
+%		$\sin(at)$		& $\frac{a}{s^2 + a^2}$		&& $\cos(at)$	& $\frac{s}{s^2 + a^2}$\\
+%		$\eu^{at}$		& $\frac{1}{s - a}$			&& $t^n \eu^{at}$& $\frac{n!}{(s-a)^{n+1}}$
+%	\end{tabular}
+
+\textbf{Constants}:\\
+\begin{tabular}{r@{$\;=\;$}l}
+    $h$			& $\unit[6.626 {\scriptstyle\mathrm{E}-34}]{Js} = \unit[4.135 {\scriptstyle\mathrm{E}-15}]{eV\,s}$,
+    \quad $\hbar = \frac{h}{2\pi}$,
+    \quad $hc = \unit[1.986 {\scriptstyle\mathrm{E}-25}]{Jm}$\\
+    $\epsilon_0$& $\unitfrac[8.85 {\scriptstyle\mathrm{E}-5}]{As}{Vm}$\\
+    $\mu_0$		& $\unitfrac[4\pi {\scriptstyle\mathrm{E}-7}]{N}{A^2}$\\
+    $k\ped{B}$	& $\unitfrac[1.38 {\scriptstyle\mathrm{E}-23}]{J}{K} = \unitfrac[8.617 {\scriptstyle\mathrm{E}-5}]{eV}{K}$\\
+    $q$			& $\unit[1.602 {\scriptstyle\mathrm{E}-19}]{C}$, \quad $m_e = \unit[9.109 {\scriptstyle\mathrm{E}-31}]{kg}$, \quad $m_p = \unit[1.672 {\scriptstyle\mathrm{E}-27}]{kg}$\\
+    $F$			& $\unitfrac[96485]{C}{mol}$ (Faraday)\\ % charge of 1 mole of electrons
+    $R$         & $N\ped{A} k\ped{B} = \unitfrac[8.314]{J}{mol\;K}$ (Ideal gas constant)\\
+    $N\ped{A}$	& $\unitfrac[6.022 {\scriptstyle\mathrm{E}23}]{particles}{mol}$
+    \qquad $\SI{0}{\degreeCelsius} = \unit[273.15]{K}$
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Einheiten}
+%
+\formula{Druck}{\unit[1]{Pa} = \unitfrac[1]{N}{m^2} = \unitfrac[1]{J}{m^3} = \unitfrac[10]{g}{cm\cdot s^2}}\\
+\formula{Induktivität}{\unit[1]{H} = \unitfrac[1]{Vs}{A} = \unit[1]{\Omega\,s}}\\
+\formula{Power}{\unit[1]{W} = \unitfrac[1]{J}{s} = \unit[1]{VA}}\\
+\formula{electron volt}{\unit[1]{eV} = \unit[1.602 {\scriptstyle\mathrm{E}-19}]{J} = \unitfrac[23.06]{kcal}{mol}}\\
+\formula{Charge}{\SI{1}{\coulomb} = \SI{1}{\ampere\second}}\\
+\formula{Energy}{\SI{1}{\joule} = \unitfrac[1]{kg\;m^2}{s^2} = \unit[1]{Nm} = \unit[1]{VAs} = \unit[1]{CV} = \unit[1]{Ws}}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Good to know}
+%
+\formula{Power in \unit{dB}}{10\,\log_{10}\frac{I}{I_0}}\\
+\formula[\unit{\frac{\!W}{m^2}}]{Intensity}{ I = \frac{\textrm{avg. Power }(P)}{\textrm{area }(A)} }\\
+\formula[\unit{W} = \unit{\frac{kg\,m^2}{s^3}}]{avg. Power}{P = \frac{\textrm{avg. Work in cycle }(\overline{W})}{\textrm{cycle }(T)}}\\
+\formula[\unit{J}=\unit{Ws}]{(avg.) Work}{\overline{W} = \int_{\textrm{cycle}} \frac{1}{\textrm{cycle} (T)} \cdot \vec{F}\cdot\vec{x} \diff t }\\
+
+mass $m$ vibrates with an amplitude $a$ along $x$-axis:\\
+$\vec{x}(t) = a\sin(\omega t)\cdot \vec{e}_x, \quad \omega = 2\pi f = 2\pi/T, \quad \vec{F}(t) = m\,\ddot{\vec{x}}(t)$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{NuS}
+%
+\formula{Induktivität}{u(t) = L \deriv{i_L}{t} \enskip\laplace\enskip U(s) = sL\,I_L(s)}\\
+\formula{Konduktivität}{i(t) = C \deriv{u_C}{t} \enskip\laplace\enskip U(s) = \frac{1}{sC}\,U_C(s)}\\
+
+\formula{Transformator}{u_1 = L_1 \deriv{i_1}{t} - M \deriv{i_2}{t} \textnormal{,\enskip $M$: mutual inductance}}\\
+\formula{LCR-Schwingkreis}{\omega_0 = 2\pi f_0 = 1/\sqrt{LC}}\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Laplace}
+%	%Laplace Transformation: \;
+%	$\phantom{\laplace} \dis{0.4} u(t)=\mathcal{L}^{-1}\{U(s)\} = \frac{1}{2\pi\iu} \int_{\bar{s}}^s U(s)\eu^{st} \diff s$\\
+%	$\laplace \dis{0.4} U(s)=\mathcal{L}\{u(t)\} = \int_0^\infty u(t)\eu^{-st} \diff t$
+%
+\begin{tabular}{ rcl }
+    \toprule
+%		$u(t)$							& \laplace	& $U(s)$								\\%\addlinespace
+%		\midrule
+    $\lambda\;u(t) + \mu\;v(t)$		& \laplace	& $\lambda\;U(s) + \mu\;V(s)$			\\
+    ${u(at),\; \scriptstyle a>0}$	& \laplace	& $\frac{1}{a}$ $U(\frac{s}{a})$		\\
+    { \color{red} $u(t-t_0)$ }		& \laplace	& $\eu^{-st_0}$ $U(s)$					\\
+    $\eu^{-at}$ $u(t)$				& \laplace	& { \color{red} $U(s+a)$ }				\\
+    ${ (-t)^{n} u(t) }$				& \laplace	& $U^{(n)}(s)$							\\
+    $u^{(n)}(t)$					& \laplace	& $ {s^nU(s) - \ldots - u^{(n-1)}(0)} $	\\
+    \midrule
+%		$t^n$							& \laplace	& $\frac{n!}{s^{n+1}}$					\\\addlinespace
+%		$\eu^{-at}$						& \laplace	& $\frac{1}{s+a}$						\\\addlinespace
+%		$t\eu^{-at}$					& \laplace	& $\frac{1}{(s+a)^2}$					\\\addlinespace
+%		$t^n\eu^{-at}$					& \laplace	& $\frac{n!}{(s+a)^{n+1}}$				\\\addlinespace
+%		$\sin (at)$						& \laplace	& $\frac{a}{s^2+a^2}$					\\\addlinespace
+%		$\cos(at)$						& \laplace	& $\frac{s}{s^2+a^2}$					\\\addlinespace
+    \multicolumn{3}{c}{
+        \begin{minipage}{.45\columnwidth} \centering
+        \begin{tabular}{ ccc }
+%					$u(t)$							& \laplace	& $U(s)$								\\%\addlinespace
+%					\midrule
+            $t^n$							& \laplace	& $\frac{n!}{s^{n+1}}$					\\
+            $\eu^{-at}$						& \laplace	& $\frac{1}{s+a}$						\\
+            $t\eu^{-at}$					& \laplace	& $\frac{1}{(s+a)^2}$					\\
+        \end{tabular}
+        \end{minipage}%
+        \begin{minipage}{.45\columnwidth} \centering
+        \begin{tabular}{ ccc }
+%					$u(t)$							& \laplace	& $U(s)$								\\%\addlinespace
+%					\midrule
+            $t^n\eu^{-at}$					& \laplace	& $\frac{n!}{(s+a)^{n+1}}$				\\
+            $\sin (at)$						& \laplace	& $\frac{a}{s^2+a^2}$					\\
+            $\cos(at)$						& \laplace	& $\frac{s}{s^2+a^2}$					\\
+        \end{tabular}
+        \end{minipage}
+    }\\
+    \bottomrule
+\end{tabular}
