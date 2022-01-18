@@ -5,7 +5,9 @@ This is a collection of some of my cheat sheets that I created during my studies
 - [Advanced Machine Learning](pdfs/AML20.pdf)
 - [Bioelectronics and Biosensors](pdfs/BE18.pdf)
 - [Biomedical Imaging](pdfs/BMI18.pdf)
+- [Deep Learning](pdfs/DL21.pdf)
 - [Introduction to Machine Learning](pdfs/IML19.pdf)
+- [Probabilistic Artificial Intelligence](pdfs/PAI21.pdf)
 - [Statistical Learning Theory](pdfs/SLT21.pdf)
 
 

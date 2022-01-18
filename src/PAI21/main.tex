@@ -1,0 +1,49 @@
+%! Author = tstreule
+%! Date = 18.01.22
+
+\documentclass[%
+,a4paper
+,fontsize=11pt % minimum font size 11pt!
+,landscape
+,pagesize
+,headinclude
+]{scrartcl}
+\usepackage[margin=5mm,headsep=1mm,footskip=1mm]{geometry}
+
+% Preamble and packages
+\input{../preamble}
+\usepackage{../shortcuts}
+
+% Uncomment for debugging headers
+% \usepackage{showframe}
+
+\graphicspath{{./graphics/}} % Set graphics path
+
+% >>> [BEGIN] (Re-)formatting >>>
+% <<< [END] (Re-)formatting <<<
+
+% Set title
+\title{Probabilistic AI}
+\author{Timo Streule, tstreule@ethz.ch}
+\date{\today}
+
+% ======================
+% === BEGIN DOCUMENT ===
+
+\begin{document}
+
+%    \input{../disclaimer} % TODO: uncomment
+
+    \begin{multicols*}{3}
+
+        % Suppress enumeration of sections
+        % \setcounter{secnumdepth}{0}
+
+        \maketitle
+
+        \input{sections/01_math.tex}
+
+        \vfill~\columnbreak~\vfill\textbf{max. 2 A4-pages, 12pt!}
+
+    \end{multicols*}
+\end{document}

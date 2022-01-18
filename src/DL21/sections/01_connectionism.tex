@@ -1,0 +1,97 @@
+%! Author = tstreule
+
+\section{Connectionism}\label{sec:connectionism}
+
+
+% ===
+\subsection{Perceptron}
+
+The perceptron is a symmetric threshold unit:
+\begin{equation}
+    \tag{sign unit}
+    \highlight{(\bm x, \bm\theta) \mapsto
+    \mathrm{sign}(\bm x\cdot \bm\theta)} =
+    \begin{cases}
+        +1 & \text{if } \sum_i x_i\theta_i \geq 0 \\
+        -1 & \text{otw.}
+    \end{cases}
+\end{equation}
+
+Given the labels $y = \pm1$, the perceptron starts at $\bm\theta \leftarrow \bm 0$ and then \textbf{updates} the weights $\bm\theta \leftarrow \bm\theta + \Delta\bm\theta$ only in case of a mistake.
+\begin{equation}
+    \tag{perceptron rule}
+    \Delta\bm\theta =
+    \begin{cases}
+        \bm 0 & \text{if } y\,\mathrm{sign}(\bm{x\cdot\theta}) \geq 0 \\
+        \highlight{y\bm x} & \text{otw.}
+    \end{cases}
+\end{equation}
+
+
+% ===
+\subsection{Willshaw memory}
+
+Associative memory, pairs of $(\bm x^t, \bm y^t) \in \mathcal S$.\quad Learn $\bm x^t \mapsto \bm y^t$:
+\begin{equation}
+    \tag{W. learning}
+    \begin{gathered}
+        \highlight{\Theta_{ji} = \min\brace*{
+            1, \sum\nolimits_{t=1}^s y_j^t x_i^t
+        }}
+        \\
+        \Theta^t = \bm y^t (\bm x^t)^\top
+        \:,\quad
+        \Theta = \min\brace*{ \bm 1, \sum\nolimits_{t=1}^s \Theta^t }
+    \end{gathered}
+\end{equation}
+
+Since $\Theta^t \bm x^t = (\bm x^t \cdot \bm x^t) y^t = ry^t$, retrieving $y$ for a given $\bm x$ is:
+\begin{equation}
+    \tag{W. retrieval}
+    \bm x \mapsto \bm z \mapsto \bm y, \quad
+    \highlight{\bm z = \Theta \bm x}, \quad
+    \highlight{y_j} = \begin{cases} 0 & \text{if } z_j < r \\ 1 & \text{otw.} \end{cases}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\linewidth]{willshaw-memory.jpg}
+\end{figure}
+
+
+% ===
+\subsection{Hopfield network}
+
+Assume neurons $x_i \in\brace{-1,1}$ with couplings $\bm\Theta = (\theta)_{ij}$ such that
+\enskip (1) symmetric: \highlight{$\theta_{ij} = \theta_{ji}$}
+\enskip (2) irreflexive: \highlight{$\theta_{ii} = 0$}
+.
+
+The \textbf{update scheme} is given as follows
+\begin{equation}
+    \tag{H. learning}\label{hopfield-dynamics}
+    \highlight{x_i \leftarrow \mathrm{sign} \brace*{
+        \sum\nolimits_{j\neq i} \theta_{ij} x_j +
+        \begingroup\color{Green}\underbracket[1pt][2pt]{\normalcolor\theta_{i0}}_{\text{bias}}\endgroup
+    }}
+\end{equation}
+
+Convergence is apparent from the Lyapunov equation
+\begin{equation}
+    \tag{Ising model}
+    \mathcal E = - \sum\nolimits_{i,j=1}^n \theta_{ij} x_i x_j - \sum\nolimits_{i=1}^n \theta_{i0} x_i
+\end{equation}
+
+Recurrent network that can work as \textbf{auto-associative} memory:\\asf
+\begin{equation}
+    \tag{H. memory}
+    \bm\Theta \propto \sum\nolimits_{t=1}^s \left[
+    \bm x^t (\bm x^t)^\top - \mathbb I
+    \right] \in \mathbb Z^{n\times n}
+\end{equation}
+
+
+% ===
+\subsection{Multilayer perceptron}
+
+\todo{I guess this will come somewhen later...}
