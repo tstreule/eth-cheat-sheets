@@ -1,0 +1,65 @@
+%! Author = tstreule
+
+\section{Potentiometric Biosensors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Redox Reaction}
+%
+\textbf{oxidation}: $e^-$ donor (\textit{anode}) \qquad
+\textbf{reduction}: $e^-$ acceptor (\textit{cathode})
+
+\formtex{Chemical reaction}{\ce{A*ox + B*X + z*e^- <=>[$k_{red}$][$k_{ox}$] C*red + D*Y}}
+\vspace{-.5mm}
+\formbox{reaction quotient}{
+    Q = \mathrm{\frac{a\ped{ox}^A \;\cdot\; a\ped{X}^B}{a\ped{red}^C \;\cdot\; a\ped{Y}^D}}
+}
+%\textcolor{gray}{$= \Big(\prod\limits_j a_j^{v_j}\Big)$}
+\begin{tabular}{@{$\bullet\;$}l @{\quad$\bullet\;$}l}
+    $\mathrm{a}\ped{ion} = r\ped{ion} [\mathrm{ion}]/\unitfrac[1]{mol}{l}$ &
+    $\mathrm{a}\ped{solids} = 1$\\
+    $\mathrm{a}\ped{gas} = p\ped{gas}/\unit[1.013]{bar}$ &
+    $[\ce{H2O}] = 1$
+\end{tabular}
+
+\formula{Standard conditions}{
+    T = \SI{1}{\degreeCelsius}, \quad
+    p = \SI{101.3}{\kilo\pascal} = \SI{1.013}{\bar}
+}
+\formula{\centering ``STP''}{
+    [\mathrm{ion}] \equiv c\ped{ion} = \unitfrac[1]{mol}{l}, \quad
+    r = 1 \text{ ``activity coeff.''}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Electrochemistry}
+%
+\formtex{Dynamic equi.}{no net charge over time ($k_1 = k_{-1}$)}
+\formula{Chemical potential}{\mu_j = \big( \pderiv{G}{n_j} \big)_{p,T,n'}}
+\formula{Equilibrium}{\mu_A = \mu_B}
+\quad general: $\sum\limits\ped{prod}v_j\mu_j = \sum\limits\ped{react}v_j\mu_j$
+\vspace{-.5mm}
+\formula{Chemical potential}{\mu\ped{redox}\equiv E\ped{\emph{F},redox}\equiv E^*}
+%\quad where \quad $D\ped{red}(\lambda,E^*) = D\ped{ox}(\lambda,E^*)$
+\formbox{Equilibrium}{\bar\mu_A = \bar\mu_B}
+\quad $\bar\mu_j = \mu_j^0 + z_jF\Delta\phi$
+
+\formula{\textbf{Contact potential}}{\Delta\phi
+    = V\ped{in}-V\ped{out} = \frac{k\ped{B}T}{Q} \ln\left(\frac{[C]\ped{out}}{[C]\ped{in}}\right)
+}
+\formula{~}{\phantom{\Delta\phi}
+    = -\frac{\Delta_rG}{zF}
+    = \frac{1}{zF} \Big( \sum\limits\ped{ox} v_j\mu_j - \sum\limits\ped{red} v_j\mu_j + z\mu_e \Big)
+}
+\formbox{Nernst eq., $\Delta\phi$}{E {=} E^0 {-} \frac{\unit[59]{mV}}{z} \log_{10}Q}
+\textcolor{gray}{\footnotesize $\frac{RT}{zF}\ln Q = \frac{2.303 RT}{zF}\log_{10}Q$}
+\formtex{~}{$E\ped{cell}=E_1-E_2$ \quad or \quad let $E_1 \overset{!}{=} E_2 \to \mathrm{pH}=\ldots$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Ion-selective Electrodes \textnormal{(ISE)}}
+%
+Sensor is seperated to solution through a \ce{H+} permeable glass.
+\formbox{pH electrode}{\mathrm{pH} = -\log_{10} a\ped{\ce{H+}} = \frac{K'-\Delta\phi}{\unit[0.059]{V}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Bioenzymatic Electrodes}
+%
+\formtex{Find out how much}{\fbox{\ce{substrate + X + ... ->[enzyme] product + Y + ...}}}
+\formtex{of an enzyme was}{Detect \textbf{``a lot''} \ce{X}}
+\formtex{initially present}{\hfill$\leftrightarrow$ \textbf{``very few''} \ce{substrate} was initially present}
