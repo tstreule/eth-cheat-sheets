@@ -13,6 +13,7 @@
 % Preamble and packages
 \input{../preamble}
 \usepackage{../shortcuts}
+\usepackage{stmaryrd}
 
 % Uncomment for debugging headers
 % \usepackage{showframe}
@@ -20,6 +21,11 @@
 \graphicspath{{./graphics/}} % Set graphics path
 
 % >>> [BEGIN] (Re-)formatting >>>
+\renewcommand{\epsilon}{\varepsilon}
+\setstretch{1.05}\setlist{leftmargin=*,nosep,labelsep=2pt,parsep=0pt}
+\everymath\expandafter{\the\everymath\color{MediumBlue}}
+\DeclareDocumentCommand{\green}{o}{\IfValueTF{#1}{\begingroup}{}\color{Green}\IfValueTF{#1}{#1\endgroup}{}}
+\DeclareDocumentCommand{\orange}{o}{\IfValueTF{#1}{\begingroup}{}\color{OrangeRed}\IfValueTF{#1}{#1\endgroup}{}}
 % <<< [END] (Re-)formatting <<<
 
 % Set title
@@ -43,7 +49,7 @@
 
         \input{sections/01_math.tex}
 
-        \vfill~\columnbreak~\vfill\textbf{max. 2 A4-pages, 12pt!}
+        \vfill\vfill{\hrule~\\\hrulefill\centering\textbf{ max. 2 A4-pages, 12pt! }\hrulefill}
 
     \end{multicols*}
 \end{document}
