@@ -3,7 +3,7 @@
 
 % Language package
 % \usepackage[utf8]{inputenc} % Not to use with Xe-LaTeX!
-\usepackage{fontspec}
+\usepackage[no-math]{fontspec}
 % \usepackage{kpfonts}
 % \usepackage[T1]{fontenc}
 \usepackage[english,ngerman]{babel}
@@ -32,7 +32,7 @@
 % Array and matrix spacing
 \setlength\arraycolsep{1pt}
 % Hack to remove vertical spacing in equations
-\usepackage{etoolbox}
+%\usepackage{etoolbox}
 \newcommand{\setdisplayskips}{%
     \setlength{\abovedisplayskip}{1pt}%
     \setlength{\belowdisplayskip}{1pt}%
@@ -45,7 +45,7 @@
 % Control (primitive) list items
 \usepackage{enumitem}
 \setlist{leftmargin=*,nosep,labelsep=2pt,parsep=-0.2pt}  % reduce spaces
-\setlist[itemize,2]{label=$\circ$}
+\setlist[itemize,2]{label=$\normalcolor\circ$}
 
 % Formatting
 \usepackage{multicol, multirow, tabularx}
