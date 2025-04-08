@@ -1,0 +1,116 @@
+%! Credits: https://latexdraw.com/drawing-neural-networks-in-tikz-short-guide/
+
+\begin{tikzpicture}[
+    >=stealth, % default arrow style
+]
+
+% Input layer neurons'number
+    \newcommand{\inputnum}{3}
+% Hidden layer neurons'number
+    \newcommand{\hiddennum}{3}
+% Output layer neurons'number
+    \newcommand{\outputnum}{2}
+% Node size
+    \newcommand{\nodesize}{1.5em}
+% Vertical/horizontal shifts
+    \newcommand{\vnodeshift}{2.5em}
+    \newcommand{\hnodeshift}{8em}
+% Colors
+    \colorlet{input-layer-color}{orange!30}
+    \colorlet{hidden-layer-color}{teal!30}
+    \colorlet{output-layer-color}{purple!30}
+
+% Input Layer
+    \foreach \i in {1,...,\inputnum}{
+        \node[circle,
+            minimum size = \nodesize,
+            fill=input-layer-color,
+        ] (Input-\i) at (0,-\i*\vnodeshift) {};
+    }
+%    \node[below = 0cm and 0cm of Input-\inputnum] {$\symbf x \in \R^n$};
+
+% Hidden Layer
+    \foreach \i in {1,...,\hiddennum}{
+        \node[circle,
+        minimum size = \nodesize,
+        fill=hidden-layer-color,
+        yshift=(\hiddennum-\inputnum)*\nodesize
+        ] (Hidden-\i) at (1*\hnodeshift,-\i*\vnodeshift) {};
+    }
+
+% Output Layer
+    \foreach \i in {1,...,\outputnum}{
+        \node[circle,
+        minimum size = \nodesize,
+        fill=output-layer-color,
+        yshift=(\outputnum-\inputnum)*\nodesize
+        ]  (Output-\i) at (2*\hnodeshift,-\i*\vnodeshift) {};
+    }
+%    \node[below = 0cm and 0cm of Output-\outputnum] {$\symbf y \in \R^l$};
+
+% Connect neurons In-Hidden
+    \foreach \i in {1,...,\inputnum}{
+        \foreach \j in {1,...,\hiddennum}{
+            \ifthenelse{\equal{\j}{1}}{%
+                \ifthenelse{\equal{\i}{1}}{%
+                    \draw[->, shorten >=1pt, thick] (Input-\i)
+                    --node[above]{$\symbf\theta_{\j} \in \R^{n}$} (Hidden-\j);
+                }{%
+                    \draw[->, shorten >=1pt, thick] (Input-\i) -- (Hidden-\j);
+                }
+            }{%
+                \draw[->, shorten >=1pt] (Input-\i) -- (Hidden-\j);
+            }
+        }}
+
+% Connect neurons Hidden-Out
+    \foreach \i in {1,...,\hiddennum}{
+        \foreach \j in {1,...,\outputnum}{
+            \ifthenelse{\equal{\j}{1}}{%
+                \ifthenelse{\equal{\i}{1}}{%
+                    \draw[->, shorten >=1pt, thick] (Hidden-\i)
+                    --node[above]{$\symbf\beta_\j \in \R^{m}$} (Output-\j);
+                }{%
+                    \draw[->, shorten >=1pt, thick] (Hidden-\i) -- (Output-\j);
+                }
+            }{%
+                \draw[->, shorten >=1pt] (Hidden-\i) -- (Output-\j);
+            }
+        }}
+
+% Inputs
+    \foreach \i in {1,...,\inputnum}{
+        \draw[stealth-, shorten <=1pt] (Input-\i) -- ++(-.33*\hnodeshift,0) node[left]{$x_{\i}$};
+    }
+
+% Outputs
+    \foreach \i in {1,...,\outputnum}{
+        \draw[->, shorten >=1pt] (Output-\i) -- ++(.33*\hnodeshift,0) node[right]{$y_{\i}$};
+    }
+
+% --- Summarized MLP ---
+
+    \node[circle,
+        minimum size = \nodesize,
+        fill=input-layer-color,
+    ] (Input) at (0,-4*\vnodeshift-1em) {};
+    \node[above = 0cm and 0cm of Input] {$\mathllap{\gray\R^n \ni\ } \symbf x$};
+
+    \node[circle,
+        minimum size = \nodesize,
+        fill=hidden-layer-color,
+    ] (Hidden) at (\hnodeshift,-4*\vnodeshift-1em) {};
+    \node[above = 0cm and 0cm of Hidden] {$F_{\symbf\theta} \circ \symbf x$};
+
+    \node[circle,
+        minimum size = \nodesize,
+        fill=output-layer-color,
+    ] (Output) at (2*\hnodeshift,-4*\vnodeshift-1em) {};
+    \node[above = 0cm and 0cm of Output] {$G_{\symbf\beta} \circ F_{\symbf\theta} \circ \symbf x \mathrlap{\gray\ \in \R^l}$};
+
+    \draw[stealth-, shorten <=1pt] (Input) -- ++(-.33*\hnodeshift,0);
+    \draw[->, shorten >=1pt] (Input) --node[]{\highlight{$\symbf\theta$}} (Hidden);
+    \draw[->, shorten >=1pt] (Hidden) --node[]{\highlight{$\symbf\beta$}} (Output);
+    \draw[->, shorten >=1pt] (Output) -- ++(.33*\hnodeshift,0);
+
+\end{tikzpicture}

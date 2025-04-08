@@ -2,7 +2,7 @@
 
 % ===
 \emph{Least Angle Clust. (LAC): {\normalfont\sffamily[Idea]}}\\
-Similarity\enspace $S(\bm x_i, \bm x_j) = w_{ij} \cos(\phi_{ij}) = w_{ij} \bm e_i \cdot \bm e_j$\enspace with unit vectors\enspace $\bm e_i \coloneqq \bm x_i / \norm{\bm x_i}$,\enspace e.g. choice $w_{ij} = \norm{\bm x_i} \cdot \norm{x_j}$.
+Similarity\enspace $S(\symbf x_i, \symbf x_j) = w_{ij} \cos(\phi_{ij}) = w_{ij} \symbf e_i \cdot \symbf e_j$\enspace with unit vectors\enspace $\symbf e_i \coloneqq \symbf x_i / \norm{\symbf x_i}$,\enspace e.g. choice $w_{ij} = \norm{\symbf x_i} \cdot \norm{x_j}$.
 
 % ===
 \columnbreak
@@ -22,7 +22,7 @@ $\mathcal Z = \brace{ (x_{i(r)}, y_{j(r)}) ; 1\leq r\leq \ell }$
     \iffalse
     $= \frac{
         \frac1\ell \sum_{r\leq\ell} \delta_{x_i, x_{i(r)}} \delta_{y_j, y_{j(r)}}
-        %\frac1\ell \sum_{r\leq\ell} \bm 1 \brace{(x_{i(r)}, y_{j(r)} = (x_i, y_i)}
+        %\frac1\ell \sum_{r\leq\ell} \symbf 1 \brace{(x_{i(r)}, y_{j(r)} = (x_i, y_i)}
         %\frac1\ell \sum_{r\leq\ell} \Delta_{x_i, x_{i(r)}} \Delta_{y_j, y_{j(r)}}
       }{
         \sum_{j\leq m} \hat p(x_i, y_j)
@@ -44,7 +44,7 @@ $R\ap{hc} (c, q, \mathcal Z) = \cancel{\frac{\ell}{n}} \sum_{i\leq n} D\ped{KL} 
 
 Solving the \textbf{Gibbs dist.} $p(c \mid q, \hat p) = \prod_{i\leq n} P_{i, c(i)}$\\
 via Lagrange yields \highlight*{$q^\ast(y_j\mid\alpha) = \frac{\sum_{i\leq n} P_{i\alpha} \cdot \hat p(y_j\mid x_i)}{\sum_{i\leq n} P_{i\alpha}}$}
-{\color{gray}\scriptsize \shortstack{Lemma 2\\ch.3 p.36}}
+{\gray\scriptsize \shortstack{Lemma 2\\ch.3 p.36}}
 
 % ===
 \subsection{Information Bottleneck Method}

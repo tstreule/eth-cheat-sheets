@@ -1,0 +1,105 @@
+%! Author = tstreule
+
+\begin{tikzpicture}[
+    % Global config
+    font=\sffamily,
+    >=stealth, % default arrow style
+    x=8mm,
+    y=7mm,
+    % Styles
+    cell/.style={% the main box
+        rectangle, rounded corners=4mm,
+        draw=lime!70!teal!80, very thick,
+        fill=lime!70!teal!20,
+    },
+    operator/.style={% operators like 'plus/+' or 'multiply/x'
+        circle, inner sep=-.5pt,
+        draw, fill=red!25,
+    },
+    function/.style={% functions like 'tanh'
+        operator,% inherit style
+        ellipse, inner sep=.5pt,
+    },
+    external/.style={% external in-/outputs
+        inner sep=1pt,
+    },
+    knot/.style={% internal knots
+        rectangle, inner sep=1.5pt,
+        minimum width=5mm, minimum height=1em,
+        draw, fill=yellow!35,
+    },
+    rigidArrow/.style={% arrows w/ tight corners
+        rounded corners=.75mm,
+        very thick,
+    },
+    roundArrow/.style={% arrows w/ big rounded corners
+        rigidArrow,% inherit style
+        rounded corners=2mm,
+    },
+    reference/.style={% text for reference
+        rectangle, color=BlueViolet, fill=white, fill opacity=0.8,
+        inner sep=1pt, outer sep=1pt,
+    },
+]
+
+% Draw elements
+    % Draw the cell / main box
+    \node [cell, above right, minimum width=50mm, minimum height=24mm] at (0,0) {};
+
+    % Draw internal knots --- knot-#
+    \node [knot] (knot-1) at (1,1) {$\sigma$};
+    \node [knot] (knot-2) at (2,1) {$\sigma$};
+    \node [knot] (knot-3) at (3,1) {\scriptsize tanh};
+    \node [knot] (knot-4) at (4,1) {$\sigma$};
+
+    % Draw operators --- mul-# , sum-# , fct-#
+    \newcommand{\myplus}{\scalebox{.9}{$+$}}
+    \node [operator] (mul-1) at (1,3) {$\times$};
+    \node [operator] (sum-1) at (3,3) {\myplus};
+    \node [operator] (mul-2) at (3,2) {$\times$};
+    \node [operator] (mul-3) at (5,2) {$\times$};
+    \node [function] (fct-1) at (5,2.6) {\scriptsize tanh};
+    \node [reference, above=0mm of mul-1] {\scriptsize(1)};
+    \node [reference, above=0mm of sum-1] {\scriptsize(2)};
+
+    % Draw inputs --- c-in , h-in, x
+    \node [external] (c-in) at (-1,3) {};
+    \node [external, above right=0pt and 0pt of c-in] {$C_{t\shortminus1}$};
+    \node [external] (h-in) at (-1,.4) {};
+    \node [external, above right=0pt and 0pt of h-in] {$h_{t\shortminus1}$};
+    \node [external] (x) at (.5,-.7) {};
+    \node [external, above left=0pt and 0pt of x] {$x_t$};
+
+    % Draw outputs --- c-out , h-out , h-out2
+    \node [external] (c-out) at (7,3) {};
+    \node [external, above=0pt of c-out] {$C_t$};
+    \node [external] (h-out) at (7,.4) {};
+    \node [external, above=0pt of h-out] {$h_t$};
+    \node [external] (h-out2) at (6,4.2) {};
+    \node [external, below left=0pt and 1pt of h-out2] {$h_t$};
+
+% Connect elements
+    % dotted lines
+    \draw [dotted, rigidArrow] (c-in) -- ++(-0.5,0);
+    \draw [dotted, rigidArrow] (h-in) -- ++(-0.5,0);
+    \draw [dotted, rigidArrow] (c-out) -- ++(0.5,0);
+    \draw [dotted, rigidArrow] (h-out) -- ++(0.5,0);
+
+    % inward connections
+    \draw [->, rigidArrow] (c-in) -- (mul-1) -- (sum-1) -- (c-out);
+    \draw [->, rigidArrow] (h-in) -| (knot-1) --node[left]{\scriptsize$f_t$} (mul-1);
+    \draw [- , rigidArrow] (h-in) -| (knot-2);
+    \draw [->, rigidArrow] (h-in) -| (knot-3) --node[right]{\scriptsize$\tilde C_t$} (mul-2);
+    \draw [->, rigidArrow] (mul-2) -- (sum-1);
+    \draw [->, roundArrow] (h-in) -| (knot-4) |-node[above=-1mm]{\scriptsize $o_t$} (mul-3);
+    \draw [->, roundArrow] (knot-2) |-node[above=-1mm]{\scriptsize$i_t$} (mul-2);
+    \draw [- , rigidArrow] (x) -- (x |- h-in) -| (knot-1);
+
+    % outward connections
+    \draw [- , rigidArrow] (sum-1) -| (fct-1) -- (mul-3);
+    \draw [->, roundArrow] (mul-3) |- (h-out);
+    \draw (c-out -| h-out2) ++(0,-0.15) coordinate (i1); % find intersection
+    \draw [- , roundArrow] (h-out -| h-out2)++(-.5,0) -| (i1);
+    \draw [->, roundArrow] (i1)++(0,0.3) -- (h-out2);
+
+\end{tikzpicture}

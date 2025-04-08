@@ -3,29 +3,28 @@
 
 \documentclass[%
 ,a4paper
-,fontsize=11pt % minimum font size 11pt!
+,fontsize=10pt % minimum font size 11pt!
 ,landscape
 ,pagesize
 ,headinclude
 ]{scrartcl}
-\usepackage[margin=5mm,headsep=1mm,footskip=1mm]{geometry}
+\usepackage[margin=4mm,headsep=0mm,footskip=4mm]{geometry}
 
 % Preamble and packages
-\input{../preamble}
-\usepackage{../shortcuts}
-\usepackage{stmaryrd}
-
-% Uncomment for debugging headers
-% \usepackage{showframe}
-
-\graphicspath{{./graphics/}} % Set graphics path
+\usepackage{../preamble,../shortcuts}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes}
+\graphicspath{{./graphics/}} % Set graphic path
+%\usepackage{showframe} % for debugging headers
 
 % >>> [BEGIN] (Re-)formatting >>>
-\renewcommand{\epsilon}{\varepsilon}
-\setstretch{1.05}\setlist{leftmargin=*,nosep,labelsep=2pt,parsep=0pt}
+%\setmathfont{STIXTwoMath-Regular.otf}
+\usepackage[notext,mathcal,bbsans,narrowiints,]{kpfonts-otf}
+\setlength\columnsep{5pt} % Column spacing for multicols
 \everymath\expandafter{\the\everymath\color{MediumBlue}}
-\DeclareDocumentCommand{\green}{o}{\IfValueTF{#1}{\begingroup}{}\color{Green}\IfValueTF{#1}{#1\endgroup}{}}
-\DeclareDocumentCommand{\orange}{o}{\IfValueTF{#1}{\begingroup}{}\color{OrangeRed}\IfValueTF{#1}{#1\endgroup}{}}
+\DeclareDocumentEnvironment{formula}{s O{t} G{} +b}{\vskip\abovedisplayskip
+    \def\ffont{\IfBooleanTF{#1}{\em}{\bfseries}}
+    \ifblank{#3}{}{\begingroup\ffont#3:\endgroup\:}#4}{\vskip\belowdisplayskip}
 % <<< [END] (Re-)formatting <<<
 
 % Set title
@@ -48,8 +47,16 @@
         \maketitle
 
         \input{sections/01_math.tex}
+        \input{sections/02_blr.tex}
+        \input{sections/03_gp.tex}
+        \input{sections/04_var_inf.tex}
+        \input{sections/99_appendix.tex}
 
-        \vfill\vfill{\hrule~\\\hrulefill\centering\textbf{ max. 2 A4-pages, 12pt! }\hrulefill}
+        ~\vfill\parbox{\linewidth}{\hrule\medskip\hrulefill\centering\textbf{ max. 2 A4-pages, 11pt! }\hrulefill}
 
+    \end{multicols*}
+    \begin{multicols*}{4}
+        \input{new_sections/01_basics.tex}
+        \input{new_sections/02_regression.tex}
     \end{multicols*}
 \end{document}

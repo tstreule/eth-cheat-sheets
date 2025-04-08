@@ -10,17 +10,20 @@ This is a collection of some of my cheat sheets that I created during my studies
 - [Probabilistic Artificial Intelligence](pdfs/PAI21.pdf)
 - [Statistical Learning Theory](pdfs/SLT21.pdf)
 
-
 ## Getting started
 
 - Clone this repo
-  ```
+
+  ```bash
   git clone https://github.com/tstreule/eth-cheat-sheets
   cd c2f_img_color
   ```
+
 - Ensure that you have XeLaTeX installed and runnable (`xelatex`)
-  ```
+
+  ```bash
   bash pdf_maker.sh
   >>> Enter cheat sheet names: NAME [NAME ...]
   ```
+
 - **Alternatively**, run the code on [Overleaf](https://www.overleaf.com)...

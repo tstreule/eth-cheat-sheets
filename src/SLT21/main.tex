@@ -8,24 +8,20 @@
     ,pagesize
     ,headinclude
     ]{scrartcl}
-\usepackage[margin=7mm,headsep=1mm,footskip=1mm]{geometry}
+\usepackage[margin=7mm,headsep=0mm,footskip=4mm]{geometry}
 
 % Preamble and packages
-\usepackage{kpfonts}
-\input{../preamble}
-\usepackage{../shortcuts}
-
-% Uncomment for debugging headers
-% \usepackage{showframe}
-
+\usepackage{../preamble,../shortcuts}
 \graphicspath{{./graphics/}} % Set graphic path
+%\usepackage{showframe} % for debugging headers
 
 % >>> [BEGIN] (Re-)formatting >>>
 \everymath\expandafter{\the\everymath\color{MediumBlue}}
+\setlist{leftmargin=*,nosep,labelsep=2pt,parsep=-0.2pt}
 % <<< [END] (Re-)formatting <<<
 
 % Set title
-\title{Statistical Learnint Theory}
+\title{Statistical Learning Theory}
 \author{Timo Streule, tstreule@ethz.ch}
 \date{\today}
 
@@ -43,7 +39,6 @@
 
         \maketitle
 
-        %\input{sections/_example_}
         \input{sections/01_basics}
         \input{sections/02_emp_risk_min}
         \input{sections/03_max_entropy}
@@ -53,8 +48,10 @@
         \input{sections/07_pairwise_clustering}
         \input{sections/08_model_selection}
         \input{sections/09_model_validation}
+%
+%        \input{sections/99_appendix}
 
-        \input{sections/99_appendix}
+        ~\vfill\parbox{\linewidth}{\hrule\medskip\hrulefill\centering\textbf{ max. 4 A4-pages! }\hrulefill}
 
     \end{multicols*}
 \end{document}

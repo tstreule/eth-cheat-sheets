@@ -3,23 +3,23 @@
 
 \documentclass[%
 ,a4paper
-,fontsize=9.5pt
+,fontsize=10pt
 ,landscape
 ,pagesize
 ,headinclude
 ]{scrartcl}
-\usepackage[margin=7mm,headsep=1mm,footskip=1mm]{geometry}
+\usepackage[margin=5mm,headsep=0mm,footskip=4mm]{geometry}
 
 % Preamble and packages
-\input{../preamble}
-\usepackage{../shortcuts}
-
-% Uncomment for debugging headers
-% \usepackage{showframe}
-
+\usepackage{../preamble,../shortcuts}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes}
 \graphicspath{{./graphics/}} % Set graphic path
+%\usepackage{showframe} % for debugging headers
 
 % >>> [BEGIN] (Re-)formatting >>>
+\DeclareDocumentEnvironment{taligned}{+b}{%
+    \let\displaystyle\textstyle\aligned#1}{\endaligned}
 % <<< [END] (Re-)formatting <<<
 
 % Set title
@@ -32,7 +32,7 @@
 
 \begin{document}
 
-%    \input{../disclaimer} % TODO: uncomment
+    \input{../disclaimer}
 
     \begin{multicols*}{3}
 
@@ -41,10 +41,25 @@
 
         \maketitle
 
-        \input{sections/01_connectionism}
-        \input{sections/02_linear_networks}
+        \input{sections/01_connectionism.tex}
+        \input{sections/02_linear_networks.tex}
+        \input{sections/03_sigmoid_networks.tex}
+        \input{sections/04_approximation_theory.tex}
+        \input{sections/05_backpropagation.tex}
+        \input{sections/06_rectified_networks.tex}
+        \input{sections/07_optimization.tex}
+        \input{sections/08_convolutional_networks.tex}
+        \input{sections/09_recurrent_neural_networks.tex}
+        \input{sections/10_deep_gradients.tex}
+        \input{sections/11_regularization.tex}
+        \input{sections/12_dnn_theory.tex}
+        \input{sections/13_attention.tex}
+        \input{sections/14_variational_autoencoders.tex}
+        \input{sections/15_adversarial_robustness.tex}
+        \input{sections/99_appendix.tex}
 
-        \vfill~\columnbreak~\vfill\textbf{max. 4 A4-pages!}
+%        \input{../test-input.tex}
+%        ~\vfill\parbox{\linewidth}{\hrule\medskip\hrulefill\centering\textbf{ max. 4 A4-pages! }\hrulefill}
 
     \end{multicols*}
 \end{document}

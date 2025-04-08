@@ -1,0 +1,117 @@
+%! Author = tstreule
+
+\section{Basics}\label{sec:basics}
+
+\begin{formula}{Prod.}
+    $\P{X,Y} = \P{Y} \P{X\mid Y} = \P{X} \P{Y\mid X}$
+\end{formula}
+\begin{formula}{Chain}
+    $\P{X_1, {\ldots}, X_n} \equiv \P{X_{1:n}} = \P{X_1} \P{X_2\mid X_1} {\ldots} \P{X_n\mid X_{1:n-1}}$
+\end{formula}
+\begin{formula}{Marginal}
+    $\P{X_{1:n}} = \sum_y \P{X_{1:n}, Y {=} y}$
+\end{formula}
+\begin{formula}{$\normalcolor \symbfit{X {\perp} Y}$}
+    $\P{X\mid Y} = \P{X}$, $\P{X,Y} = \P{X} \P{Y}$
+\end{formula}
+\begin{formula}*{Bayes}
+    \highlight*{$\P{X\mid Y} = \frac{\P{X,Y}}{\P{Y}} = \frac{\P{X} \P{Y\mid X}}{\P{Y}}$}
+\end{formula}
+
+\begin{formula}{Variance}
+    $\V{X} = \E{(X - \mu_X)^2} = \E{X^2} - \mu_X^2$,\enskip
+    $\V{X+Y} = \V{X} + \V{Y} + 2\Cov{X,Y}$
+\end{formula}
+\begin{formula}{C.}
+    $\Cov{X,Y} = \E{(X {-} \mu_X)(Y {-} \mu_Y)} = \E{XY} \allowbreak - \E{X}\E{Y}$,\enskip
+    $\Cov{aX,bY} = ab\Cov{X,Y}$
+\end{formula}
+
+\smallskip\hrule
+
+\begin{formula}{CoV}
+    $Y = g(X)$,\enskip
+    $f_Y(y) = f_X(g^{-1}(y)) \cdot \abs*{\deriv{y} g^{-1}(y)}$
+\end{formula}
+
+\hrule
+
+\begin{formula}*{Gauss}
+    \highlight*{$\Gauss = \frac{1}{\mkern-5mu\sqrt{(2\pi)^n \abs{\symbf\Sigma}}} \exp*(-\frac{1}{2} (\symbf{x\shortminus\mu})^\top \symbf\Sigma^{\shortminus1} (\symbf{x\shortminus\mu}))$}
+\end{formula}
+\begin{formula}{Condit.}
+    $\symbf X_A \vert X_B {=} \symbf x_B \sim \Gauss{\symbf{\tilde\mu}, \symbf{\tilde\Sigma}}$
+    where $\highlight*{\symbf{\tilde\mu}} = \symbf\mu_A + \symbf\Sigma_{AB} \symbf\Sigma_{BB}^{-1} (\symbf x_B - \symbf\mu_B)$
+    and $\highlight*{\symbf{\tilde\Sigma}} = \symbf\Sigma_{AA} - \symbf\Sigma_{AB} \symbf\Sigma_{BB}^{-1} \symbf\Sigma_{BA}$
+\end{formula}
+\begin{formula}{Compl. the sq.}
+    If $p(\symbf x) \propto \exp(-\frac12 \symbf x^\top \symbf{\orange{A}x} + \symbf x^\top \orange{\symbf b})$, then $p(\symbf x) = \Gauss{\symbf x \mid \symbf A^{\shortminus1} \symbf b, \symbf A^{\shortminus1}}$
+\end{formula}
+
+\smallskip\hrule
+
+\begin{formula}{KL-Div.}
+    $D\ped{KL} (p\parallel q) = \sum_x p(x)\log\paren*{\frac{p(x)}{q(x)}} \geq 0$
+\end{formula}
+\begin{formula}{Entropy}
+    $H(X) = \E[x\sim p]{-\log p(x)}$;\\
+    $H(\prod_i p_i) = \sum_i H[p_i]$;\enskip
+    $H(X,Y) = H(X) + H(Y\mid X)$;\enskip
+    $H(S\mid T) \geq H(S\mid T,U)$ {\small``information never hurts''};\enskip
+    $H(\Gauss{\symbf{\mu,\Sigma}}) = \frac12 \log \abs{2\pi\eu\symbf\Sigma}$;\enskip
+\end{formula}
+
+\hrule\smallskip
+
+\begin{formula}{Orthogonal $\normalcolor\symbf A$}
+    $A^{-1} = A^\top$;\enskip
+    $AA^\top = A^\top A = \norm A_2^2 = \symbf I$;\enskip
+    $\det(A) \in \brace{\pm1}$;\enskip
+    $A^{-\top} = (A^\top)^{-1}$;\enskip
+    $\rank(A) = n$
+\end{formula}
+\begin{formula}{Inverse}
+    $A^{-1} = \brack*{\begin{smallmatrix} a & b \\ c & d \end{smallmatrix}}^{-1}
+    = \frac{1}{ad - bc} \brack*{\begin{smallmatrix} d & -b \\ -c & a \end{smallmatrix}}$
+\end{formula}
+\begin{formula}{Deriv}
+    $(fg)' = f'g + fg'$;\enskip
+    $(f/g)' = (f'g - fg')/g^2$;\enskip
+    $f(g(x))' = f'(g(x)) g'(x)$;\enskip
+    $\log'(x) = 1/x$;\\
+    \DeclareDocumentCommand{\pderiv}{O{}mG{}}{\sfrac%
+        {\partial^{#1}\ifblank{#3}{~}{#2}}%
+        {\partial\ifblank{#3}{#2}{#3}^{#1}}}
+    \newcommand{\Tr}{\mathop{T\!r}}
+    $\pderiv{\symbf x} (\symbf b^\top\symbf  x) \iffalse = \pderiv{}{\symbf x} (\symbf x^\top\symbf  b) \fi = \symbf b$;\enskip
+    $\pderiv{\symbf x} (\symbf x^\top \symbf{Ax}) = (\symbf A^\top + \symbf A)\symbf x \overset{\orange{\ast}}{=} 2\symbf{Ax}$ \mbox{\footnotesize $\orange\ast \colon \symbf A \textrm{ sym.}$};\enskip
+    $\pderiv{\symbf X} (\symbf c^\top \symbf{Xb}) = \symbf{cb}^\top$;\enskip
+%    $\pderiv{\symbf X} (\symbf c^\top \symbf X^\top \symbf b) = \symbf{bc}^\top$;\enskip
+    $\pderiv{\symbf X} \Tr(\symbf{X^\top A}) = \symbf A$;\enskip
+    $\pderiv{\symbf X} \log \abs{\symbf X} = \symbf X^{\shortminustop}$;\enskip
+    $\pderiv{}{\symbf x} \norm{\symbf{x-b}}_2 = \frac{\symbf{x-b}}{\norm{\symbf{x-b}}_2}$
+\end{formula}
+\begin{formula}{Convex}
+    $g(x)$ is conv. $\iff
+    x_1, x_2 \in \R,\ \lambda\in[0,1]\colon \allowbreak
+    g''(x) > 0;\ g(\lambda x_1 + (1-\lambda)x_2) \leq \lambda g(x_1) + (1-\lambda) g(x_2)$
+\end{formula}
+\begin{formula}*{Jensen ineqality}
+    $g$ convex: \highlight*{$g(\E{X}) \leq \E{g(X)}$};\enskip
+    $g$ concave (e.g. log): \highlight*{$g(\E{X}) \geq \E{g(X)}$}
+\end{formula}
+
+\smallskip\hrule\smallskip
+
+\begin{formula}*{Bayesian Learning}
+    Prior $p(\theta)$;\\
+    Likelihood $p(y_{1:n} \mid x_{1:n}, \theta) \overset{iid}{=} \prod_{i=1}^n (\ldots)$;\\
+    Posterior $p(\theta \mid x_{1:n}, y_{1:n}) = \frac1Z p(\theta) \prod_{i=1}^n (\ldots)$;\\
+    Evidence $Z \neq 0$;\enskip
+    \textbf{Prediction}\\
+    \resizebox{\linewidth}{.8em}{
+        $p(y^\ast \mid x^\ast, x_{1:n}, y_{1:n}) = \int p(y^\ast \mid x^\ast, \theta)\ p(\theta \mid x_{1:n}, y_{1:n}) \diff\theta$
+    }
+\end{formula}
+
+\columnbreak

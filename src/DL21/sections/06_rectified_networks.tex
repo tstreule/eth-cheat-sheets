@@ -1,0 +1,97 @@
+%! Author = tstreule
+
+\section{Rectified Networks}\label{sec:rectified-networks}
+
+
+% ===
+\subsection{Rectified linear unit --- ReLU}
+
+\begin{formula}*{ReLU}
+    $\highlight*{(\symbf{x, \theta})_{\orange\boldsymbol+}} \coloneqq \max\brace{0, \symbf{x \cdot \theta}}$,\quad
+    $\partial (z)_{+} =
+    \begin{cases}
+        1 & \text{if } z>0 \\
+        0 & \text{if } z<0
+    \end{cases}$
+\end{formula}
+\begin{itemize}
+    \item backprop very simple: gradient either $0$ or the weight value
+    \item sparseness of Jacobi matrix can be exploited
+    \begin{formula}
+        $\partial F_l = \symbf{\tilde\Theta} \coloneqq \paren*{\symbf{\tilde\theta}_{li}^\top}_i$,\quad
+        $\symbf{\tilde\theta}_{ij} =
+        \begin{cases}
+            \symbf0 & \text{if } z_{lj}=0 \\
+            \symbf\theta_{lj} & \text{otw.}\quad\leftarrow\ \text{weight value!}
+        \end{cases}$
+    \end{formula}
+    \item can lead to dying \textit{(inactive)} ReLU
+\end{itemize}
+
+
+% ===
+\subsection{Absolute value unit --- AbsU}
+
+\begin{formula}{AbsU}
+    $\partial\abs{z} =
+    \begin{cases}
+        1 & z>0 \\
+        \shortminus1 & z<0
+    \end{cases}$,\enskip
+    \highlight{$(z)_+\! = \frac{z + \abs{z}}{2}$} and \highlight{$\abs{z} = 2(z)_+\! - z$}
+\end{formula}
+
+
+% ===
+\subsection{Smooth ReLU approximations}
+
+\begin{tabular}{@{}>{\bfseries}l<{:}l@{}}
+    Softplus & $\sigma\ap{softp}(z) = \log(1 + \eu^z)$\\
+    Exp. LU & $\sigma\ap{expLU}(z) =
+    \begin{cases}
+        z & z \geq 0 \\
+        \eu^z - 1 & \text{otw.}
+    \end{cases}$\\
+    Leaky ReLU & $\sigma\ap{\ell ReLU}(z) =
+    \begin{cases}
+        z & z \geq 0 \\
+        \epsilon \cdot z & \text{otw.}
+    \end{cases}$
+\end{tabular}
+
+
+% ===
+\subsection{Piecewise linear approximation}
+
+\begin{formula}{Theorem}
+    Piecewise linear functions are \textit{dense} in $C([0;1])$.
+\end{formula}
+
+\begin{formula}
+    with $m$ pieces:\quad
+    $g(x) = \underbrace{ax + b}_{\text{linear}} \enskip+\enskip \underbrace{\sum_{i=1}^{m-1} c_i (x - x_i)_{\orange+}}_{\mathclap{\text{changes of slope, but \textit{no} shift}}}$
+\end{formula}
+
+
+% ===
+\subsection{Hinge functions}
+
+2+ hyperplanes glued together: $g(\symbf x) = \max(\symbf\theta_1 \symbf x + b_1,\ \symbf\theta_2 \symbf x + b_2)$
+
+
+% ===
+\subsection{Polyhedral functions}
+
+\begin{formula}{Polyhedral}
+    $f$ is \textit{polyhedral} $\iff$ $\mathrm{epi(f)}$ is a polyhedral set\\
+    Epigraph: $\mathrm{epi(f)} \coloneqq \brace{(\symbf x, t) \in \R^{n+1} \colon f(\symbf x) \leq t}$
+\end{formula}
+
+\begin{formula}
+    A \textit{set} $S$ is polyhedral $\iff$ $S = \brace{\symbf x \in \R^n \colon \symbf\theta_j \symbf x + b_j \geq 0, j=1,{\ldots},r}$\\
+    \gray{$\to$ finite \#hyperplanes sufficient to approximate a polyh. set}
+\end{formula}
+
+\begin{formula}*{Thm.}
+    Every continuous pieccewise linear function $f$ can be written as the difference of \textbf{two} polyhedral functions. $f(\symbf x) = \max\limits_{(\symbf\theta, b) \in \mathcal A^+} \brace{\symbf{\theta x} + b} -  \max\limits_{(\symbf w, b) \in \mathcal A^-} \brace{\symbf{w x} + b}$
+\end{formula}

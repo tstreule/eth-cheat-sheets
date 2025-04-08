@@ -1,0 +1,49 @@
+%! Author = tstreule
+
+\section{Regularization}\label{sec:regularization}
+
+\begin{formula}{Weight decay}
+    L2-regularization;
+    pulls weights towards zero.
+\end{formula}
+
+\begin{formula}{Early stopping}
+    use validation data to estimate expected risk.\\
+    $\to$ acts as approximate L2-regularizer!
+\end{formula}
+
+\begin{formula}{Bagging}
+    combine models trained on bootstrap samples $S_r^k$.\\
+    $\to$ almost always beneficial, but expensive!
+\end{formula}
+
+\begin{formula}{Dropout}
+    randomly ``drop'' subsets of units in network.\\
+    $\to$ each neuron learns to detect a feature that is \textit{generally} helpful!\enskip
+    $\vert\to$ effectively defines an exponential \textbf{ensemble} w/o suffering the drawback of having to evaluate multiple layouts.
+\end{formula}
+
+
+% ===
+\subsection{Data augmentation}
+
+Exploit input \textbf{invariances} by generating virtual examples subject to transformations $\tau$ (highly domain specific).
+
+\begin{formula}{Injecting noise}
+    to inputs, weights and/or targets
+\end{formula}
+
+
+% ===
+\subsection{Task augmentation}
+
+\textbf{Pre-training:}\enskip
+use pre-trained parts of the model. May also \textit{fine-tune} parameters.
+
+\textbf{Semi-superivsed learning:}\enskip
+optimize \textit{additive combination} of supervised and unsupervised risk, while \textbf{sharing parameters}.
+$\to$ (typically) when more unlabeled that labeled data.
+
+\textbf{Multitask learning:}\enskip
+share (low level) representations across tasks and learn jointly.
+$\to$ Learn high level repr. \textit{per task}.

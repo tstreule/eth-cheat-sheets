@@ -1,0 +1,122 @@
+%! Author = tstreule
+
+\section{Backpropagation}\label{sec:backpropagation}
+
+
+\begin{formula}
+    \bfseries\setstretch{0.9}
+    \renewcommand{\labelenumi}{\normalfont\scriptsize\arabic{enumi}:}
+    \begin{enumerate}[leftmargin=1.5em,labelsep=0.5em]
+        \item $\symbf z_0 = \symbf x$ \gray{\normalfont\cdotfill$\vartriangleright$ Forward pass\enskip~}
+        \item for $l=1{\ldots}k$ do
+        \item \quad $\symbf z_l = F_l(\symbf z_{l-1})$
+        \item end for
+        \item $\symbf\xi_{k+1} = \partial\ell(\symbf z_k)$ \gray{\normalfont\cdotfill$\vartriangleright$ Backward pass\enskip~}
+        \item for $l=k{\ldots}1$
+        \item \quad $\symbf\xi_l = \symbf\xi_{l+1} \cdot \partial F_l(\symbf z_{l-1})$
+        \item end for
+        \item for $l=1{\ldots}k$ do \gray{\normalfont\cdotfill$\vartriangleright$ Local computations\enskip~}
+        \item \quad $\nabla_l = \symbf\xi_{l+1} \cdot F_l'(\symbf z_{l-1})$
+        \item end for
+    \end{enumerate}
+\end{formula}
+%\begin{formula}
+%    \bfseries
+%    \renewcommand{\labelenumi}{\normalfont\scriptsize\arabic{enumi}:}
+%    \begin{enumerate}[leftmargin=1.5em,labelsep=0.5em]
+%        \item $\symbf z[0] = \symbf x$ \gray{\normalfont\cdotfill$\vartriangleright$ Forward pass\enskip~}
+%        \item for $l=1{\ldots}k$ do
+%        \item \quad $\symbf z[l] = F_l(\symbf z[l-1])$
+%        \item end for
+%        \item $\symbf\xi[k+1] = \partial\ell(\symbf z[k])$ \gray{\normalfont\cdotfill$\vartriangleright$ Backward pass\enskip~}
+%        \item for $l=k{\ldots}1$
+%        \item \quad $\symbf\xi[l] = \symbf\xi[l+1] \cdot \partial F_l(\symbf z[l-1])$
+%        \item end for
+%        \item for $l=1{\ldots}k$ do \gray{\normalfont\cdotfill$\vartriangleright$ Local computations\enskip~}
+%        \item \quad $\nabla[l] = \symbf\xi[l+1] \cdot F_l'(\symbf z[l-1])$
+%        \item end for
+%    \end{enumerate}
+%\end{formula}
+
+
+% ===
+\subsection{Layers}
+
+\begin{formula}{DAG}
+    Directed Acyclic Graphs represent connectivity structure between computational units.
+\end{formula}
+
+In DNNs typically units are arranged in sequence of \textbf{layers}
+\begin{formula}{Composition}
+    $F = F_{\orange k:1} = F_{\orange k} \circ\cdots\circ F_{\orange 1}$\\
+    $\mathrm{width}_l \equiv n_l \coloneqq \mathrm{dim}(\mathrm{range}(F_l))$,\enskip $\mathrm{\#units} = \sum_{l=1}^k n_l$
+\end{formula}
+
+Such layer-to-layer maps successively tansform input into intermediate representations
+\begin{formula}*{Activation}
+    \highlight{$\symbf z_l \coloneqq F_{l:1}(\symbf x) = (F_l \circ F_{l-1:1})(\symbf x) = F_l(\symbf z_{l-1})$}\\
+    $\symbf z_0 \coloneqq \symbf x$: input layer,\quad $\symbf y \eqqcolon \symbf z_k$: output layer
+\end{formula}
+
+
+% ===
+\subsection{Multivariate analysis}
+
+\begin{formula}{Chain rule}
+    $\partial (g \circ f) = (\partial g \circ f) \cdot f$ \enskip generalized to maps\\
+    $\mathllap{\gray \partial F_{g:f} \equiv\ } \highlight{\partial(F_g \circ F_f) = (\partial F_g \circ F_f) \cdot \partial F_f}$
+    \begin{formula}*{for DNNs}
+        $\highlight*{\partial F_{l:1} = \prod_{l=k}^1 \partial F_l \circ F_{l-1:1}}$
+    \end{formula}
+\end{formula}
+
+\begin{formula}{Notation}
+    $F \colon \R^n \times \R^d \to \R^m$, inputs $\symbf x \in \R^n$, parameters $\symbf\theta \in \R^d$\\
+    $\partial f = \paren*{\displaystyle\pderiv{f}{x_i}}_{\mkern-5mui} \mkern-4mu \green{\! \overset{m=1}{=} \!} \partial F = \paren*{\displaystyle\pderiv{F_j}{x_i}}_{\mkern-5muji} \mkern-4mu$,\enskip $f' = \nabla_\theta f$,\enskip $F' = \nabla_\theta F$
+\end{formula}
+
+
+% ===
+\subsection{Gradient descent}
+
+For learning we're not interested in prediction $F$, but in loss $f$
+\begin{formula}{Loss}
+    $\highlight{f \coloneqq \ell \circ F = \ell \circ F_{k:1}} = \ell(F(\symbf{x,\theta}), \symbf y)$,\quad $\ell : \mathcal Y \times \mathcal Y \to \R$
+\end{formula}
+The (normalized) \textbf{negative gradient} $\propto - \nabla_\theta f(\symbf{x,\theta})$ will define the direction of the steepest descent on the loss.
+
+\begin{formula}{\orange\warning}
+    There exist two different gradients w.r.t. maps $F_l$, \textit{input/activity} and \textit{\bfseries parameters}. Don't be confused!
+\end{formula}
+
+\begin{formula}*{Gradient}
+    \highlight*{$\nabla_{\orange\symbf\theta_l} F = (\partial F_{k:l+1} \circ F_{l:1}) \cdot (F_l' \circ F_{l-1:1})$} $(\forall l)$\\
+    $\nabla_{\orange\symbf\theta_l} f (\symbf x) = \underbrace{\partial (\ell \circ F_{k:l+1}) (\symbf z_l)}_{\mathclap{\symbf\xi_{k+1} \colon \text{downstream}}} \enskip\cdot\enskip \underbrace{F_l' (\symbf z_{l-1})}_{\mathclap{\text{local Jacob.}\mathrlap{\text{\ \ $(\symbf z_{l-1}$: upstream)}}}}$
+\end{formula}
+
+\begin{formula}{vector-Jacobian product}
+    for \enskip $\symbf z = \symbf{W x}$ \enskip we find \highlight{$\pderiv{\symbf z}{\symbf W} = \symbf x^\top$}
+\end{formula}
+
+
+% ===
+\subsection{Parameter gradients}
+
+\begin{formula}{Ridge function layer}
+    $\nabla_{\symbf\theta_{lj}} \ell(\symbf x) = \underbrace{\xi_{lj}}_{\mathclap{\text{Scalar}}} \enskip\cdot\enskip \underbrace{\sigma' (\symbf\theta_{lj} \cdot \symbf z_{l-1})}_{\mathclap{\text{Sensitivity of unit}}} \enskip\cdot\enskip \underbrace{\symbf z_{l-1\vphantom{j}}}_{\mathclap{\text{Direction}}}$
+\end{formula}
+\begin{formula}{Deep lin. netw.}
+    $F(\symbf x) = \prod_{l=k}^1 \symbf\theta_l \symbf x$,\quad $f = \ell \circ F$
+\end{formula}
+\begin{formula}
+    $\highlight{\partial F_l} = \symbf\theta_l$,\quad $\partial F_{k:l} = \prod_{r=k}^l \symbf\theta_r$,\quad
+    $\highlight{\symbf\xi_k} = \nabla \ell(\symbf z_k)$,\quad $\symbf\xi_{l-1} = \symbf\xi_l \symbf\theta_l$\\
+    $\highlight{\nabla_{\orange \symbf\theta_l} f(\symbf x)} =
+    \begin{bmatrix}
+        \symbf\theta_k & \ldots & \orange{\symbf\theta_{l+1}} & \delta
+    \end{bmatrix}
+    \begin{bmatrix}
+        \orange{\symbf\theta_{l-1}} & \ldots & \symbf\theta_1 & \symbf x
+    \end{bmatrix}^{\top}
+    = \symbf\xi_l \symbf z_{l-1}^\top$
+\end{formula}

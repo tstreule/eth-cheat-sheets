@@ -1,0 +1,40 @@
+%! Author = tstreule
+
+\section{Deep Gradients}\label{sec:deep-gradients}
+
+
+% ===
+\subsection{Short connectivity}
+
+\emph{Residual connections:}\enskip
+shortcut layers and \textbf{add} back in,\enskip $g(\symbf x) = f(\symbf{x; \theta}) \green + \symbf x$, or if dimensions don't match: $f(\symbf{x; \theta}) \green + \symbf{Wx}$
+
+\emph{Skip connections:}\enskip
+shortcut layers and \textbf{concatenate} back in.
+Connect layer output to all downstream layers.
+
+
+% ===
+\subsection{Normalization}
+
+We observe \textbf{vanishing gradients}, i.e. poor backpropagation of errors, when incoming data to activation function is not normalized.
+
+
+\subsubsection{Batch normalization \enskip\mdseries $\implies$ across many data points}
+
+\begin{itemize}
+    \item Learning rate $\eta$ is otherwise very sensitive
+    \item Key idea: normalize the layer activation (and backpropagate through normalization!)
+\end{itemize}
+($+$) very effective, broadly used in vision\\
+($-$) dependence on batch size, not suitable for all architectures
+
+
+\subsubsection{Layer normalization \enskip\mdseries $\implies$ across units in same layer}
+
+\begin{itemize}
+    \item In scenarios like recurrent NNs, we have batch size = 1; batch normalization is not possible.
+    \item Use population average of activations in layer as reference
+\end{itemize}
+($+$) very effective, used in NLP (transformers, RNNs)\\
+($-$) no consistent benefits

@@ -28,7 +28,7 @@ Solutions on two data sets drawn from the same source should be similar.
     \item \textbf{Capacity:}\enspace
         \highlight{$\mathrm{cap} = \max_p I(S;\hat S)$}
         $\rightsquigarrow p_S(s)$
-    \item \textbf{$\bm{(M,n)}$-code:}\enspace
+    \item \textbf{$\symbf{(M,n)}$-code:}\enspace
         is a pair $(Enc,Dec)$\hfill
         $\color{gray} \leftarrow\text{scr. p.87}$\\\quad
         where $M$: \#messages, $n$: code-length
@@ -50,9 +50,9 @@ Goal / \textbf{Best code:}\enspace
 \begin{itemize}
     \item $A_\epsilon^{(n)}$:
         Typical set of sequences $(s_1,\ldots,s_n) \in \mathcal S^n$\\\qquad
-        $\abs*{-\frac1n \log p_{S^n} (\bm s^n) - H[S]} < \epsilon$\hfill
+        $\abs*{-\frac1n \log p_{S^n} (\symbf s^n) - H[S]} < \epsilon$\hfill
         $\color{gray} \leftarrow \text{scr. p.89}$
-    \item $\P*{(\bm S^n, \bm{\hat S}^n) \in A_\epsilon^{(n)}} \overset{n\to\infty}{\to} 1$\hfill
+    \item $\P*{(\symbf S^n, \symbf{\hat S}^n) \in A_\epsilon^{(n)}} \overset{n\to\infty}{\to} 1$\hfill
         $\color{gray} \leftarrow \text{scr. p.90}$
     \item \highlight{$p\ped{err} \leq 2^{-n(\mathrm{cap} - 3\epsilon -r)}$}
         $\overset{n\to\infty}{\to} 0$\enspace if\enspace \highlight{$r<\mathrm{cap}$}

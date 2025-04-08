@@ -1,0 +1,182 @@
+%! Package = Preamble for cheat sheets
+%! Author = tstreule
+%! Date = 24.01.22
+
+\NeedsTeXFormat{LaTeX2e}
+
+
+% =======================
+% === Package imports ===
+
+% Essentials
+\RequirePackage[english,ngerman]{babel} % Language
+\RequirePackage{calc,etoolbox,ifthen,xparse} % Commands and hooks
+
+% Math
+\RequirePackage{mathtools,amsfonts,amsmath,autobreak,cancel,xfrac}
+\RequirePackage{unicode-math} % Font (includes fontspec)
+\RequirePackage{units,trfsigns}
+
+% Other
+\RequirePackage{graphicx,float} % Image
+\RequirePackage[svgnames]{xcolor} % Color
+\RequirePackage{enumitem} % Itemize/enumerate
+\RequirePackage{booktabs,makecell,multicol,multirow,tabularx} % Tabulars
+\RequirePackage{ulem} % Underline/strikethrough/...
+\RequirePackage{setspace} % Spacing
+\RequirePackage{ragged2e} % Center, raggedright, justifying, ...
+\RequirePackage{xurl,navigator} % urls
+
+
+% --- url and href commands ---
+% I do this since hyperref package is quite ugly with XeLaTeX and LuaLaTeX
+\DeclareUrlCommand\url@original{}
+\DeclareDocumentCommand{\url}{m}{\begingroup\ttfamily\urllink{#1}{\url@original{#1}}\endgroup}
+\DeclareDocumentCommand{\href}{mm}{\urllink{#1}{#2}}
+
+
+% ========================
+% === Basic page setup ===
+
+%\RequirePackage[document]{ragged2e} % Flush left
+
+% Fonts
+\defaultfontfeatures{LetterSpace=-1.5,WordSpace=0.75} % make tight
+\setmainfont[Scale=0.95,BoldFont=* SemiBold,BoldItalicFont=* SemiBold Italic]{Noto Serif}
+\setsansfont[Scale=0.95]{Open Sans}
+\setmathfont[LetterSpace=12]{latinmodern-math.otf}
+\setmathrm  {latinmodern-math.otf} % undo `setmainfont` for mathrm
+%\AtBeginDocument{\let\mathbb\relax\DeclareMathAlphabet{\mathbb}{U}{msb}{m}{n}} % undo `setmainfont` for mathbb
+
+% Custom emphasizing
+\colorlet{emph-text-color}{MediumOrchid}
+\DeclareOldFontCommand {\em}{\normalfont\color{emph-text-color}\bfseries\sffamily}{}
+\DeclareTextFontCommand{\emph}{\em}
+
+% Enumitem
+\setlist{leftmargin=*,labelsep=0.5em,nosep}  % Spacing
+\setlist[itemize,2]{label=$\normalcolor\circ$}
+
+% Spacing
+\setstretch{1.1}
+\renewcommand*{\arraystretch}{1} % Vertical array and matrix spacing --> tipp: keep value `1`
+\setlength\arraycolsep{.2em} % Horizontal array and matrix spacing
+\setlength\columnsep  {8pt} % Column spacing for multicols
+\setlength\intextsep  {0.1em plus 0.1em minus 0.05em} % Vertical spacing for figures
+\setlength\jot        {-0.1em} % Vertical space for equations
+\setlength\parskip    {0.1em minus 0.05em} % "glue" between each paragraph
+\setlength\parindent  {0em} % `\indent` of paragraphs
+\setlength\tabcolsep  {0.5em} % Column tabular spacing
+
+% Math spacing - move operators tighter together
+\thinmuskip =2mu minus 1mu          % default: 3mu
+\medmuskip  =3mu plus 1mu minus 2mu % default: 4mu plus 2mu minus 4mu
+\thickmuskip=4mu plus 1mu minus 3mu % default: 5mu plus 5mu
+\newcommand{\setdisplayskips}{ % Hack to remove vertical spacing in equations
+    \setlength{\abovedisplayskip}     {0em}%
+    \setlength{\belowdisplayskip}     {0em}%
+    \setlength{\abovedisplayshortskip}{0em}%
+    \setlength{\belowdisplayshortskip}{0em}}
+\appto{\normalsize}  {\setdisplayskips}
+\appto{\small}       {\setdisplayskips}
+\appto{\footnotesize}{\setdisplayskips}
+% Colorize all math
+%\everymath\expandafter{\the\everymath\color{MediumBlue}}
+% --> use "\the\everymath" for default math color
+% --> use "\normalcolor" for other way around
+
+% Adjust `cases` environment
+\makeatletter
+\renewcommand*\env@cases[0]{% in order to inherit vertical spacing of `\arraystretch`
+    \let\@ifnextchar\new@ifnextchar
+    \left\lbrace\array{@{}l@{\quad}l@{}}}
+\makeatother
+
+
+% ==========================
+% === Title and Sections ===
+
+\RequirePackage{titling}
+\RequirePackage[useregional=numeric]{datetime2} % Date format
+
+% --- Title format ---
+
+% Vertical space before and after `\maketitle`
+\setlength\droptitle{-3.5em}
+\renewcommand\maketitlehookd{\vspace*{-1.2em}}
+% Title
+\pretitle  {\centering\bfseries\sffamily\large}
+\posttitle {\par}
+% Author
+\preauthor {\centering\sffamily\small}
+\postauthor{}
+% Date
+\predate   {\centering\sffamily\small\ifx\thedate\empty\else{(}\fi}
+\postdate  {\ifx\thedate\empty\else{)}\fi\par}
+\renewcommand\maketitlehookc{\leavevmode\unskip}
+
+% --- Section format ---
+
+\RequirePackage{titlesec}
+
+% Background colors
+\colorlet{section-color}           {RoyalBlue}
+\colorlet{subsection-color}        {RoyalBlue!45}
+\colorlet{subsubsection-color}     {RoyalBlue!20}
+% Text colors
+\colorlet{section-text-color}      {white}
+\colorlet{subsection-text-color}   {black}
+\colorlet{subsubsection-text-color}{black}
+
+% Font sizes
+\setkomafont{section}      {\normalsize}
+\setkomafont{subsection}   {\normalsize}
+\setkomafont{subsubsection}{\normalsize}
+%\setkomafont{paragraph}   {\normalsize}
+%\setkomafont{subparagraph}{\normalsize}
+
+% Put section in box with fixed height
+\newcommand\mysectionformat{\normalfont\sffamily\bfseries}
+\newcommand\mysectionformatskip{\heightof{}}
+\NewDocumentCommand{\mysectionbox}{oom}{%
+    \colorbox{#1-color}{\parbox{\linewidth-2\fboxsep}{% colors and boxing
+        \parbox[c]{0pt}{\rule{0pt}{1em}}% assert lineheight of 1em (note: multiple lines are allowed)
+        \parbox[b]{\linewidth}{\color{#1-text-color}\ifblank{#2}{}{#2.\ }#3}% actual content
+    \vspace*{-0.2em}}}}
+\titleformat{name=\section}      {\mysectionformat}{}{0em}{\mysectionbox[section][\thesection]}
+\titleformat{name=\subsection}   {\mysectionformat}{}{0em}{\mysectionbox[subsection][\thesubsection]}
+\titleformat{name=\subsubsection}{\mysectionformat}{}{0em}{\mysectionbox[subsubsection][\thesubsubsection]}
+% Starred expressions
+\titleformat{name=\section,numberless}      {\mysectionformat}{}{0em}{\mysectionbox[section][]}
+\titleformat{name=\subsection,numberless}   {\mysectionformat}{}{0em}{\mysectionbox[subsection][]}
+\titleformat{name=\subsubsection,numberless}{\mysectionformat}{}{0em}{\mysectionbox[subsubsection][]}
+
+% Section spacing
+\newcommand\mybeforeskip{0.1em plus 0.2em minus 0.05em}
+\newcommand\myafterskip {\parskip}
+\titlespacing*{\section}      {0pt}{0.2em plus 0.5em}{\myafterskip}
+\titlespacing*{\subsection}   {0pt}{\mybeforeskip}{\myafterskip}
+\titlespacing*{\subsubsection}{0pt}{\mybeforeskip}{\myafterskip}
+
+
+% ===========================
+% === HEADERS AND FOOTERS ===
+
+\usepackage[footsepline]{scrlayer-scrpage}
+\pagestyle{plain.scrheadings}
+
+% Clear and set styles
+\clearpairofpagestyles
+%\clearscrheadfoot
+\setkomafont{pageheadfoot}{\color{gray}\sffamily}
+
+% Reset pagination format
+\setkomafont{pagination}{}
+
+% Set content
+%\ihead*{}
+%\chead*{}
+\ohead*{tstreule | p.\pagemark}
+%\ifoot*{}
+%\cfoot*{}
+%\ofoot*{}

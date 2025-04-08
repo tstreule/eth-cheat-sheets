@@ -1,0 +1,47 @@
+%! Author = tstreule
+
+\section{Variational Autoencoders}\label{sec:vae}
+
+
+\begin{formula}{Define}
+    $\xrightarrow[\text{prior}]{p_{\theta'}(z)} \mathcal Z
+    \xrightarrow[\text{likelihood}]{\mathrm{dec}_\theta(z) = p_\theta(x\mid z)} \mathcal X
+    \xrightarrow[\text{approx. posterior}]{\mathrm{enc}_\phi(x) = q_\phi(z\mid x)} \mathcal Z$
+    \\ $\to$ sample/observe $\mathcal X_i$ from latent representation $\mathcal Z$
+\end{formula}
+
+\newcommand\getcolor{\colorlet{previousColor}{.}}
+\newcommand\resetcolor{\color{previousColor}}
+
+\begin{formula}{Train}
+    $\max\limits_{\theta', \theta, \phi} \sum_{i} \getcolor\orange\underbracket{{\resetcolor \log p_{\theta', \theta} (x_i)}}\nolimits_{\ (\ast) \text{ indep. of } Z}$
+    \\
+    \begin{tabular}{r@{~}l}
+        $\orange{(\ast)} =$
+        & $\E*[Z \sim q_\phi(\cdot \mid x_i)]{\log\paren*{ \frac{p_{\theta', \theta}(x_i, Z)}{p_{\theta', 'theta}(Z \vert x_i)} \ \frac{q_\phi(Z \vert x_i)}{q_\phi(Z \vert x_i)} }}$
+        \\
+        $=$ & $\overbracket{
+            \E*{\log p_\theta(x_i\mid Z)}
+            - D\ped{KL}\paren*{q_\phi(\cdot\mid x_i) \parallel p_{\theta'}(\cdot)}
+        }^{\begingroup\color{Green} \mathcal L(x_i,\theta,\phi) \endgroup \:\equiv\: \text{\textbf{ELBO} = Infomax -- Regularisation term}}$
+        \\
+        & $+ D\ped{KL}\paren*{q_\phi(\cdot\mid x_i) \parallel p_{\theta', \theta}(\cdot\mid x_i)}
+        \color{Green} \geq \mathcal L(x_i, \theta, \phi)$
+    \end{tabular}
+    \\
+    $\implies$ \highlight{$\theta^\ast, \phi^\ast = \arg\max_{\theta,\phi} \mathcal L(x_i, \theta, \phi)$}
+\end{formula}
+
+Requirements for good representation:
+\begin{itemize}
+    \item \textbf{informative:}\enskip
+    $\theta^\ast = \arg\max_\theta I(X;Z)
+    \gray{= \arg\max_\theta \E[X,Z]{\log p(X\mid Z)} - \textit{const}_{\textit{w.r.t. } \theta}}
+    \approx \arg\max_\theta \sum_i \E[Z\mid X]{\log p(x_i\mid Z)}$
+    \item \textbf{disentangled:}\enskip
+    components in $\mathcal Z$ associated with distinct feature in $\mathcal X$
+    (see $D\ped{KL}$ in ELBO).
+    \item \textbf{robust:}\enskip
+    noise in $\mathcal Z$ doesn't substantially affect $\mathcal X$ (and vice versa)
+    $\to$ choice of approx. posterior!
+\end{itemize}

@@ -1,0 +1,89 @@
+%! Author = tstreule
+
+%\vfill~\columnbreak
+
+\section*{Appendix}\label{sec:appendix}
+
+
+\begin{formula}{Taylor}
+    \highlight{$f(\symbf x + \Delta\symbf x) \approx f(\symbf x) + \nabla f(\symbf x)^\top \Delta\symbf x + \frac12 \Delta\symbf x^\top \nabla^2 f(\symbf x) \Delta\symbf x$}
+\end{formula}
+\begin{formula}{Cauchy-Schwarz}
+    $\abs*{\E{X,Y}}^2 \leq \E{X^2} \E{Y^2}$
+\end{formula}
+\begin{formula}{Jensen, {\mdseries $f(~\cdot~)$ convex}}
+    $f(\E{x}) \leq \E{f(X)}$
+\end{formula}
+
+\begin{formula}{Derivative}
+    $\nabla_{\symbf v} f(\symbf w) = \nabla f(\symbf w)^\top \symbf v = \lim\limits_{\lambda\to0} \frac{f(\symbf w + \lambda \symbf v) - f(\symbf w)}{\lambda}$
+\end{formula}
+
+
+% ===
+\subsection*{Probability / statistics}
+
+\begin{itemize}
+    \item Gaussian:
+    $\Gauss{x \mid \mu, \sigma^2} = \frac{1}{\sqrt{2\pi\sigma^2}} \exp*(-\frac12 \frac{(x-\mu)^2}{\sigma^2})$
+    \\
+    $\Gauss{\symbf{x \mid \mu, \Sigma}} = \frac{1}{\sqrt{(2\pi)^d \abs{\symbf\Sigma}}} \exp*(-\frac{1}{2} (\symbf x - \mu)^\top \symbf \Sigma^{\shortminus1} (\symbf x - \mu))$
+    % \\
+    % $\ln(\Gauss{}) {=} {-} \frac{\ln\abs{\symbf\Sigma}}{2} {-} \frac12 (\symbf x{-}\symbf\mu)\!^\top \symbf\Sigma^{-1} (\symbf x{-}\symbf\mu) + const$%{-} \frac{d}{2} \ln(2\pi)
+    \\
+    $X \sim \Gauss{\symbf{\mu, \Sigma}}$,\enskip $Y = A {+} BX \implies Y{\sim}\Gauss{A {+} B \symbf\mu,\ B \symbf\Sigma B\!^\top}$
+    \item Binom.: $f(k,n;p) = \P{X=k} = \binom nk p^k (1-p)^{n-k}$
+    \item $\V{X} = \E{(X - \E{X})^2} = \E{X^2} - \E{X}^2$ \\
+    $\V{X+Y} = \V{X} + \V{Y} + 2\Cov{X,Y}$
+    \item $\Cov{X,Y} = \E{(X-\E{X})(Y-\E{Y})} = \E{XY} - \E{X}\E{Y}$ \\
+    $\Cov{aX,bY} = ab\Cov{X,Y}$
+\end{itemize}
+
+\emph{Complete the square:}\\
+If $p(\symbf x) \propto \exp(-\frac12 \symbf x^\top \symbf{\orange{A}x} + \symbf x^\top \orange{\symbf b})$,
+then $p(\symbf x) = \Gauss{\symbf x \mid \symbf A^{\shortminus1} \symbf b, \symbf A^{\shortminus1}}$
+
+\emph{Conditional Gaussians:}\enskip
+$\implies Y\vert X \sim \Gauss{\tilde{\symbf\mu}, \tilde{\symbf\Sigma}}$,\enskip where\\
+$\tilde{\symbf\mu} = \symbf\mu_Y + \symbf\Sigma_{YX} \symbf\Sigma_{XX}^{\shortminus1} (X - \symbf\mu_X)$,\enskip
+$\tilde{\symbf\Sigma} = \symbf\Sigma_{YY} - \symbf\Sigma_{YX} \symbf\Sigma_{XX}^{\shortminus1} \symbf\Sigma_{XY})$\\
+$P_{X,Y} = \begin{bmatrix} \symbf X \\ \symbf Y \end{bmatrix} \sim
+\Gauss*[~]{
+    \begin{bmatrix} \symbf\mu_X \\ \symbf\mu_Y \end{bmatrix} ,
+    \begin{bmatrix} \symbf\Sigma_{XX} & \symbf\Sigma_{XY} \\ \symbf\Sigma_{YX} & \symbf\Sigma_{YY} \end{bmatrix}
+}$,\enspace $\symbf\Sigma_{ij}$ p.s.d.
+
+
+% ===
+\subsection*{Calculus}
+
+\begin{formula}
+    \raggedright
+    \newcommand{\Item}[1]{\textbullet\nobreak\enskip#1\hfill\enskip\allowbreak}
+    \newcommand{\Tr}{\mathop{T\!r}}
+    \Item{$\int_a^b u v' \diff x = u v \vert_a^b - \int_a^b u' v \diff x$}
+    \Item{$\pderiv{x} \frac{g}{h} = \frac{g'h}{h^2} - \frac{gh'}{h^2}$}
+    \Item{$\pderiv{\symbf x} f(\symbf x) = \diag (f'(\symbf x))$}
+    \Item{$\pderiv{\symbf x} (\symbf b^\top\symbf  x) = \pderiv{}{\symbf x} (\symbf x^\top\symbf  b) = \symbf b$}
+    \Item{$\pderiv{\symbf x} (\symbf b^\top \symbf{Ax}) = \symbf A^\top \symbf b$}
+    \Item{$\pderiv{\symbf x} (\symbf x^\top \symbf{Ax}) = (\symbf A^\top + \symbf A)\symbf x \overset{\orange{\ast}}{=} 2\symbf{Ax}$ \enskip \mbox{\gray\footnotesize $(\ast)$: $\symbf A$ sym.}}
+    \Item{$\pderiv{\symbf X} (\symbf c^\top \symbf{Xb}) = \symbf{cb}^\top$}
+    \Item{$\pderiv{\symbf X} (\symbf c^\top \symbf X^\top \symbf b) = \symbf{bc}^\top$}
+    \Item{Trace trick: $\symbf{x^\top A x} \overset{\orange{\ast}}{=} \Tr(\symbf{x^\top A x}) \overset{\orange{\ast\ast}}{=} \Tr(\symbf{x x^\top A}) = \Tr(\symbf{A x x^\top})$ \enskip \mbox{\gray\footnotesize $(\ast)$: inner prod., $(\ast\ast)$: cyclic permut.}}
+    \Item{$\pderiv{\symbf X} \Tr(\symbf{X^\top A}) = \symbf A$}
+    \Item{$\abs{\symbf X^{\shortminus1}} = \abs{\symbf X}^{\shortminus1}$}
+    \Item{$\pderiv{}{\symbf X} \log \abs{\symbf X} = \symbf X^{\shortminustop}$}
+    \Item{$\deriv{}{x} \abs x = \frac{x}{\abs x}$}
+    \Item{$\pderiv{}{\symbf x} \norm{\symbf x}_2 = \pderiv{}{\symbf x} (\symbf x^\top \symbf x) = 2\symbf x$}
+    \Item{$\pderiv{}{\symbf x} \norm{\symbf x - \symbf b}_2 = \frac{\symbf x-\symbf b}{\norm{\symbf x-\symbf b}_2}$}
+    \Item{$\pderiv{}{\symbf x} \norm{\symbf x}_1 = \sign(\symbf x)$ \enskip \mbox{\gray\footnotesize $\sign(\symbf x) \in \brace{\pm1}^p$ is row-wise}}
+\end{formula}
+
+
+%\vfill
+%\todo{Links to review
+%\begin{itemize}
+%    \item \href{https://distill.pub/2017/momentum/}{Blog post about \textbf{momentum}}
+%    \item \href{https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/}{Blog post about \textbf{attention}}
+%    \item \textbf{(Vaswani et al. 2017)} ``Attention is all you need''
+%\end{itemize}}

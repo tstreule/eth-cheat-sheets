@@ -5,9 +5,9 @@
     \item General p-norm:\enskip
         $\norm{x}_p = \paren{\sum_{i=1}^n \abs{x_i}^p}^{1/p}$
     \item Taylor:\enskip
-        $f(x) \approx f(a) + \frac{f'(a)}{1!}(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \ldots$
+        $f(x) \approx f(a) + \frac{f'(a)}{1!}(x{-}a) + \frac{f''(a)}{2!}(x{-}a)^2 + ..$
         \begin{itemize}
-            \item $f(\bm x) \approx f(\bm a) + \pderiv{f(\bm x)}{\bm x}\big\vert_{\bm a} - \frac12 (\bm x - \bm a)^\top \paren*{\frac{\partial^2 f(\bm x)}{\partial \bm x \partial \bm x^\top}}\big\vert_{\bm a} (\bm x - \bm a)$
+            \item $f(\symbf x) \approx f(\symbf a) + \pderiv{f(\symbf x)}{\symbf x}\big\vert_{\symbf a} - \frac12 (\symbf x - \symbf a)^\top \frac{\partial^2 f(\symbf x)}{\partial \symbf x \partial \symbf x^\top}\big\vert_{\symbf a} (\symbf x - \symbf a)$
             \vspace{-2pt}
             \item Power series of exp.:\enskip
                 $\exp(x) \coloneqq \sum_{k=0}^\infty \frac{x^k}{k!}$
@@ -45,10 +45,10 @@
     \item Gaussian:\enskip
         $\Gauss*{x \mid \mu, \sigma^2} = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\paren*{-\frac12 \frac{(x-\mu)^2}{\sigma^2}}$
         \\
-        $\Gauss{\bm x \mid \bm\mu,\bm\Sigma} = \frac{1}{\sqrt{(2\pi)^d \abs{\bm\Sigma}}} \exp \left( -\frac{1}{2} (\bm x - \mu)^\top \bm \Sigma^{-1} (\bm x - \mu) \right)$
+        $\Gauss{\symbf x \mid \symbf\mu,\symbf\Sigma} = \frac{1}{\sqrt{(2\pi)^d \abs{\symbf\Sigma}}} \exp \left( -\frac{1}{2} (\symbf x - \mu)^\top \symbf \Sigma^{-1} (\symbf x - \mu) \right)$
         \begin{itemize}
-            % \item $\ln(\Gauss{}) = - \frac{\ln\abs{\bm\Sigma}}{2} - \frac12 (\bm x - \bm\mu)^\top \bm\Sigma^{-1} (\bm x - \bm\mu) + \frac{d}{2} \ln(2\pi)$%{-} \frac{d}{2} \ln(2\pi)
-            \item $X \sim \Gauss{\bm{\mu,\Sigma}}, Y = A + BX \implies Y \sim \Gauss{A+B\bm\mu, B\bm\Sigma B^\top}$
+            % \item $\ln(\Gauss{}) = - \frac{\ln\abs{\symbf\Sigma}}{2} - \frac12 (\symbf x - \symbf\mu)^\top \symbf\Sigma^{-1} (\symbf x - \symbf\mu) + \frac{d}{2} \ln(2\pi)$%{-} \frac{d}{2} \ln(2\pi)
+            \item $X \sim \Gauss{\symbf{\mu,\Sigma}}, Y = A + BX \implies Y \sim \Gauss{A+B\symbf\mu, B\symbf\Sigma B^\top}$
         \end{itemize}
     \item Binomial:\enskip
         $f(k,n;p) = \P{X=k} = \binom nk p^k (1-p)^{n-k}$
@@ -69,26 +69,26 @@
     \item Partial:\enskip $\int u v' \diff x = u v - \int u' v \diff x$
         \quad\textbullet\,
         $\pderiv{}{x} \frac{g}{h} = \frac{g'h}{h^2} - \frac{gh'}{h^2}$
-    \item $\pderiv{}{\bm x} (\norm{\bm x - \bm b}_2) = \frac{\bm x-\bm b}{\norm{\bm x-\bm b}_2}$
+    \item $\pderiv{}{\symbf x} (\norm{\symbf x - \symbf b}_2) = \frac{\symbf x-\symbf b}{\norm{\symbf x-\symbf b}_2}$
         \quad\textbullet\,
         $\deriv{}{x} \abs x = \frac{x}{\abs x}$
-    \item $\pderiv{}{\bm X} \log \abs{\bm X} = \bm X^{-\top}$
+    \item $\pderiv{}{\symbf X} \log \abs{\symbf X} = \symbf X^{-\top}$
         \quad\textbullet\,
-        $\abs{\bm X^{-1}} = \abs{\bm X}^{-1}$
+        $\abs{\symbf X^{-1}} = \abs{\symbf X}^{-1}$
         
-    \item $\pderiv{}{\bm x} (\bm b^\top\bm  x) = \pderiv{}{\bm x} (\bm x^\top\bm  b) = \bm b$
-    \item $\pderiv{}{\bm x} (\bm b^\top \bm{Ax}) = \bm A^\top \bm b$
+    \item $\pderiv{}{\symbf x} (\symbf b^\top\symbf  x) = \pderiv{}{\symbf x} (\symbf x^\top\symbf  b) = \symbf b$
+    \item $\pderiv{}{\symbf x} (\symbf b^\top \symbf{Ax}) = \symbf A^\top \symbf b$
         \quad\textbullet\,
-        $\pderiv{}{\bm X} (\bm c^\top \bm{Xb}) = \bm{cb}^\top$
-    \item $\pderiv{}{\bm X} (\bm c^\top \bm X^\top \bm b) = \bm{bc}^\top$
+        $\pderiv{}{\symbf X} (\symbf c^\top \symbf{Xb}) = \symbf{cb}^\top$
+    \item $\pderiv{}{\symbf X} (\symbf c^\top \symbf X^\top \symbf b) = \symbf{bc}^\top$
         \quad\textbullet\,
-        $\pderiv{}{\bm x} (\bm x^\top \bm x) = 2\bm x$
-    \item $\pderiv{}{\bm x} (\bm x^\top \bm{Ax}) = (\bm A^\top + \bm A)\bm x \overset{\bm A\textrm{ sym.}}{=} 2\bm{Ax}$
-    \item $\pderiv{}{\bm X} T\!r(\bm X^\top \bm A) = \bm A$
+        $\pderiv{}{\symbf x} (\symbf x^\top \symbf x) = 2\symbf x$
+    \item $\pderiv{}{\symbf x} (\symbf x^\top \symbf{Ax}) = (\symbf A^\top + \symbf A)\symbf x \overset{\symbf A\textrm{ sym.}}{=} 2\symbf{Ax}$
+    \item $\pderiv{}{\symbf X} T\!r(\symbf X^\top \symbf A) = \symbf A$
         \quad\textbullet\,
         Trace trick:\enspace
-            $\bm x^\top \bm{Ax} = \ldots$\\\hfill
-            $\ldots \overset{\small\substack{\textrm{inn. prod.}}}{=} T\!r (\bm x^\top \bm{Ax}) \overset{\small\substack{\textrm{cycl. permut.}}}{=} T\!r(\bm{xx}^\top \bm A) = T\!r(\bm{Axx}^\top)$
+            $\symbf x^\top \symbf{Ax} = \ldots$\\\hfill
+            $\ldots \overset{\small\substack{\textrm{inn. prod.}}}{=} T\!r (\symbf x^\top \symbf{Ax}) \overset{\small\substack{\textrm{cycl. permut.}}}{=} T\!r(\symbf{xx}^\top \symbf A) = T\!r(\symbf{Axx}^\top)$
     \item $\sigma(x) = \frac{1}{1 + \exp(-x)} \implies \nabla\sigma(x) = \sigma(x)(1-\sigma(x))$
     \item $\tanh(x) = \frac{2\sinh(x)}{2\cosh(x)} = \frac{\eu^x - \eu^{-x}}{\eu^x+\eu^{-x}}$
         \hfill\textbullet\hfill

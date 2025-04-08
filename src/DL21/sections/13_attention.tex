@@ -1,0 +1,70 @@
+%! Author = tstreule
+
+\section{Attention}\label{sec:attention}
+
+
+\textbf{RNNs:}\enskip learn to encode information relevant for the future.\\
+\textbf{Attention:}\enskip select what is relevant in retrospective.
+
+
+% ===
+\subsection{Self attention \enskip\mdseries($\symbf h_e^j$: encoder hidden state $j$)}
+
+\begin{formula}*{Softmax Gating}
+    $f_\phi (\symbf\xi, \symbf h_e^{1:s}) =
+    \frac{1}{\sum_j \exp(\phi(j))}
+    \begin{pmatrix}
+        \exp(\phi(\symbf\xi, \symbf h_e^1)) \\[-0.3em]
+        \vdots \\[-0.2em]
+    \end{pmatrix}
+    \gray \in \R^s$
+\end{formula}
+\begin{formula}{Gating function}
+    Similarity or compatibility $\phi\colon \R^n \times \R^m \to \R$.
+    $\to$ often an MLP, e.g. $\phi(\symbf\xi, \symbf h_3) = \symbf\xi \cdot \symbf h_e$ for $n {=} m$
+\end{formula}
+
+\begin{formula}*{Self-gated Attention}
+    $\symbf z^{1:n} =
+    [\symbf h_e^1, \ldots, \symbf h_e^s] \cdot f_\phi(\symbf\xi, \symbf h_e^{1:s})
+    \gray \in \R^{n \times s} {\times} \R^{s}$
+\end{formula}
+\hfill$\to$ use those ``read-outs'' as input to the decoding RNN!
+
+
+% ===
+\subsection{Transformers}
+
+Sequential nature of RNNs lead to \textit{memory limitations} and increased \textit{computation time}.
+IDEA: Preserve attention, and encoder-decoder architecture, but\ldots
+
+\begin{figure}[H]
+    \label{fig:transformer}
+    \centering
+    \input{graphics/transformer.tex}
+\end{figure}
+
+\textbf{Self attention:}\enskip
+captures relations between words in a sentence. Use (query-key-value) word embeddings.
+$\to$ think of it as a Google search / retrieval process\enskip
+$\to$ can be computed in parallel!\enskip
+Afterwards, use layer normalization.
+
+\textbf{Enc-Dec attention:}\enskip
+mimics attention mechanism of Seq2Seq models $\to$ input to output attention!\enskip
+
+($+$) very powerful for solving encoder-decoder NLP problems\\
+($-$) hard to train, attention results are not well interpretable
+
+
+\subsubsection{Embedding from language models --- ELMO}
+
+\textit{Bi}directional LSTM!\enskip
+l2r for prediction,\enskip
+r2l for context.
+
+
+\subsubsection{Bidirect. Enc. Repr. from Transformers --- BERT}
+
+Builds from \textit{ELMO} and \textit{GPT} but is a \textbf{few-shot learner}.
+Compared to traditional \textit{fine-tuning}, this shows that such large NLP models have \textbf{learnt to learn}.

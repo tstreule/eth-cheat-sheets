@@ -1,0 +1,19 @@
+%! Author = tstreule
+
+\section{Variational Inference}\label{sec:variational-inference}
+
+
+Find approximate $q$ s.t. $p(\theta \mid y) = \frac1Z p(\theta, y) \approx q(\theta \mid \lambda) \equiv q_\lambda$
+
+% ===
+\subsection{Laplace Approximation \enskip\mdseries (via 2nd Taylor)}
+
+\highlight*{$q(\theta) = \Gauss{\theta;\ \hat\theta, \Lambda^{-1}}$},
+$\hat\theta = \mathop{\mathrm{amax}}\limits_{\theta} p(\theta \mid \symbf{y})$,
+$\Lambda = - \nabla^2 \log p(\hat\theta \mid \symbf{y})$
+
+Predict: $p(y^\ast \mid \symbf{x^\ast, X, y}) \approx \int p(y^\ast \mid f^\ast)\ q(f^\ast) \diff f^\ast$
+with $q(f^\ast) = \int p(f^\ast \mid \theta)\ q_\lambda(\theta) \diff\theta$.
+
+LA greedily fits mode, then matches curvature (over-conf.).
+

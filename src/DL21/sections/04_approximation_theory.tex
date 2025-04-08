@@ -1,0 +1,31 @@
+%! Author = tstreule
+
+\section{Approximation Theory}\label{sec:approximation-theory}
+
+
+% ===
+\subsection{Universality}
+
+\begin{formula}{Weierstrass\\Theorem}
+    Polynomials $\mathcal P$ are \textbf{dense} in $C(I)$, \textit{i.e.} set of intervals, where $I = [a, b]$ for any $a<b$.
+    \\\llap{\textit{w.l.o.g.:}\enskip}%
+    Assume $I = [0, 1]$ \& define $\phi : C(I) \mapsto C([a, b])$,\enskip $\phi(f) = f\circ\phi$,\enskip $\phi = (1 - t)a + tb$.
+\end{formula}
+
+\begin{highlightbox}
+    An MLP $\mathcal H_\sigma^n$ with any continuous, \textit{non}-polynomial activation function $\sigma \in C^\infty(\R^n)$ is a universal approximator.
+    \begin{equation*}
+        \mathcal G_\sigma^n = \brace{g : g(\symbf x) = \sigma(\symbf{\theta^\top x}) \mid \symbf\theta \in \R^n},\quad
+        \mathcal H_\sigma^n = \mathop{\mathrm{span}}(\mathcal G_\sigma^n)
+    \end{equation*}
+\end{highlightbox}
+
+
+% ===
+\subsection{Complexity}
+
+Universality is the rule not the exception but at what cost? Deeper networks may yield better approximations but there's no evidence for/against it.
+\begin{itemize}
+    \item \textit{MLPs do not suffer from the curse of dimensionality} when approximating func. $g$ with $C_g \coloneqq \int \norm{\omega} \abs{\hat g(\omega)} \diff\omega < \infty$.
+    \item approx. error rate $\propto 1/m$ ($m = \text{\#units}$)
+\end{itemize}

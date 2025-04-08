@@ -1,0 +1,33 @@
+%! Author = tstreule
+
+%~\vfill~\columnbreak
+
+\section*{Appendix}\label{sec:appendix}
+
+% ===
+\subsection*{BLR extended}
+
+
+% ===
+\subsection*{Calculus}
+
+\begin{formula}
+    \raggedright
+    \newcommand{\Item}[1]{\textbullet\nobreak\enskip#1\hfill\enskip\allowbreak}
+    \newcommand{\Tr}{\mathop{T\!r}}
+    \Item{$\int_a^b u v' \diff x = u v \vert_a^b - \int_a^b u' v \diff x$}
+    \Item{$\pderiv{x} \frac{g}{h} = \frac{g'h}{h^2} - \frac{gh'}{h^2}$}
+    \Item{$\pderiv{\symbf x} f(\symbf x) = \diag (f'(\symbf x))$}
+    \Item{$\pderiv{\symbf x} (\symbf b^\top\symbf  x) = \pderiv{}{\symbf x} (\symbf x^\top\symbf  b) = \symbf b$}
+    \Item{$\pderiv{\symbf x} (\symbf b^\top \symbf{Ax}) = \symbf A^\top \symbf b$}
+    \Item{$\pderiv{\symbf x} (\symbf x^\top \symbf{Ax}) = (\symbf A^\top + \symbf A)\symbf x \overset{\orange{\ast}}{=} 2\symbf{Ax}$ \enskip \mbox{\gray\footnotesize $\normalcolor(\orange{\ast}) \colon \symbf A$ sym.}}
+    \Item{$\pderiv{\symbf X} (\symbf c^\top \symbf{Xb}) = \symbf{cb}^\top$}
+    \Item{$\pderiv{\symbf X} (\symbf c^\top \symbf X^\top \symbf b) = \symbf{bc}^\top$}
+    \Item{Tr. trick: $\symbf{x^\top A x} \overset{\orange{\ast}}{=} \Tr(\symbf{x^\top A x}) \overset{\orange{\ast\ast}}{=} \Tr(\symbf{x x^\top A}) = \Tr(\symbf{A x x^\top})$ \enskip \mbox{\gray\footnotesize $\normalcolor(\orange{\ast})$: inner prod., $\normalcolor(\orange{\ast\ast})$: cyclic permut.}}
+    \Item{$\pderiv{\symbf X} \Tr(\symbf{X^\top A}) = \symbf A$}
+    \Item{$\abs{\symbf X^{\shortminus1}} = \abs{\symbf X}^{\shortminus1}$}
+    \Item{$\pderiv{}{\symbf X} \log \abs{\symbf X} = \symbf X^{\shortminustop}$}
+    \Item{$\deriv{}{x} \abs x = \frac{x}{\abs x} = \sign(x)$}
+    \Item{$\pderiv{}{\symbf x} \norm{\symbf x}_2 = \pderiv{}{\symbf x} (\symbf x^\top \symbf x) = 2\symbf x$}
+    \Item{$\pderiv{}{\symbf x} \norm{\symbf x - \symbf b}_2 = \frac{\symbf x-\symbf b}{\norm{\symbf x-\symbf b}_2}$}
+\end{formula}

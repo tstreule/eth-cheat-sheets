@@ -21,22 +21,22 @@ Choose the model that provides the shortest description of the data.
 \subsubsection{Min. Description Length\quad (MDL)}
 
 Minimise \textbf{descr. length}:\enspace
-$-\log p(\bm X\mid \theta) - \log p(\theta)$
+$-\log p(\symbf X\mid \theta) - \log p(\theta)$
 
 Approx.:\enspace
-$\hat k \in \arg\min_k \highlight*{-\log p(\bm X\mid \hat\theta) + \frac{k'}{2} \log n}$
+$\hat k \in \arg\min_k \highlight*{-\log p(\symbf X\mid \hat\theta) + \frac{k'}{2} \log n}$
 
 % ---
 \subsubsection{Bayesian Information Crit.\quad (BIC)}
 
-Parametrise likelihood $p(\bm X\mid M)$ by $\theta$:\\
-\enspace $p(\bm X\mid M) = \int_{\Theta_M} \! \exp(\log p(\bm X\mid M, \theta)) \cdot p(\theta\mid M) \diff\theta$
+Parametrise likelihood $p(\symbf X\mid M)$ by $\theta$:\\
+\enspace $p(\symbf X\mid M) = \int_{\Theta_M} \! \exp(\log p(\symbf X\mid M, \theta)) \cdot p(\theta\mid M) \diff\theta$
 
 Assume flat prior $p(\theta\vert M) \approx \mathit{const}$ and\\
 expand log-likelihood by ML estimator $\hat\theta$:\\
-$\overline\ell (\theta) = \frac{\ell(\theta)}{n} = \frac1n \log p(\bm X\vert M,\theta) \overset{\text{i.i.d.}}{=} \frac1n \sum_i \ell(\theta, X_i) \overset{\textrm{Taylor}}{\approx} \ldots$
+$\overline\ell (\theta) = \frac{\ell(\theta)}{n} = \frac1n \log p(\symbf X\vert M,\theta) \overset{\text{i.i.d.}}{=} \frac1n \sum_i \ell(\theta, X_i) \overset{\textrm{Taylor}}{\approx} \ldots$
 
-$\implies p(\bm X\mid M) = \mathit{const}_2 \cdot \exp( \highlight*{\ell (\hat\theta) - \frac{k'}{2} \log n} )$\\
+$\implies p(\symbf X\mid M) = \mathit{const}_2 \cdot \exp( \highlight*{\ell (\hat\theta) - \frac{k'}{2} \log n} )$\\
 \quad where $k'$ : dimension of (trainable) parameters
 
 % ===

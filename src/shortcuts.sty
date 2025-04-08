@@ -1,217 +1,147 @@
+%! Package = Shortcuts for cheat sheet
 %! Author = tstreule
-%! Date = 17.01.22
-%\ProvidesPackage{shortcuts}
+%! Date = 24.01.22
 
-% ===============
-% === GENERAL ===
-
-% better design for tables
-%	Rules:	- Avoid vertical lines
-%			- Avoid double lines
-%	useful commands
-%			- \toprule	\midrule	\bottomrule		% rules
-%			- \cmidrule{a,b}						% rule from * to *
-%			- \addlinespace							% linespace (to add after each line)
-%			- \toprule[3pt]							% change width of the rule
-
-\RequirePackage{booktabs}
-\RequirePackage{amsmath,amssymb,mathtools,bm,autobreak,cancel,xfrac}
-\RequirePackage{xparse}% Custom Document Command
-\RequirePackage[safe]{tipa} % for overset
-\RequirePackage{trfsigns} %\laplace
-\RequirePackage{units}
-\RequirePackage{etoolbox}
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{./preamble}
+\RequirePackage{xstring}
 
 
 % =============
 % === UTILS ===
 
-\newcommand\dotwhenblank[1]{\ifblank{#1}{\:\cdot\:}{#1}}% Fill with dot when blank input
+% Dotting
+\DeclareDocumentCommand{\dotwhenblank}{m}{\ifblank{#1}{\:\cdot\:}{#1}} % Fill with dot when blank input
+\makeatletter\newcommand\cdotfill{%
+    \leavevmode\cleaders\hb@xt@.44em{\hss$\cdot$\hss}\hfill\kern\z@}\makeatother
 
-% Short minus and transpose
-\newcommand\minus{\scalebox{.6}[1]{\ensuremath{-}}}
-\newcommand\minusone{{\minus 1}}
-\newcommand\minustop{{\minus\!\top}}
+% Color hooks >> \gray <content> << OR >> \gray{<content>} <<
+\DeclareDocumentCommand{\colorize}{mg}{\IfValueTF{#2}{\begingroup\color{#1}#2\endgroup}{\color{#1}}}
+\DeclareDocumentCommand{\gray}  {g}{\colorize{Gray}{#1}}
+\DeclareDocumentCommand{\green} {g}{\colorize{Green}{#1}}
+\DeclareDocumentCommand{\orange}{g}{\colorize{OrangeRed}{#1}}
 
-% Add characters
-\def\hbar{{\mathchar'26\mkern-7mu h}}
-\def\bbar{{\mathchar'26\mkern-7mu b}}
-\def\dbar{{\mathchar'26\mkern-11mu d}}
+% Highlighting >> \highlight*[<color>]{<content>} <<
+\colorlet{highlight-color}{Gold!30}
+\colorlet{highlight-color-alt}{Silver!30}
+\NewDocumentCommand{\highlight}{s O{} m}{%
+    \colorlet{bg-color}{\ifblank{#2}{highlight-color\IfBooleanF{#1}{-alt}}{#2}}
+    \begingroup\setlength\fboxsep{1pt}
+    \relax\ifmmode% if in math mode
+        \mathchoice%
+        {\colorbox{bg-color}{$\displaystyle     #3\vphantom{|}$}}%
+        {\colorbox{bg-color}{$\textstyle        #3\vphantom{|}$}}%
+        {\colorbox{bg-color}{$\scriptstyle      #3\vphantom{|}$}}%
+        {\colorbox{bg-color}{$\scriptscriptstyle#3\vphantom{|}$}}%
+    \else% not in math mode
+        \colorbox{bg-color}{#3}%
+    \fi\endgroup}
 
-% ================
-% === BRACKETS ===
+% Highlight environment >> \begin{higlightbox}*[<color>][<length>] <content> \end{highlightbox} <<
+\NewDocumentEnvironment{highlightbox}{s O{} O{1} +b}{%
+    \colorlet{bg-color}{\ifblank{#2}{highlight-color\IfBooleanF{#1}{-alt}}{#2}}
+    \colorbox{bg-color}{%
+        \begin{minipage}{#3\linewidth-2\fboxsep}\normalcolor#4\end{minipage}%
+    }}{}
 
-\newcommand\given\mid% Ensure it exists
+% Formula environment >> \begin{formula}*[<pos>]{<name>} <content> \end{formula} <<
+\DeclareDocumentEnvironment{formula}{s O{t} G{} +b}{\vskip\abovedisplayskip
+    \def\ffont{\IfBooleanTF{#1}{\em}{\bfseries}}
+    \def\ftext{\ifblank{#3}{}{\begin{tabular}[#2]{@{}>{\ffont}l@{\enskip}}#3:\end{tabular}}}
+    \begin{minipage}[#2]{\widthof\ftext}\ftext\end{minipage}%
+    \begin{minipage}[#2]{\linewidth-\widthof\ftext}\ifblank{#3}{\centering}{}#4\end{minipage}
+    }{\vskip\belowdisplayskip}
 
-\DeclarePairedDelimiterX{\paren}[1]\lparen\rparen{
-    \renewcommand\given{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}}%
-    \begingroup\dotwhenblank{#1}\endgroup}% --- ( ) ---
-\let\brack\undefined
-\DeclarePairedDelimiterX{\brack}[1]\lbrack\rbrack{
-    \renewcommand\given{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}}%
-    \begingroup\dotwhenblank{#1}\endgroup}% --- [ ] ---
-\let\brace\undefined
-\DeclarePairedDelimiterX{\brace}[1]\lbrace\rbrace{
-    \renewcommand\given{\nonscript\:\delimsize\vert\nonscript\:\mathopen{}}%
-    \begingroup\dotwhenblank{#1}\endgroup}% --- { } ---
-
-\DeclarePairedDelimiter\ceil{\lceil}{\rceil}%--- ceil ---
-\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}% --- floor ---
-
-
-% ===============================
-% === SUBSCRIPT / SUPERSCRIPT ===
-
-\providecommand*{\ped}[1]{\ensuremath{_\mathrm{#1}}}% --- subscript ---
-\providecommand*{\ap}[1]{\ensuremath{^\mathrm{#1}}}% --- superscript ---
-
-
-% ==================
-% === PRIMITIVES ===
-
-%\let\exp\undefined
-%\NewDocumentCommand{\exp}{sD[]{}m}{\mathop{\mathrm{exp}}_{#2}%
-%    \ifblank{#3}{}{%
-%    \IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}}% --- Exponential ---
-% ---
-\DeclareMathOperator{\argmax}{arg\,max}% --- argmax ---
-\DeclareMathOperator{\argmin}{arg\,min}% --- argmin ---
-% ---
-\providecommand*{\iu}{\ensuremath{j\mkern1mu}}% --- imaginary unit ---
-\providecommand*{\eu}{\ensuremath{\mathrm{e}}}% --- Euler number ---
-% ---
-\DeclareMathOperator{\R}{\mathbb{R}}% --- Real ---
-\DeclareMathOperator{\C}{\mathbb{C}}% --- Complex ---
-\let\Re\undefined\DeclarePairedDelimiterXPP\Re[1]
-{\mathrm{Re}}\lbrace\rbrace{}{#1}% --- Real part ---
-\let\Im\undefined\DeclarePairedDelimiterXPP\Im[1]
-{\mathrm{Im}}\lbrace\rbrace{}{#1}% --- Imaginary part ---
-% ---
-\newcommand{\tothe}[1]{\mathop{\scalebox{.8}{%
-    \textrm{E}}\textrm{#1}}}% --- e.g. 10E-3 ---
+% TODOs >> \todo << OR >> \todo{<content>} <<
+\NewDocumentCommand{\todo}{g}{%
+    \colorlet{todo-color}{red!80}%
+    \begin{minipage}{\linewidth}\sffamily\color{todo-color}
+        \smallskip\hrule\smallskip
+        \textbf{TODO\IfValueT{#1}{:~}}%
+        \IfValueTF{#1}{\begingroup\normalcolor#1\endgroup}{\centering}%
+        \smallskip\hrule\smallskip%
+    \end{minipage}\par}
 
 
+% ===============
+% === Symbols ===
 
-% ======================
-% === LINEAR ALGEBRA ===
-
-\DeclarePairedDelimiterX{\abs}[1]\lvert\rvert{
-    \dotwhenblank{#1}}% --- Absolute ---
-\DeclarePairedDelimiterX{\norm}[1]\lVert\rVert{
-    \dotwhenblank{#1}}% --- Norm ---
-\DeclarePairedDelimiterX{\avg}[1]\langle\rangle{
-    \dotwhenblank{#1}} % --- Average value ---
-
-
-% =======================
-% === COMPLEX ALGEBRA ===
-
-\newcommand{\underhat}[1]{\underline{\hat{#1}}}% --- complex AC formulas ---
+\newcommand*{\TakeFourierOrnament}[1]{{%
+    \fontencoding{U}\fontfamily{futs}\selectfont\char#1}}
+\newcommand*{\warning}{\text{\TakeFourierOrnament{66}}}
 
 
 % ===================
-% === PROBABILITY ===
+% === Mathematics ===
 
-% Usage (in math mode): \P*[sub]{blah \mid blah}
-\let\P\undefined
-\NewDocumentCommand{\P}{sD[]{}m}{\mathbb{P}_{#2}%
-    \IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}% --- Probability ---
+% --- Sub- and superscript ---
 
-\NewDocumentCommand{\E}{sD[]{}m}{\mathbb{E}_{#2}%
-    \IfBooleanTF#1{\brack*{#3}}{\brack{#3}}}% --- Expectation value ---
+\providecommand*{\ped}[1]{\ensuremath{_\mathrm{#1}}}
+\providecommand*{\ap}[1]{\ensuremath{^\mathrm{#1}}}
 
-\NewDocumentCommand{\V}{sD[]{}m}{\mathbb{V}_{#2}%
-    \IfBooleanTF#1{\brack*{#3}}{\brack{#3}}}% --- Variance ---
+% --- Primitives ---
 
-\NewDocumentCommand{\Cov}{sD[]{}m}{\mathbb{C}\mathrm{ov}_{#2}%
-    \IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}% --- Covariance ---
-% ---
-\NewDocumentCommand{\Gauss}{sD[]{}m}{\mathcal{N}_{#2}
-    \IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}% --- Gaussian distribution ---
+\DeclareMathOperator{\const}{const} % Constant
+\DeclareMathOperator{\iu}{j\mkern1mu} % Imaginary unit
+\DeclareMathOperator{\eu}{e} % Euler
+\DeclareMathOperator{\rank}{rank} % Matrix rank
+\providecommand\bbar{{\mathchar175\mkern-8mub}}
+\providecommand\dbar{{\mkern3mu\mathchar175\mkern-12mud}}
+\providecommand\hbar{{\mathchar175\mkern-8muh}}
 
+% Tight math
+\DeclareMathSymbol{\shortminus}{\mathbin}{AMSa}{"39}
+\newcommand{\shortminustop}{{{\shortminus}\!{\top}}}
+\DeclareDocumentCommand{\tothe}{m}{\mathop{\scalebox{0.8}{$\mathrm{E}$}}\StrSubstitute{#1}{-}{\shortminus}}
 
-% =============
-% === UNITS ===
+% Number ranges
+\DeclareMathOperator{\N}{\mathbb{N}}
+\DeclareMathOperator{\R}{\mathbb{R}}
+\DeclareMathOperator{\C}{\mathbb{C}}
 
-\DeclareMathAccent{\ring}{\mathalpha}{operators}{"17}% --- ring ---
-\providecommand*{\angs}{\ensuremath{\smash{\mathrm{\ringA}}}}% --- angs ---
-\providecommand*{\ohm}{\ensuremath{\mathrm{\Omega}}}% --- Ohm ---
-\providecommand*{\degree}{\ensuremath{^\circ}}% --- degree ---
-\providecommand*{\celsius}{\ensuremath{\mathrm{^\circC}}}% --- Celsius ---
-\providecommand*{\micro}{\ensuremath{\mu}}% --- micro ---
+% Parentheses
+\providecommand\given{} % ensure command exists
+\newcommand\SetSymbol[1][]{\nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
+\DeclarePairedDelimiterX{\paren}[1]\lparen\rparen{
+    \renewcommand\given{\SetSymbol[\delimsize]} % let `\given` behave as `\middle\mid`
+    \dotwhenblank{#1}}
+\let\brack\undefined
+\DeclarePairedDelimiterX{\brack}[1]\lbrack\rbrack{
+    \renewcommand\given{\SetSymbol[\delimsize]} % let `\given` behave as `\middle\mid`
+    \dotwhenblank{#1}}
+\let\brace\undefined
+\DeclarePairedDelimiterX{\brace}[1]\lbrace\rbrace{
+    \renewcommand\given{\SetSymbol[\delimsize]} % let `\given` behave as `\middle\mid`
+    \dotwhenblank{#1}}
 
-%\providecommand*{\unit}[1]{%				        % '\unit'		% unit macro
-%	\ensuremath{\, \mathrm{#1}}}
-%\providecommand*{\fracunit}[2]{%			        % '\fracunit'	% unit macro for fracs
-%	\ensuremath{\, \frac{\mathrm{#1}}{\mathrm{#2}}}}
+% --- Functions (and operators) ---
 
+% Functions with optional delimiters
+\DeclareDocumentCommand{\exp}  {sd()}{\mathop{\mathrm{exp}}\IfValueT{#2}{\IfBooleanTF{#1}{\paren*{#2}}{\paren{#2}}}}
+\DeclareDocumentCommand{\diag} {sd()}{\mathop{\mathrm{diag}}\IfValueT{#2}{\IfBooleanTF{#1}{\paren*{#2}}{\paren{#2}}}}
+\DeclareDocumentCommand{\sign} {sd()}{\mathop{\mathrm{sgn}}\IfValueT{#2}{\IfBooleanTF{#1}{\paren*{#2}}{\paren{#2}}}}
 
-% ===================================
-% === DIFFERENTIAL AND DERIVATIVE ===
+% Functions with mandatory delimiters
+\DeclarePairedDelimiterX{\abs  }[1]\lvert\rvert  {\dotwhenblank{#1}}
+\DeclarePairedDelimiterX{\norm }[1]\lVert\rVert  {\dotwhenblank{#1}}
+\DeclarePairedDelimiterX{\avg  }[1]\langle\rangle{\dotwhenblank{#1}}
+\DeclarePairedDelimiterX{\ceil }[1]\lceil\rceil  {\dotwhenblank{#1}}
+\DeclarePairedDelimiterX{\floor}[1]\lfloor\rfloor{\dotwhenblank{#1}}
 
-\makeatletter
-\providecommand*{\diff}%
-{\@ifnextchar^{\DIfF}{\DIfF^{}}}% --- Differential operator ---
-\def\DIfF^#1{%
-    \mathop{\mathrm{\mathstrut d}}%
-    \nolimits^{#1}\gobblespace}
-\def\gobblespace{%
-    \futurelet\diffarg\opspace}
-\def\opspace{%
-    \let\DiffSpace\!%
-    \ifx\diffarg(%
-    \let\DiffSpace\relax
-    \else
-    \ifx\diffarg[%
-    \let\DiffSpace\relax
-    \else
-    \ifx\diffarg\{%
-    \let\DiffSpace\relax
-    \fi\fi\fi\DiffSpace}
+% Probability
+\DeclareDocumentCommand{\P}    {sO{}g}{\mathop{\mathbb{P}_{#2}}           \IfValueT{#3}{\IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}}
+\DeclareDocumentCommand{\E}    {sO{}g}{\mathop{\mathbb{E}_{#2}}           \IfValueT{#3}{\IfBooleanTF#1{\brack*{#3}}{\brack{#3}}}}
+\DeclareDocumentCommand{\V}    {sO{}g}{\mathop{\mathbb{V}_{#2}}           \IfValueT{#3}{\IfBooleanTF#1{\brack*{#3}}{\brack{#3}}}}
+\DeclareDocumentCommand{\Var}  {sO{}g}{\mathop{\mathbb{V}_{#2}}           \IfValueT{#3}{\IfBooleanTF#1{\brack*{#3}}{\brack{#3}}}}
+\DeclareDocumentCommand{\Cov}  {sO{}g}{\mathop{\mathbb{C}\mathrm{ov}_{#2}}\IfValueT{#3}{\IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}}
+\DeclareDocumentCommand{\Gauss}{sO{}g}{\mathop{\mathcal{N}_{#2}}          \IfValueT{#3}{\IfBooleanTF#1{\paren*{#3}}{\paren{#3}}}}
 
-\NewDocumentCommand{\deriv}{D[]{}mm}{%
-    \frac{\diff^{#1}#2}{\diff#3^{#1}}}% --- derivative ---
-\NewDocumentCommand{\pderiv}{D[]{}mm}{%
-    \frac{\partial^{#1}#2}{\partial#3^{#1}}}% --- partial derivative ---
+% --- Differential operator and derivative ---
 
-
-% ==============
-% === BOXING ===
-
-% Define colors
-%\RequirePackage[svgnames]{xcolor}
-\colorlet{highlight-color}{Gold!30}
-\colorlet{highlight-color-alt}{Silver!30}
-
-\NewDocumentCommand\highlight{s O{} m}{%
-% Define color (if empty, check if starred)
-    \colorlet{bg-color}{\ifblank{#2}{%
-        \IfBooleanTF#1{highlight-color}{highlight-color-alt}%
-    }{#2}}
-    % Check if in math mode or not
-    \relax\ifmmode% if in math mode
-    \mathchoice%
-    {\colorbox{bg-color}{$\displaystyle#3$}}%
-    {\colorbox{bg-color}{$\textstyle#3$}}%
-    {\colorbox{bg-color}{$\scriptstyle#3$}}%
-    {\colorbox{bg-color}{$\scriptscriptstyle#3$}}%
-    \else% not in math mode
-    \colorbox{bg-color}{#3}%
-    \fi}% --- \highlight*[<color>]{<stuff>} ---
-
-\NewDocumentEnvironment{highlightbox}{ D[]{} D<>{1} +b }{%
-    \colorbox{\ifblank{#1}{highlight-color-alt}{#1}}{%
-        \begin{minipage}{\dimexpr#2\linewidth-2\fboxsep\relax}%
-            \normalcolor#3%
-        \end{minipage}%
-    }}{}
-\NewDocumentEnvironment{highlightbox*}{ D[]{} D<>{1} +b }{%
-    \colorlet{bg-color}{\ifblank{#1}{highlight-color}{#1}}%
-    \begin{highlightbox}[bg-color]<#2>#3\end{highlightbox}%
-    }{}% --- \begin{highlightbox}[]<>...\end{highlightbox} ---
-
-\newcommand{\todo}[1]{\fcolorbox{red!80}{white!0}{%
-    \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}%
-        \textcolor{red!80}{\sffamily\bfseries TODO\ifblank{#1}{~}{:}} \normalcolor#1%
-    \end{minipage}%
-}}% --- TODO ---
+\DeclareMathOperator{\diff}{d \!}
+\NewDocumentCommand{\deriv} {O{}mG{}}{\frac%
+    {\diff^{#1}\ifblank{#3}{~}{#2}}%
+    {\diff\ifblank{#3}{#2}{#3}^{#1}}}
+\NewDocumentCommand{\pderiv}{O{}mG{}}{\frac%
+    {\partial^{#1}\ifblank{#3}{~}{#2}}%
+    {\partial\ifblank{#3}{#2}{#3}^{#1}}}

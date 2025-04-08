@@ -2,10 +2,6 @@
 %! Date = 17.01.22
 
 % Language package
-% \usepackage[utf8]{inputenc} % Not to use with Xe-LaTeX!
-\usepackage[no-math]{fontspec}
-% \usepackage{kpfonts}
-% \usepackage[T1]{fontenc}
 \usepackage[english,ngerman]{babel}
 \usepackage[svgnames]{xcolor}
 
@@ -15,29 +11,25 @@
 % Set date format
 \usepackage[useregional=numeric]{datetime2}
 
-% Arithmetic / Coding package
-\usepackage{ifthen}
-\usepackage{calc}
-
 % Spacing
 \usepackage[nodisplayskipstretch]{setspace}
 \setlength\intextsep{0pt}% no spacing above and below figures/tables
 \setlength\columnsep{10pt}% Column spacing for multicols
 % \setstretch{1.1}
 % Move operators tighter together
-\thinmuskip=2mu                     % default: 3mu
-\medmuskip=3mu plus 1mu minus 3mu   % default: 4mu plus 2mu minus 4mu
-\thickmuskip=4mu plus 3mu minus 3mu % default: 5mu plus 5mu
+\thinmuskip=2mu minus 1mu           % default: 3mu
+\medmuskip=3mu plus 1mu minus 2mu   % default: 4mu plus 2mu minus 4mu
+\thickmuskip=4mu plus 1mu minus 3mu % default: 5mu plus 5mu
 % \setlength{\thickmuskip}{5mu}     % not possible due to \usepackage{calc}
 % Array and matrix spacing
 \setlength\arraycolsep{1pt}
 % Hack to remove vertical spacing in equations
 %\usepackage{etoolbox}
 \newcommand{\setdisplayskips}{%
-    \setlength{\abovedisplayskip}{1pt}%
-    \setlength{\belowdisplayskip}{1pt}%
-    \setlength{\abovedisplayshortskip}{1pt}%
-    \setlength{\belowdisplayshortskip}{1pt}}
+    \setlength{\abovedisplayskip}{.2em}%
+    \setlength{\belowdisplayskip}{.2em}%
+    \setlength{\abovedisplayshortskip}{.1em}%
+    \setlength{\belowdisplayshortskip}{.1em}}
 \appto{\normalsize}{\setdisplayskips}
 \appto{\small}{\setdisplayskips}
 \appto{\footnotesize}{\setdisplayskips}
@@ -58,11 +50,22 @@
 
 % Custom emphasizing
 \colorlet{emph-text-color}{MediumOrchid}
-\DeclareTextFontCommand{\emph}{\color{emph-text-color}\bfseries\sffamily}
+\DeclareOldFontCommand{\em}{\normalfont\color{emph-text-color}\bfseries\sffamily}{}
+\DeclareTextFontCommand{\emph}{\em}
 
 
 % =============
 % === FONTS ===
+
+\usepackage[no-math]{fontspec}
+\usepackage{unicode-math}
+
+% Set fonts
+%\defaultfontfeatures{Mapping=tex-text,Ligatures=TeX,LetterSpace=-1.5,WordSpace=0.75}
+\setmainfont[Scale=0.95,BoldFont=* SemiBold,BoldItalicFont=* SemiBold Italic]{Noto Serif}
+\setsansfont[Scale=0.95]{Open Sans}
+\setmathrm{latinmodern-math.otf}
+\AtBeginDocument{\let\mathbb\relax\DeclareMathAlphabet{\mathbb}{U}{msb}{m}{n}}
 
 % Font sizes
 \setkomafont{section}{\normalsize}
@@ -70,15 +73,6 @@
 \setkomafont{subsubsection}{\normalsize}
 %\setkomafont{paragraph}{\normalsize}
 %\setkomafont{subparagraph}{\normalsize}
-
-% Set fonts
-\setmainfont[LetterSpace=-1.5,WordSpace=0.8,Scale=1.0,
-    BoldFont=* SemiBold,BoldItalicFont=* SemiBold Italic]{Noto Serif}
-\setsansfont[LetterSpace=-1.8,WordSpace=0.8,Scale=1.0]{Open Sans}
-
-\defaultfontfeatures{Mapping=tex-text}
-\defaultfontfeatures{Ligatures=TeX}
-\addfontfeature{LetterSpace=-20.0}
 
 
 % ====================
@@ -107,8 +101,8 @@
 % Make spacing tight
 \RedeclareSectionCommands[%
     runin=false,
-    beforeskip=1ex plus .5ex,
-    afterskip=0ex plus .1ex,
+    beforeskip=0em plus .5em,
+    afterskip=0em plus .1em,
 ]{section,subsection,subsubsection}
 
 % Define colors
@@ -120,8 +114,8 @@
 \colorlet{subsubsection-text-color}{black}
 
 % Put in colored box with fixed height
-\def\sectionboxheight{.7em}
-\def\sectionboxvspace{-.1ex}
+\def\sectionboxheight{.75em}
+\def\sectionboxvspace{-.05em}
 \makeatletter
 \renewcommand\sectionlinesformat[4]{%
     \colorbox{#1-color}{%

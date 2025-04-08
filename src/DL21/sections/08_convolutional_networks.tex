@@ -1,0 +1,19 @@
+%! Author = tstreule
+
+\section{Convolutional Networks}\label{sec:convolution}
+
+
+\begin{formula}{Fourier Trsf.}
+    $(\mathcal F (f))(u) \coloneqq \int_{\R} \eu^{-2\pi i t u} f(t) \diff t$
+\end{formula}
+\begin{formula}{Convolution}
+    $(f \ast h)(u) \coloneqq \int_{\R} f(t) h(u-t) \diff t = \int_{\R} f(u-t) h(t) \diff t$ \\
+    shift equiv.: $f_{\triangle} \ast h = (f \ast h)_{\triangle}$,\enskip \gray$f_{\triangle} (t) \coloneqq f(t + \triangle)$
+\end{formula}
+
+
+% ===
+\subsection{Convolutional architectures}
+
+\textit{Pyramidal architecture:} increase channels and reduce resolution w/ increasing depth;
+AlexNet, VGG, Inception

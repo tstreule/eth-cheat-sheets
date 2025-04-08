@@ -2,5 +2,84 @@
 
 \section{Linear Networks}\label{sec:linear-networks}
 
-asdf
+% ===
+\subsection{Linear Units}
 
+A linear unit defines a unique direction of change via $\symbf\theta / \norm*{\symbf\theta}$, as well as a constant {\fontspec{Symbola}\symbol{"2639}} rate of change via $\norm*{\symbf\theta}$.
+\begin{formula}*{Linear, \green{affine} unit}
+    $\iota(\symbf{\tilde x}, \symbf\theta) = \symbf{\tilde x}^\top \symbf\theta \equiv \sum_{i=1}^n x_i \theta_i \green{+ b}$
+\end{formula}
+
+Multiple linear units form a \textbf{layer}, resulting in
+\begin{formula}{Linear map}
+    $L(\symbf x; \symbf\Theta)
+    = \brack*{\substack{\textstyle\ldots\smallskip \\ \textstyle\symbf x^\top \symbf\theta^{(j)} \\ \textstyle\smallskip\ldots}}
+    = \symbf\Theta \symbf x,
+    \enskip \symbf\Theta \in \R^{m\times n}$
+\end{formula}
+
+Simple parameter update rule
+\begin{formula}{Delta rule}
+    $\begin{cases}
+        \Delta\symbf\theta = \eta (y - \symbf x^\top \symbf\theta) \symbf x
+        \\
+        \Delta\symbf\Theta = \eta(\symbf y - \symbf\Theta\symbf x) \symbf x^\top
+    \end{cases}$
+    \begin{tabular}{c@{}}as simple parameter \\ update rule.\end{tabular}
+\end{formula}
+
+
+% ===
+\subsection{Linearity}
+
+A func. $f$ is \textbf{linear \green/ affine}
+$\iff f(\alpha \symbf x + \beta \symbf y) = \alpha f(\symbf x) + \beta f(\symbf y) \green + \symbf b$
+$\iff f(\symbf x) = \symbf A \symbf x$
+\enskip($\forall \symbf x, \symbf y \in \R^n$,\enskip $\forall \alpha, \beta \in \R$,\enskip $\symbf A \in \R^{n\times m}$,\enskip $\green \symbf b \in \R^m$)
+
+\begin{formula}{Composition}
+    $f(\symbf x) = \symbf A \symbf x,\ g(\symbf x) = \symbf B \symbf x
+    \implies (g \circ f)(x) = \symbf{BAx}$
+\end{formula}
+
+
+% ===
+\subsection{Linear Autoencoder}
+
+%Learn compressed data representation, i.e. identity $\symbf{DC\approx I}$.
+%Linear AE's aim to learn compressed data representations.
+\begin{formula}*{Linear AE}
+    $\begin{cases}
+        \highlight{\symbf x \overset{\symbf C}{\longmapsto} \symbf z \overset{\symbf D}{\longmapsto} \symbf{\widehat x}},\enskip
+        \symbf C,\ \symbf D^\top \in \R^{m\times n},\ m<n
+        \\
+        \ell(\symbf x) = \frac12 \norm*{\symbf x - \symbf{\widehat x}}^2 = \frac12 \norm*{\symbf x - \symbf{DCx}}^2
+    \end{cases}$
+\end{formula}
+
+\begin{formula}*{Auto-loss}
+    $(\symbf{C^\ast,D^\ast}) \xleftarrow{\hphantom{\arg\min}}\mathllap{\substack{\arg\min\\~\\~}\mkern6mu} \frac{1}{2s} \sum_{t=1}^s \ell(\symbf x_t) = \frac12 \norm*{\symbf X - \symbf{DCX}}_F^2$\\
+    with \textbf{Frobenius norm} $\norm*{\symbf A}_F \coloneqq \sqrt{\sum_{i,j} \abs{a_{ij}}^2}$
+\end{formula}
+
+The \textbf{goal} is to learn the identity $\symbf{DC} \approx \symbf I$ via the \textbf{AE gradients}
+\begin{formula}
+    $\pderiv{\ell(\symbf x)}{\symbf C} = \symbf D^\top (\symbf{\widehat x} - \symbf x) \symbf x^\top \gray \in \R^{m\times n}$,\enskip
+    $\pderiv{\ell(\symbf x)}{\symbf D} = (\symbf{\widehat x} - \symbf x) \symbf x^\top \symbf C^\top \gray \in \R^{n\times m}$
+\end{formula}
+
+\begin{formula}{Eckard-Young}
+    Choose $\symbf D = \symbf U_k$ and $\symbf C = \symbf U_k^\top$ given $\symbf X = \symbf{U\Sigma V^\top}$ (not unique!)
+\end{formula}
+
+\begin{formula}{Reduced~~~\\rank}
+    $\rank(\symbf{DC}) \leq \min \brace*{\rank(\symbf C),\ \rank(\symbf D)} \leq m < n$
+    \\
+    $\gray\symbf{\widehat X} = \symbf{DCX}$,\enskip $\rank(\symbf {\widehat X}) \leq \min\brace*{m,\ \rank(\symbf X)} \leq m$
+\end{formula}
+
+
+% ===
+\subsection{Deep Linear Gradients}
+
+\todo

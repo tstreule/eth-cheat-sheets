@@ -1,0 +1,65 @@
+%! Author = tstreule
+
+\section{Bayesian Linear Regression --- BLR}\label{sec:blr}
+
+\begin{formula}
+    $\normalcolor\big[$\hfill
+    \emph{Ridge:} $\varepsilon\ped{RSS}(\symbf w,\orange{\lambda}) = \norm*{\symbf y - \symbf X^\top \!\symbf w}_2^2 \orange + \lambda \symbf w^\top \!\symbf w$,\enskip \highlight{$\lambda = \nicefrac{\sigma_n^2}{\sigma_p^2}$}
+    \hfill$\normalcolor\big]$
+\end{formula}
+\begin{formula}
+    \textbf{Model:} $\highlight{y_i = \symbf w^\top \symbf x_i \green + \varepsilon} = (\symbf X \symbf w)_i \green + \varepsilon$,\enskip \highlight{$\varepsilon \sim \Gauss{0, \sigma_n^2}$}\\
+    \textbf{Prior:} $p(\symbf w) = \Gauss{0, \symbf\Lambda^{-1}} \overset{\mathrm{iid}}{\Longrightarrow} \Gauss{0, \sigma_p^2 \symbf I} \overset{\mathrm{Ridge}}{\Longrightarrow} \Gauss{0, \symbf I}$\\
+    \textbf{Likelihood (iid):} $p(y_i \mid \symbf X, \symbf w, \sigma_n) = \Gauss{y_i; \ \symbf w^\top \symbf x_i, \sigma_n^2}$\\
+    \textbf{Posterior:} $\highlight{p(\symbf w \mid \symbf X, \symbf y)} = \Gauss{\symbf w; \ \symbf{\bar\mu}, \symbf{\bar\Sigma}}$ with ($\symbf{\hat w}\ped{MAP} = {\ldots}$)\\
+    \resizebox{\linewidth}{1em}{$\highlight{\symbf{\bar\mu}} = (\symbf X^\top \symbf X + \sigma_n^2 \symbf\Lambda)^{-1} \symbf X^\top \symbf y$ and $\highlight{\symbf{\bar\Sigma}} = \sigma_n^2 (\symbf X^\top \symbf X + \sigma_n^2 \symbf\Lambda)^{-1}$}\\
+    \textbf{Predict:} avg. {acc.} to \textit{all} post. $\symbf w {\sim} \Gauss$,\enskip $p(y^\ast \mid \symbf X, \symbf y, \symbf x^\ast) = \E[\symbf w \sim \mathrm{post.}]{p(y^\ast \mid \symbf x^\ast, \symbf w)} = \Gauss*{y^\ast;\ \symbf{\bar\mu}^\top \symbf x^\ast, \ \symbf x^{\ast\top} \symbf{\bar\Sigma} \symbf x^\ast \green + \sigma_n^2}$
+\end{formula}
+\begin{formula}{Uncertainty}
+    \emph{aleat.} $\sigma_n^2$ {\small(noise)},\enskip \emph{epist.} $\symbf x^{\ast\top} \symbf{\bar\Sigma} \symbf x^\ast$ {\small(model)}
+\end{formula}
+\begin{formula}{Choose Hparams}
+    (one option) Find $\lambda$ via CV, estimate $\sigma_n^2 = \norm*{\symbf y {-} \symbf X^\top \!\symbf w}_2^2$, then solve for $\sigma_p^2 = \frac{\sigma_n^2}{\lambda}$.
+\end{formula}
+
+
+% ===
+\subsection{Recursive Bayesian updates --- online BLR}
+
+%``Today's posterior is tomorrow's prior''
+
+%\textit{Update} the posterior w/o complexity growing as $\normalcolor\mathcal O(t)$.
+
+$\symbf X_{1:t}^\top \symbf X_{1:t} = \norm{\symbf X_{1:t-1}}_2^2 + \norm{\symbf x_{1:t}}_2^2$
+same for $\symbf{X^\top y}$ term.
+
+%{\footnotesize
+%\emph{Woodbury:}
+%\highlight{$(\symbf{ A + xx^\top })^{-1} = \symbf A^{-1} - \symbf A^{-1} \symbf x (1 + \symbf x^\top \symbf A^{-1} \symbf x)^{-1} \symbf x^\top \symbf A^{-1}$}
+%}
+
+Posterior is \textbf{recursive}! $p_{t+1}\paren*{\symbf w \mid \symbfit D} = \frac1Z \cdot p(\symbf w) \cdot p\paren*{\symbfit D \mid \symbf w} \allowbreak= \frac1Z \cdot p\paren*{\symbf w \mid (\symbf x, y)_{1\colon t}} \cdot p\paren*{(\symbf x, y)_{t+1} \mid \symbf w}$
+
+
+% ===
+\subsection{Kalman filters --- KF}
+
+Location: $X_1, {\ldots}, X_T$,\enskip Observ.: $Y_1, {\ldots}, Y_T$,\enskip Prior: $\P{\symbf X_1}$
+\begin{itemize}
+    \item Motion model: $\symbf X_{t+1} = \symbf F \symbf X_t + \varepsilon_t$,\enskip $\varepsilon_t \sim \Gauss{0, \symbf\Sigma_x}$
+    \item Sensor model:\quad $\symbf Y_t = \symbf H \symbf X_t + \eta_t$,\enskip $\eta_t \sim \Gauss{0, \symbf\Sigma_y}$
+\end{itemize}
+
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=.4\linewidth]{kalman-filter}
+%\end{figure}
+
+\emph{Bayesian filtering in KFs:}
+Start w/ $\P{\symbf X_1}$;\enskip At time $t$:
+\begin{enumerate}
+%    \item Assume we have $\P{\symbf X_t \mid \symbf y_{1:t-1}}$
+    \item \textbf{Conditioning:} $\P{\symbf X_t \mid \symbf y_{1:t}} \propto \P{\symbf X_t \mid \symbf y_{1:t-1}} \P{\symbf y_t \mid \symbf X_t}$
+    \item[] Hint: Use formula for cond. Gaussians ($\mathcal Y_t {=} y_t$).
+    \item \textbf{Pred.:} $\P{\symbf X_{t+1} \mid \symbf y_{1:t}} = \int \P{\symbf X_{t+1} \mid \symbf x_t} \P{\symbf x_t \mid \symbf y_{1:t}} \diff\symbf x_t$
+\end{enumerate}

@@ -4,36 +4,44 @@
 
 \begin{itemize}
     % Distributions
-    \item \textbf{Bernoulli:} (biased) coin flip, $\P{X{=}H}=p$, $\P{X{=}T}=1-p)$, yields \textit{Binomial} distr.
+    \item \textbf{Bernoulli:} (biased) coin flip, $\P{X{=}H}=p$, $\P{X{=}T}=(1-p)$, yields \textit{Binomial} distr. $\P{X{=}k} = \binom nk p^k (1-p)^{n-k}$
     \item \textbf{Categorical:} (biased) $m$-sided dice, $\P{X{=}i} = p_i$, $p_i \geq 0$, $\sum p_i = 1$, yields \textit{Multinomial} distr.
-    \item \textbf{Gaussian:} \highlight{$p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\paren*{-\frac{(x-\mu)^2}{2\sigma^2}}$}
+%    \item \textbf{Gaussian:} \highlight{$\Gauss{x; \mu, \sigma^2} = \frac{1}{\sqrt{2\pi\sigma^2}} \exp*(-\frac12\frac{(x-\mu)^2}{\sigma^2})$}
     % Joint distributions
-    \item \textbf{Cond. prob.:} $\P{X\mid Y} = \frac{\P{X\land Y}}{\P{Y}}$ if $\P{Y} \neq 0$
-    \item \textbf{Chain rule:} $\P{X\land Y} = \P{X\mid Y} \P{Y}$,\enskip $\P{X_1, {\ldots}, X_n} \equiv \P{X_{1:n}} = \P{X_1} \P{X_2\mid X_1} {\ldots} \P{X_n\mid X_{1:n-1}}$
-    \item \textbf{Marg.:} $\P{X_{1:i-1}, X_{i+1:n}} = \sum_{x_i} \P{X_{1:i-1}, x_i, X_{i+1:n}}$,\enskip $\P{X_i} = \sum_{x_1} {\ldots} \sum_{x_n} \P{x_{1:i-1}, X_i, X_{i+1:n}}$
+%    \item \textbf{Conditional prob.:} $\P{X\mid Y} = \frac{\P{X\land Y}}{\P{Y}}$\enskip if\enskip $\P{Y} \neq 0$
+    \item \emph{Chain rule:} $\P{X\land Y} = \P{X\mid Y} \P{Y}$,\enskip $\P{X_1, {\ldots}, X_n} \equiv \P{X_{1:n}} = \P{X_1} \P{X_2\mid X_1} {\ldots} \P{X_n\mid X_{1:n-1}}$
+    \item \emph{Marginal:} $\P{X_i} = \sum_{x_1} {\ldots} \sum_{x_n} \P{x_{1:i-1}, X_i, X_{i+1:n}}$,\enskip $\P{X_{1:i-1}, X_{i+1:n}} = \sum_{x_i} \P{X_{1:i-1}, x_i, X_{i+1:n}}$
     % Independence
-    \item \textbf{$\normalcolor X{\perp}Y$:} $\phantom{\vert Z}\P{X,Y} \overset{\mathrm{chain}}{=} \P{X} \P{Y\mid X} \overset{\mathrm{indep}}{=} \P{X} \P{Y}$
-    \item \textbf{$\normalcolor X{\perp}Y\vert Z$:} $\P{x,y\orange\vert z} = \P{x\orange\vert z} \P{y\orange\vert z}$, $\P{X\vert Y\orange,Z} = \P{X\orange\vert Z}$
-    % Bayesian inference
-    \item \emph{Bayes:} \highlight*{$\P{X\mid Y} = \frac{\P{X,Y}}{\P{Y}}$},\enskip \begin{tabular}{@{}>{\normalcolor\small}l}prior $\P{X}$, likel. $\P{Y\vert X}$,\\ post. $\P{X\vert Y}$, evid. $\P{Y}$\end{tabular}
+    \item \textbf{$\normalcolor X{\perp}Y$:}\quad~$\P{X,Y} \overset{\mathrm{chain}}{=} \P{X} \P{Y\mid X} \overset{\mathrm{indep}}{=} \P{X} \P{Y}$
+    \item[] \textbf{$\normalcolor X{\perp}Y\vert Z$:} $\P{x,y\orange{\vert z}} = \P{x\orange{\vert z}} \P{y\orange{\vert z}}$,\enskip $\P{X\vert Y\orange{,Z}} = \P{X\orange{\vert Z}}$
 \end{itemize}
 
-% ===
-\subsection{Multivariate Gaussian
-    \textnormal\hfill$\normalcolor \bm\Sigma = \brace{\sigma_{ij}}$}\label{subsec:mv-gaussian}
+\emph{Bayes:} \highlight*{$\P{X\mid Y} = \frac{\P{X,Y}}{\P{Y}}$},\enskip \begin{tabular}{@{}>{\normalcolor\small}l@{}}prior $\P{X}$, likel. $\P{Y\vert X}$,\\ post. $\P{X\vert Y}$, evid. $\P{Y} \gray \neq 0$\end{tabular}
 
-\highlight*{$\Gauss{\bm y\mid\bm\mu,\bm\Sigma} = \frac{1}{(2\pi)^{\nicefrac{n}{2}}\sqrt{\abs{\bm\Sigma}}} \exp\paren*{-\frac{1}{2} (\bm y-\bm\mu)^\top \bm\Sigma^{-1} (\bm y-\bm\mu)}$}
-\begin{itemize}\vspace{-1pt}
+\begin{itemize}
+    \item $\V{X} = \E{(X - \E{X})^2} = \E{X^2} - \E{X}^2$
+    \item[] $\V{X+Y} = \V{X} + \V{Y} + 2\Cov{X,Y}$
+    \item $\Cov{X,Y} = \E{(X - \mu_X)(Y - \mu_Y)} = \E{XY} - \E{X}\E{Y}$
+    \item[] $\Cov{aX,bY} = ab\Cov{X,Y}$
+\end{itemize}
+
+
+% ===
+\subsection{Multivariate Gaussian \mdseries\hfill$\color{subsection-text-color} \symbf\Sigma = \brace{\sigma_{ij}}$}
+
+\highlight*{$\Gauss{\symbf{x;\ \mu, \Sigma}} = \frac{1}{\mkern-5mu\sqrt{(2\pi)^n \abs{\symbf\Sigma}}} \exp*(-\frac{1}{2} (\symbf x-\symbf\mu)^\top \symbf\Sigma^{-1} (\symbf x-\symbf\mu))$}
+\begin{itemize}\vspace{-.2em}
     \item $\sigma_{ij} = \E{(X_i - \mu_i)(X_j - \mu_j)} = \Cov{X_i, X_j} \overset{X_i\perp X_j}{=} 0$
     \item $\sigma_i^2 = \E{(X_i - \mu_i)^2} = \V{X_i}$
 \end{itemize}
 
-Gaussians are closed under conditioning, marginalisation, multiplication and addition.
+%Gaussians are closed under conditioning, marginalisation, multiplication and addition.
+Gaussians are closed under cond., margin., mult. \& add.
 \begin{itemize}
-%    \item $\bm X \equiv \bm X_V = [X_1, {\ldots}, X_d] \sim \Gauss{\bm\mu_V, \bm\Sigma_{VV}}$
-    \item $\bm Y \coloneqq \bm M \bm X + \bm X' \sim \Gauss{\bm M \bm\mu {+} \bm\mu', \bm M \bm\Sigma \bm M^\top {+} \bm\Sigma'}$, $\scriptstyle\normalcolor \bm M \in \R^{m\times d}$
-    \item $\P{\bm X_A \vert \bm x_B} = \Gauss{\bm\mu_{A\mid B}, \bm\Sigma_{A\mid B}}$ where $\bm\mu_{A\mid B} = \bm\mu_A + \bm\Sigma_{AB} \bm\Sigma_{BB}^{-1} (\bm x_B - \bm\mu_B)$ and $\bm\Sigma_{A\mid B} = \bm\Sigma_{AA} - \bm\Sigma_{AB} \bm\Sigma_{BB}^{-1} \bm\Sigma_{BA}$
+    \item $\symbf Y \coloneqq \orange{\symbf M} \symbf X \orange{+\symbf X'} \sim \Gauss{\symbf M \symbf\mu {+} \symbf\mu', \symbf M \symbf\Sigma \symbf M^\top {+} \symbf\Sigma'}$, $\scriptstyle\normalcolor \symbf M \in \R^{m\times d}$
+    \item \emph{Conditional:} $\symbf X_A \vert X_B {=} \symbf x_B \sim \Gauss{\symbf{\tilde\mu}, \symbf{\tilde\Sigma}}$ where $\highlight*{\symbf{\tilde\mu}} = \symbf\mu_A + \symbf\Sigma_{AB} \symbf\Sigma_{BB}^{-1} (\symbf x_B - \symbf\mu_B)$ and $\highlight*{\symbf{\tilde\Sigma}} = \symbf\Sigma_{AA} - \symbf\Sigma_{AB} \symbf\Sigma_{BB}^{-1} \symbf\Sigma_{BA}$
     \begin{itemize}
-        \item RV $X_A$ as model of $X_B$ (1D): $\highlight{X_A = aX_B + b + \epsilon} = \allowbreak \highlight{\sigma_{AB} \sigma_B^2 {\cdot} X_B + (\mu_A {-} \sigma_{AB} \sigma_{B}^{-2} \mu_B) + \epsilon}$, $\epsilon \sim \Gauss{0, \sigma_{A\mid B}^2}$
+        \item RV $X_A$ as model of $X_B$ (1D): $\highlight{X_A = aX_B + b + \varepsilon} = \allowbreak \highlight{\sigma_{AB} \sigma_B^2 {\cdot} X_B + (\mu_A {-} \sigma_{AB} \sigma_{B}^{-2} \mu_B) + \varepsilon}$,\enskip $\varepsilon \sim \Gauss{0, \sigma_{A\mid B}^2}$
     \end{itemize}
+    \item \emph{Complete the square:} If $p(\symbf x) \propto \exp(-\frac12 \symbf x^\top \symbf{\orange{A}x} + \symbf x^\top \orange{\symbf b})$, then $p(\symbf x) = \Gauss{\symbf x \mid \symbf A^{\shortminus1} \symbf b, \symbf A^{\shortminus1}}$
 \end{itemize}

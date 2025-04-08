@@ -1,0 +1,29 @@
+%! Author = tstreule
+
+\section{Theory of DNNs}\label{sec:dnn-theory}
+
+
+\emph{Consistency:}\enskip
+\textbf{VC inequality:}\enskip
+if worst-case empirical risk minimizer diverges, it will happen for the true case.
+
+
+\emph{Spectral complexity:}\enskip
+%for arbitraty ref. matrix $M^l$
+%\begin{formula}
+%    $R(\mathcal A) = \paren*{
+%        \prod_{l=1}^L \rho^l \norm{W^l}_2
+%    } \paren*{
+%        \sum_{l=1}^L \frac{\norm{(W^l - M^l)^\top}_{2,1}^{2/3}}{\norm{W^l}_2^{2/3}}
+%    }^{\raisebox{-3pt}{\math\scriptstyle3/2\endmath}}$
+%\end{formula}
+%For any margin $\gamma>0$ and probability $(1-\delta)$ over samples:
+you can see the randomness of your data given the normalized margins!
+\begin{formula}
+    Test error$(f) \leq$ empirical $\gamma$-margin error$(f)$
+\end{formula}
+
+
+\emph{Double descent risk curves:}\enskip
+DNNs contradict the classical view of bias-variance tradeoff.
+\textit{Note:} this behavior is invisible when we use regularizers from the beginning.

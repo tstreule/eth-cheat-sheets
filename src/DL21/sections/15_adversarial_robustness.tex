@@ -1,0 +1,33 @@
+%! Author = tstreule
+
+\section{Adversarial Robustness}\label{sec:adversarial-robustness}
+
+
+How to measure robustness of linear, \textbf{binary} classifier?
+$\arg\min_r \norm{r}_p$ s.t. $f_1(x+r) - f_2(x+r) < 0$.
+
+For $p=2$: $r_i=\frac{f_1(x)-f_2(x)}{\norm{w_2 - w_1}} (w_2 - w_1)$.
+\enskip
+\textbf{Multi-class} case:\\ $\arg\min_{\brace{r_i}} \norm{r_i}_2$
+$\leftarrow$ pick min. distance from $x$ to any polytope.
+
+
+\textbf{IDEA:}\enskip Improve robustness through adversarial training!
+%\begin{formula}{$\ell_p$-norm robustness}
+%    $k(x+r) \approx k(x)$ for small $\norm{r}_p$
+%\end{formula}
+\begin{formula}*{Standard train loss}
+    $\min_\theta \ell(f_\theta(x), y)$
+\end{formula}
+\begin{formula}*{$L_p$-robust train loss}
+    $\min_\theta \max_{\norm{r}_p \leq \epsilon} \ell(f_\theta(x+r), y)$
+\end{formula}
+\begin{formula}
+    Project gradient \textbf{ascent} via
+    $r \mapsto
+    \begin{cases}
+         r_i & \abs{r_i} \leq \epsilon \\
+         \epsilon & \text{otw.}
+    \end{cases}
+    \leq \epsilon \cdot \sign(r_i)$
+\end{formula}

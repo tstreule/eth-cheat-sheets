@@ -1,0 +1,59 @@
+%! Author = tstreule
+
+\begin{scriptsize}
+\begin{tikzpicture}[
+    >=stealth, % default arrow style
+    every node/.append style={inner sep=0.5pt},
+    every path/.append style={-stealth, thick, shorten >=0.5pt}
+]
+\tikzstyle{place}=[circle, draw=black, minimum size=2.5em]
+
+% --- "rolled" RNN ---
+
+    \node[place] (y) at (0,2) {$\symbf y$};
+    \node[place] (h) at (0,1) {$\symbf h$};
+    \node[place] (x) at (0,0) {$\symbf x$};
+    \draw (x) --node[left=2pt] {$\symbf U$} (h);
+    \draw (h) --node[left=2pt] {$\symbf V$} (y);
+
+    \node[fill=black,minimum size=0.5em] (W) at (0.7,1) {};
+    \node[right=0cm and 0cm of W] {$\symbf W$};
+    \draw (h) to[out=-45,in=-90,looseness=1.5] (W) to[out=90,in=45,looseness=1.5] (h);
+
+% --- Rightarrow "unroll"
+
+    \draw (1.35,1) --node[above=2pt] {unroll~~~} (2.45,1);
+
+% --- unrolled RNN ---
+
+    % all y's
+    \node[place] (yt-1) at (4,2) {$\symbf y^{t\shortminus1}$};
+    \node[place] (yt)   at (5,2) {$\symbf y^{t}$};
+    \node[place] (yt+1) at (6,2) {$\symbf y^{t+1}$};
+    % all h's
+    \node[place] (ht-2) at (3,1) {$\symbf h^{t\shortminus2}$};
+    \node[place] (ht-1) at (4,1) {$\symbf h^{t\shortminus1}$};
+    \node[place] (ht)   at (5,1) {$\symbf h^{t}$};
+    \node[place] (ht+1) at (6,1) {$\symbf h^{t+1}$};
+    \node[place] (ht+2) at (7,1) {$\symbf h^{t+2}$};
+    % all x's
+    \node[place] (xt-1) at (4,0) {$\symbf x^{t\shortminus1}$};
+    \node[place] (xt)   at (5,0) {$\symbf x^{t}$};
+    \node[place] (xt+1) at (6,0) {$\symbf x^{t+1}$};
+
+    % h-h connections (horizontal)
+    \draw (ht-2) --node[above=2pt] {$\gray\symbf W$} (ht-1);
+    \draw (ht-1) --node[above=2pt] {$\gray\symbf W$} (ht);
+    \draw (ht)   --node[above=2pt] {$\gray\symbf W$} (ht+1);
+    \draw (ht+1) --node[above=2pt] {$\gray\symbf W$} (ht+2);
+    % x-h connections (vertical)
+    \draw (xt-1) --node[left=2pt] {$\gray\symbf U$} (ht-1);
+    \draw (xt)   --node[left=2pt] {$\gray\symbf U$} (ht);
+    \draw (xt+1) --node[left=2pt] {$\gray\symbf U$} (ht+1);
+    % h-y connections (vertical)
+    \draw (ht-1) --node[left=2pt] {$\gray\symbf V$} (yt-1);
+    \draw (ht)   --node[left=2pt] {$\gray\symbf V$} (yt);
+    \draw (ht+1) --node[left=2pt] {$\gray\symbf V$} (yt+1);
+
+\end{tikzpicture}
+\end{scriptsize}

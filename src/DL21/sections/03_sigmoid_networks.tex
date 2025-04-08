@@ -1,0 +1,111 @@
+%! Author = tstreule
+
+\section{Sigmoid Networks}\label{sec:sigmoid}
+
+
+Composition of linear unit w/ non-linear \orange{activation function}.
+\begin{formula}*{Ridge unit}
+    $f = \orange{\phi} \circ \iota,\enskip f(\symbf x; \symbf\theta) = \orange{\phi}(\symbf x^\top \symbf\theta)$
+\end{formula}
+
+For any loss function $\ell$, the parameter updates read
+\begin{formula}{Updates}
+    $\nabla_{\symbf\theta} (\ell \circ \phi)(\symbf x^\top \symbf\theta)
+    = (\mathcal L \circ \phi)'(\symbf x^\top \symbf\theta)
+    \underbracket{\ \symbf x\ }_{\mathllap{\text{direction fully determined by}\ \symbf x}\ \hookleftarrow}$
+\end{formula}
+
+
+% ===
+\subsection{Threshold units \enskip\mdseries(not differentiable)}
+
+\begin{formula}{Sign unit \& Heavyside}
+    $\highlight{\sign(\symbf x^\top \symbf\theta)} \gray \in \brace{-1,1}$,\enskip
+    $H(z) \gray \in \brace{0,1}$
+\end{formula}
+
+The perceptron is a symmetric threshold unit.
+\begin{formula}*{Perceptron}
+    $\highlight*{\ell(\symbf x, y; \symbf\theta)} = \min\brace{0,\ y \symbf{x^\top\theta}} = \max\brace{0,\ -y \symbf{x^\top\theta}}$,\\
+    $\highlight{\nabla_{\symbf\theta}\ell (\symbf x, y; \symbf\theta)} \equiv \Delta\symbf\theta =
+    \begin{cases}
+        \symbf0 & y\symbf{x^\top\theta} \geq 0\\
+        y \symbf x & \text{otw.}
+    \end{cases}$
+\end{formula}
+Given the labels $y = \pm1$, the perceptron starts at $\symbf\theta \leftarrow \symbf 0$ and \textbf{updates} the weights $\symbf\theta \leftarrow \symbf\theta + \Delta\symbf\theta$ only in case of a mistake.
+
+
+% ===
+\subsection{Logistic unit \enskip\mdseries($C^\infty$ smooth \& monotone)}
+
+\begin{formula}*{Sigmoid}
+    $\highlight*{\sigma(z)} = \dfrac{1}{1 + \eu^{-z}} = \dfrac{\eu^z}{\eu^z + 1}$\enskip
+    $\gray \in [0,1]$,\quad $z \coloneqq \symbf{x^\top\theta}$
+\end{formula}
+\begin{formula}
+    $\highlight{\sigma'(z)} = \sigma(z)(1 - \sigma(z)) = \sigma(z) \sigma(-z)$,\quad
+    $\highlight{\sigma^{-1}(z)} = \ln \dfrac{z}{1 - z}$
+\end{formula}
+
+\begin{formula}*{Hyperbolic}
+    $\highlight*{\tanh(z)} = \dfrac{\eu^z - \eu^{-z}}{\eu^z + \eu^{-z}} = 2 \sigma(2z) - 1$\enskip
+    $\gray \in [\shortminus1,1]$
+\end{formula}
+\begin{formula}
+    $\tanh(z) = \frac{2\sinh(z)}{2\cosh(z)}$,\quad
+    $\highlight{\nabla_z\tanh(z)} = 1 - \tanh^2(z)$%,\quad
+%    $\tanh^{\shortminus1} (z) = \frac12 [\ln(1+z) - \ln(1-z)]$
+\end{formula}
+
+
+\subsubsection{Softmax \enskip\mdseries($k$ classes)}
+
+\begin{formula}*{Softmax}
+    $\highlight*{\sigma_i\ap{max} (z_i)} = \dfrac{\exp*(z_i)}{\sum_{j=1}^k \exp*(z_j)}$,\quad
+    $z_i \coloneqq \symbf{x^\top\theta}_i$
+\end{formula}
+
+We recover the sigmoid for $k=2$:
+\begin{formula}
+    $\text{soft-max w/}\ \symbf\theta_1, \symbf\theta_2 \iff \text{sigmoid w/}\ \symbf\theta \coloneqq \symbf\theta_1 - \symbf\theta_2$
+\end{formula}
+
+
+\subsubsection{Cross-entropy loss}
+
+\begin{formula}{Probability}
+    $\highlight{\P{Y=y \mid \symbf x \gray ; \symbf\theta}} = \sigma(yz)$,\quad $z = \symbf{x^\top\theta}$
+\end{formula}
+
+\begin{formula}*{Binary CE}
+    $\highlight*{\ell(\symbf x, y; \symbf\theta)} = - \ln \sigma(y \symbf{x^\top\theta}))$\hfill for $y \in \brace{\shortminus1,1}$\\
+    $\ldots = -y \ln \sigma(z) - (1\shortminus y) \ln (1 \shortminus \sigma(z))$\hfill for $y \in \brace{0, 1}$\\
+$\highlight{-\nabla_{\symbf\theta} \ell(\symbf x, y; \symbf\theta)} = \sigma(-yz) y \cdot \symbf x$
+\end{formula}
+
+\begin{formula}*{Softmax CE}
+    $\begin{taligned}[t]
+        \highlight*{\ell(\symbf x, \symbf y; \symbf\Theta)} &= -\symbf y \cdot \ln \sigma\ap{max} (\symbf x; \symbf\Theta)\\
+        &= -\sum_{i=1}^k y_i \symbf{x^\top\theta}_i + \underbracket{\ln\paren*{\sum_i \exp*(\symbf{x^\top\theta}_i)}}_{\text{norm. constant}}
+    \end{taligned}$\\[-.8em]
+    $\highlight{\nabla_{\symbf\theta_i} \ell (\symbf x, \symbf y; \symbf\Theta)} = (\sigma_i\ap{max} - y_i) \cdot \symbf x$
+\end{formula}
+
+
+% ===
+\subsection{Multilayer perceptron (MLP)}
+
+
+\begin{figure}[H]
+    \centering
+    \scalebox{.75}{\input{graphics/multilayer_perceptron.tex}}
+\end{figure}
+
+\begin{formula}{Forward}
+    $y_k \equiv f_k(\symbf{x; \beta, \theta}) = \sum_{j=1}^m \beta_{kj}\ \sigma(\symbf\theta_j^\top \symbf x) = \symbf{\beta}_k^\top \sigma(\symbf\Theta \symbf x)$
+\end{formula}
+\begin{formula}{Backw. (SGD)}
+    $\theta \leftarrow \theta - \eta \cdot \displaystyle \pderiv{\frac12(f(\symbf x) - y)^2}{\theta}$,\quad
+    $\theta \in \brace{\beta_j, \theta_{ji}}$,\enskip $\eta > 0$
+\end{formula}

@@ -1,0 +1,57 @@
+%! Author = tstreule
+
+\begin{tikzpicture}[
+    % Global config
+    font=\sffamily\scriptsize,
+    >=stealth, % default arrow style
+    x=30mm,
+    y=6mm,
+    % Styles
+    encdecbox/.style={% encoder and decoder box
+        rectangle, rounded corners=2.5mm,
+        very thick, minimum width=28mm,
+    },
+    basebox/.style={% base box for style inheritance
+        rectangle, rounded corners=1.5mm,
+        draw=black!70, thick,
+        inner sep=1pt,
+        minimum width=24mm, minimum height=4.5mm,
+    },
+    feedforward/.style={% feed forward box layer
+        basebox, fill=blue!80!cyan!25,
+    },
+    attention/.style={% attention box layer
+        basebox, fill=yellow!90!red!40,
+    },
+    arrow/.style={% arrow style
+        thick,
+    },
+]
+
+    \colorlet{encoder}{Green}
+    \colorlet{decoder}{Purple}
+
+% Draw elements
+    % Encoder
+    \node [encdecbox, draw=encoder!50, minimum height=14mm] (enc) at (0,0) {};
+    \node [attention] (att-enc) at (0,-.5) {Self-Attention};
+    \node [feedforward] (ff-enc) at (0,.5) {Feed Forward};
+    \node [above left=2mm and 0mm of enc, anchor=west] {\color{encoder}Encoder};
+    \node [left=0mm of enc, anchor=east] {\normalsize x6};
+
+    % Decoder
+    \node [encdecbox, draw=decoder!50, minimum height=20mm] (dec) at (1,0) {};
+    \node [attention] (att-dec) at (1,-1) {Self-Attention};
+    \node [attention] (att-enc-dec) at (1,0) {Enc-Dec Attention};
+    \node [feedforward] (ff-dec) at (1,1) {Feed Forward};
+    \node [above left=2mm and 0mm of dec, anchor=west] {\color{decoder}Decoder};
+    \node [right=0mm of dec, anchor=west] {\normalsize x6};
+
+% Connect elements
+    \draw [->, arrow] (att-enc)++(0,-1) -- (att-enc) -- (ff-enc) -- ++(0,1);
+    \draw [->, arrow] (att-dec)++(0,-1) -- (att-dec) -- (att-enc-dec) -- (ff-dec) -- ++(0,1);
+%    \draw [<-, arrow] (att-enc) -- ++(0,-.8);
+%    \draw [->, arrow] (att-enc) -- (ff-enc);
+%    \draw [->, arrow] (ff-enc) -- ++(0,.8);
+
+\end{tikzpicture}

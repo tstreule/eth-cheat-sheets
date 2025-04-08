@@ -1,0 +1,58 @@
+%! Author = tstreule
+
+\section{Gaussian Processes --- GP}\label{sec:gp}
+
+
+\begin{formula}*{Prediction}
+    $f \sim GP(f;\ \mu, k)$, observe $y_i = f(\symbf x_i) + \epsilon_i$, $\epsilon_i \sim \Gauss{0, \sigma_n^2}$.
+    Then $p(f \mid \symbf x_{1:m}, y_{1:m}) = GP(f;\ \mu', k')$\\
+    where $\mu'(\symbf x) = \mu(\symbf x) + \symbf k_{x,A} (\symbf K_{AA} + \sigma_n^2 \symbf I)^{\shortminus1} (\symbf y_A - \mu_A)$\\
+    and $k'(\symbf{x, x'}) = k(\symbf{x, x'}) - \symbf k_{x,A} (\symbf K_{AA} + \sigma^2 \symbf I)^{-1} \symbf k_{x',A}^\top$
+\end{formula}
+
+\begin{formula}{Forward sampling}
+    Use chain rule on $p(f_1, {\ldots}, f_n)$. Each sample is just a Gauss conditioned of prev. samples.
+\end{formula}
+
+\begin{formula}*{Marginal LL}
+    instead of $p(\symbf y \mid \symbf X, \theta) \overset{\mathrm{MAP}}{\approx} p(\symbf y \mid \hat f, \theta)$ use\\
+    $\hat\theta = \arg\max_\theta p(\symbf y\ped{train} \mid \symbf X\ped{train}, \theta) = \int p(\symbf y \mid \symbf X, f, \theta)\ p(f \mid \theta) \diff f$.
+\end{formula}
+
+\begin{formula}{Fast GPs}
+    GP prediction has cost $\mathcal O(n^3)$ {\fontspec{Symbola}\symbol{"2639}}
+    \begin{itemize}
+        \item \textit{Local} method: Use distance decaying kernel (e.g. RBF), only condition on points $x' \colon \abs{k(x,x')} \geq \tau$
+        \item \textit{Approximate} kernel $k(x, x') \approx \phi(x)^\top \phi(x')$ \scalebox{0.8}{$\normalcolor \to \mathcal O(nm^2 + m^3)$}
+        \item RFF: \textit{Stationary} kernel $k(\symbf x, \symbf x') = \int_{\R^d} p(\omega) \eu^{\iu\omega^\top (\symbf x - \symbf x')} \diff\omega = \E[\omega,b]{\symbf z_{\omega,b}(\symbf x) \cdot \symbf z_{\omega,b}(\symbf x')} \approx \frac1m \sum_i \ldots = \symbf{z(x)^\top z(x')}$\enskip
+        where $\omega \sim p(\omega)$,\enskip $b \sim U([0,2\pi])$,\enskip $\symbf z_{\omega,b}(\symbf z) = \sqrt{2} \cos(\omega^\top \symbf x + b)$
+        \item Summarize data with values of $f$ at \textit{inducing points} $\symbf u$\\
+        $p(\symbf{f^\ast, f}) = \int p(\symbf{f^\ast, f, u}) \diff \symbf u = \int p(\symbf{f^\ast, f \mid u})\ p(\symbf u) \diff\symbf u$\\
+        $\approx q(\symbf{f^\ast, f}) = \int q(\symbf{f^\ast \mid u})\ q(\symbf{f \mid u})\ p(\symbf u) \diff\symbf u$\\
+        {\small with $\normalcolor p(\symbf{f {\mid} u}) = \Gauss{\symbf{K_{f^\ast, u} K_{u,u}^{-1} u, K_{f,f} - Q_{f,f}}}$,\enskip
+        $\normalcolor p(\symbf{f^\ast {\mid} u}) = \Gauss{\symbf{K_{f^\ast, u} K_{u, u} u, K_{f^\ast, f^\ast} - Q_{f^\ast, f^\ast}}}$\enskip
+        w/ $\normalcolor \symbf{Q_{a,b}} \equiv \symbf{K_{a,u} K_{u,u}}^{-1} \symbf{K_{u,b}}$}
+    \end{itemize}
+\end{formula}
+
+
+% ===
+\subsection{Kernels \mdseries\hfill scalar product:\enskip $\color{subsection-text-color}K_{ij} = k(\symbf x_i, \symbf x_j)$}
+
+\begin{formula}*{Valid kernel}
+\textbf{symmetr.} %($\symbf K^\top\! {=} \symbf K$)
+and \textbf{p.s.d.} ($\symbf x^\top \symbf{Kx} \geq 0 \; \forall\symbf x$ \textit{or} pos. eigenvalues \textit{or} pos. princip. minors).
+Must have a (pot. $\infty$-dim.) \textbf{feat. vec.} $\phi$ s.t. $k(\symbf x, \symbf x') = \phi(\symbf x)^\top \phi(\symbf x')$.
+\textit{Stationary:} $k(\symbf{x, x'}) = k(\symbf{x - x'})$, \textit{isotropic:} $k(\symbf{x, x'}) = k(\norm{\symbf{x - x'}}_2)$.
+\end{formula}
+
+\begin{formula}{Kernel construction}
+    \newcommand{\Item}[1]{\textbullet\nobreak\enskip#1\hfill\enskip\allowbreak}
+    \newcommand{\Tr}{\mathop{T\!r}}
+    \Item{$k_1 {+} k_2$}
+    \Item{$c\cdot k_1$, $\gray c>0$}
+    \Item{$k_1\cdot k_2$}
+    \Item{$f(\symbf x) k_1(\symbf x, \symbf x') f(\symbf x')$}
+    \Item{$k(\phi(\symbf x), \phi(\symbf x'))$ with $\phi \colon \mathcal X \to \mathbb R^d$}
+    \Item{$g(k_1)$ with $g \colon$exp. \textit{ or } polyn. w/ \underline{all} pos. coeff.}
+\end{formula}

@@ -1,18 +1,18 @@
 %! Author = tstreule
 %! Date = 17.01.22
 
-\providecommand\thetitle{LECTURE\_NAME}
+\thispagestyle{empty} % clear headers and footers
+\providecommand\thetitle{LECTURE\_NAME} % ensure a dummy exists
 
-\begingroup
-%\vspace*{\fill}
-%\begin{center}
-\begin{minipage}{.35\textwidth}
+\begin{justify}
+\begin{minipage}{.3\textwidth}
 
     \setmainfont{Noto Serif}
-    \KOMAoptions{fontsize=12pt}\color{black}
-    \justifying
+    \KOMAoptions{fontsize=10pt}\color{black}
+    \setlength{\parskip}  {0.5em}
+    \setlength{\parindent}{1em}
 
-    {\Large\bfseries Disclaimer}
+    {\noindent\Large\bfseries Disclaimer}
 
     This document is an exam summary and follows the given material of the lecture {\itshape \thetitle}.
     Its contribution is a short summary that contains the most important concepts, formulas and algorithms.
@@ -20,11 +20,10 @@
 
     I do not guarantee the accuracy or completeness, nor is this document endorsed by the instructors.
     Any errors that are pointed out to me are welcome.
-    The complete {\LaTeX} source code can be found at {\ttfamily https://github.com/tstreule/eth-cheat-sheets}.
+    The complete {\LaTeX} source code can be found at \url{https://github.com/tstreule/eth-cheat-sheets}.
 
 \end{minipage}
-%\end{center}
-%\vspace*{\fill}
-\endgroup
+\end{justify}
 
 \pagebreak
+\pagenumbering{arabic}

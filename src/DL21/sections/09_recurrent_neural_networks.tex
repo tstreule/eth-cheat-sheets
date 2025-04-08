@@ -1,0 +1,64 @@
+%! Author = tstreule
+
+\section{Recurrent Neural Networks}\label{sec:recurrent-nns}
+
+
+\begin{formula}{Linear RNN}
+    $\highlight{\symbf h^t} = F(\symbf h^{t-1}, \symbf x^t; \symbf\theta)$,\enskip $\highlight{\symbf h^0} = \symbf 0$,\enskip $F = \sigma \circ \bar F$ \\
+    $\bar F(\symbf{h, x; \theta}) = \symbf{Wh + Ux + b}$,\enskip $\symbf\theta = (\symbf{U, W, b, \ldots})$ \\
+    \llap{\textit{optional:\enskip}}$\symbf y = H(\symbf{h; \theta})$,\enskip $H(\symbf{h; \theta}) \coloneqq \sigma(\symbf{Vh + c})$,\enskip $\symbf\theta = (\ldots, \symbf{V, c})$
+\end{formula}
+
+You can loot at is as a neural network. However, the first input has $N$ layers, the second $N\shortminus1$, etc., and the last has two layers.
+
+\begin{figure}[H]
+    \label{fig:unfold-rnn}
+    \centering
+    \input{graphics/unfold_rnn.tex}
+\end{figure}
+
+\textbf{Backpropagation through time:}
+\begin{itemize}
+    \item Propagate derivates backwards through time
+    \item Parameter sharing leads to a sum over $t$
+    \item \textit{Def.} shortcut $\dot\sigma_i^t \coloneqq \sigma' (\bar F_i (h^{t\shortminus1}, x^t))$,\enskip $\symbf S(\symbf h^r) = \diag(\dot\sigma_1^r, {\ldots}, \dot\sigma_n^r)$
+    \item \textbf{RNN gradients:} $\nabla_{\symbf x^t} \mathcal R = \brack*{\prod_{r=t+1}^s \symbf{W^\top S}(\symbf h^r)} \cdot \symbf J_H \cdot \nabla_{\symbf y} \mathcal R$
+\end{itemize}
+
+
+% ===
+\subsection{Memory Units -- LSTM}
+
+Classical RNNs easily forget (info gets ``washed out'').
+
+\begin{figure}[H]
+    \label{fig:lstm}
+    \centering
+    \begin{flushleft}
+        \color{BlueViolet}\sffamily\scriptsize
+        \quad (1): element-wise, to (not) pass information,\\
+        \quad (2): add info to memory $C_t$
+    \end{flushleft}\vspace{-2em}
+    \input{graphics/lstm_architecture.tex}
+%    \includegraphics[width=.8\linewidth]{lstm_architecture}
+\end{figure}
+
+\begin{itemize}
+    \item Information propagates along the chain
+    \item can flow unchanged, only selectively changed by $\sigma$-gates
+    \item can forget (when $f_t \approx 0$)
+    \item LSTMs and GRUs can learn active memory strategies
+    \item difficult to understand and resource-hungry
+\end{itemize}
+
+
+% ===
+\subsection{Seq2Seq learning}
+
+\textbf{Encoder RNN} $\symbf x \mapsto \symbf z$ and
+\textbf{Decoder RNN} $\symbf z \mapsto \symbf y^{1:S}$ e.g. use encoder output as input for decoder and stop symbol \texttt{<EOS>}.
+
+Can use Seq2Seq also for \textbf{image-to-text} sequencing, \ldots!
+
+
+\textbf{Downsides of RNN:} (i) they don't work well for longer sequences, (ii) cannot be parallelized since architecture is sequential.

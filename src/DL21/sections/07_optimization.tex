@@ -1,0 +1,177 @@
+%! Author = tstreule
+
+\section{Optimization}\label{sec:optimization}
+
+
+% ===
+\subsection{Objectives}
+
+\begin{formula}{Squared loss}
+    \highlight{$\ell_{\symbf y} (\symbf\nu) = \frac12 \norm{\symbf{y - \nu}^2}$}
+\end{formula}
+\begin{formula}{Classification loss}
+    $\ell_{y} (\nu) =
+    \begin{cases}
+        0 & \text{if } \nu = y \\
+        1 & \text{otw.}
+    \end{cases}$\quad (has no gradients)
+\end{formula}
+
+\begin{formula}{Probabilistic loss}
+    \highlight{$\ell_{\symbf y} (\symbf\nu) = - \log p(\symbf{y; \nu})$}
+\end{formula}
+\begin{itemize}
+    \item \textbf{Gaussian models:}\enskip
+    $p(\symbf{y; \nu}) = \prod_{j = 1}^m \frac{1}{\sqrt{2\pi}} \exp*(- \frac12 (y_j - \nu_j))^2$ \\
+    $\implies \ell_{\symbf y} (\symbf\nu) = \frac12 \norm{\symbf{y - \nu}}^2 + \const$
+    \item \textbf{Exponential:}\enskip
+    $p(\symbf{y; \nu}) = \cancel{h(\symbf y)} \exp(\symbf{y \nu} - \phi(\symbf\nu))$ \\
+    $\implies \ell_{\symbf y} (\symbf\nu) = - \symbf{y \nu} + \phi(\symbf\nu) + \const$
+    \item \textbf{Poisson models:}\enskip
+    $p(y; \nu) = \nu^y \frac{\eu^{-\nu}}{y!}$ \\
+    $\implies \ell_y (\nu) = \nu - y \log \nu + \const$,\enskip $\nu > 0$
+\end{itemize}
+
+
+% ===
+\subsection{Expected vs. empirical risk}
+
+\begin{formula}{Expected}
+    $\mathcal R (\symbf\theta) = \E[(\symbf{x,y})]{\ell (F(\symbf{x; \theta}))}
+    \implies
+    \highlight{\symbf\theta^\ast = \arg\min_{\symbf\theta} \mathcal R(\symbf\theta)}$
+\end{formula}
+
+\begin{formula}{Empirical}
+    $\hat{\mathcal R} (\symbf\theta) = \frac1s \sum_{t=1}^s \ell_{\symbf y^t} \paren*{F(\symbf x^t; \symbf\theta)}$
+\end{formula}
+
+
+% ===
+\subsection{Gradient descent --- GD}
+
+Use Taylor approx. $f(\symbf x + \Delta\symbf x) \approx g(\symbf x)$ and set $\nabla g(x) \overset!= 0$.
+
+\begin{formula}{$\implies$ Newton's method}
+    \highlight{$\Delta \symbf x = - \orange{[\nabla^2 f(\symbf x)]^{-1}} \nabla f(\symbf x)$}
+\end{formula}
+
+Idea: Find matrix $\symbf B$ close to the Hessian, i.e. $\norm{\nabla^2 f(\symbf x) - \symbf B}_2 \leq \epsilon$
+
+\begin{formula}*{Gradient descent}
+    Assuming $\nabla^2 f(\symbf x) = \frac1\eta \symbf I$, we recover\\
+    \highlight{$\Delta\symbf x = - \eta \nabla f(\symbf x)$},\enskip step size $\eta > 0$
+\end{formula}
+
+\begin{formula}*{Gradient flow}
+    \highlight{$\dot{\symbf x} = - \nabla f(\symbf x)$},\enskip grad. descent with $\eta \to 0$
+\end{formula}
+
+
+\subsubsection{Optimal learning rate}
+
+Start w/ convex quadratic objective $f(\symbf x) = \frac12 \symbf{x^\top Q x} - \symbf{q x}$ with $\symbf Q = \symbf{\orange{U} \Lambda \orange{U}^\top}$ p.s.d., thus $f$ convex.
+Change the basis as $\symbf x \leftarrow \symbf{U^\top}$ and $\symbf q \leftarrow \symbf{U^\top q}$ and effectively minimize the \textit{separable} problem: $f(\symbf x) = \sum_{i=1}^n g_i (x_i)$,\enskip $g_i(z) = \frac{\lambda_i}{2} z^2 - q_i z$,\enskip $\lambda_i > 0$.
+
+\begin{formula}{Exp. convergence if}
+    $\eta < \frac2\lambda$ (1-dim.),\quad
+    $\eta \leq \frac{2}{\lambda\ped{max} (\symbf Q)}$ (n-dim.)
+\end{formula}
+\begin{formula}{Optimal}
+    $\highlight{\eta^\ast} = \min\limits_\eta \max \brace{\eta\lambda\ped{max} \!- 1,\ 1 - \eta\lambda\ped{min}} = \highlight{\frac{2}{\lambda\ped{max} + \lambda\ped{min}}}$
+\end{formula}
+
+
+\subsubsection{Convexity}
+
+\begin{formula}{$L$-smooth function}
+    $\norm{\nabla f(\symbf x) - \nabla f(\symbf x + \Delta\symbf x)} \leq L \norm{\Delta\symbf x}$ \\
+    \llap{\gray$C^{2} \rightsquigarrow\ $}$f(\symbf x + \Delta\symbf x) \leq f(\symbf x) + \nabla f(\symbf x) \cdot \Delta\symbf x + \frac{L}{2} \norm{\Delta\symbf x}^2$
+\end{formula}
+\begin{formula}{$\mu$-strongly convex}
+    $f(\symbf x + \Delta\symbf x) \geq f(\symbf x) + \nabla f(\symbf x) \cdot \Delta\symbf x + \frac\mu2 \norm{\Delta\symbf x}^2$ \\
+    \gray Convex if $\mu = 0$.
+\end{formula}
+$\implies$ Can be sandwiched: $\mu \symbf I \preceq \nabla^2 f \preceq L \symbf I$
+
+\todo{Lec. ch08-a: slide 26-39}
+
+\begin{formula}{Convexity}
+    $\ell(\lambda w + (1 - \lambda) w') \leq \lambda \ell(w) + (1 - \lambda) \ell(w')$\\
+    $\iff \ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w')$
+\end{formula}
+Given also \textbf{$\symbfit L$-smoothness}, i.e. $\norm{\nabla \ell(w) - \nabla \ell(w')} \leq L \norm{w - w'}$, then $\implies \ell(w) \leq \ell(w') + \nabla \ell(w')^\top (w - w') + \frac{L}{2} \norm{w - w'}^2$.
+
+
+% ===
+\subsection{Stochastic gradient descent --- SGD}
+
+Approximate true gradient with mean gradient of batch. Sacrifice statistical efficiency at benefit of reduced variance.
+
+\begin{formula}{Unbiased}
+    $\E{\nabla f_I(\symbf x)} = \sum_{i=1}^n \frac1n \nabla f_i (\symbf x) = \nabla f(\symbf x)$
+\end{formula}
+\begin{formula}{Variance}
+    $\V{\symbf x} = \frac1n \sum_{i=1}^n \norm{\nabla f(\symbf x) - \nabla f_i(\symbf x^2)}$,\enskip $\nabla f(\symbf x^\ast) = 0$
+\end{formula}
+
+\textit{Note:} Smaller batch sizes introduce more noise, yet usually give better results in the non-convex case
+
+
+\subsubsection{Learning rates}
+
+\begin{formula}{In theory}
+    $\eta_k \propto 1/k$,\enskip $\sum_{k=1}^\infty \eta_k = \infty$,\enskip $\sum_{k=1}^\infty \eta_k^2 < \infty$
+\end{formula}
+\begin{formula}{in practice}
+    trial and error (e.g. may use $\eta_k = \eu^{-k}$)
+\end{formula}
+
+
+\subsubsection{SVRG}
+
+\begin{formula}
+    $\symbf x^{k+1} = \symbf x^k - \eta \underbrace{
+        \brack*{\nabla f_i (\symbf x^k) - \nabla f_i (\orange{\bar{\symbf x}}) + \nabla f(\orange{\bar{\symbf x}})}
+    }_{\mathclap{\E{} = \nabla f(\symbf x),\quad \V{} < \V{\nabla f_i(\symbf x)}}}$
+\end{formula}
+Expensive but do only once in a while.
+Very effective in convex optimization (\textbf{not} so for DNNs).
+
+
+% ===
+\subsection{Momentum and adaptivity}
+
+\subsubsection{Nesterov's accelerated method \enskip\mdseries (speed-up conv.)}
+
+(1) Extrapolate by momentum: $\symbf y_{k+1} = \symbf x_k + \beta (\symbf x_k - \symbf x_{k-1})$,\\
+(2) then do gradient descent: $\symbf x_{k+1} = \symbf y_{k+1} - \eta \nabla f(\symbf y_{k+1})$.\\
+$\beta = 0$ is standard gradient descent.
+
+\subsubsection{Heavy ball method \enskip\mdseries (``shoot more straight'')}
+
+Same as Nesterov but do gradient at $\symbf x^k$ and then add momentum/extrapolate:
+$\symbf x^{k+1} = \symbf x^k - \eta \nabla f(\symbf x^k) + \beta (\symbf x^k - \symbf x^{k-1})$.
+
+\subsubsection{AdaGrad}
+
+$\symbf x^{k+1} = \symbf x^k - \eta \symbf\Lambda^k \nabla f(\symbf x^k)$,\enskip where\enskip $\symbf\Lambda^k = \diag(\lambda_i^k)$,\enskip $\lambda_i^k = \frac{1}{\sqrt{\gamma_i^k} + \delta}$,\enskip regularizer $\delta > 0$.
+\quad
+Define: $\symbf\gamma^k = \symbf\gamma^{k-1} + \nabla f(\symbf x^k) \odot \nabla f(\symbf x^k)$.
+
+\subsubsection{Adam \enskip\mdseries (combines momentum \& adaptivity)}
+
+\textbf{Momentum:}
+$\symbf m^k = \beta \symbf m^{k-1} + (1 - \beta) \nabla f(\symbf x^k)$,\enskip $\beta \in [0;1]$,\enskip $\symbf m^0 = \symbf 0$,\enskip $\symbf x^{k+1} = \symbf x^k - \frac{\eta}{1 - \beta^k} \symbf m^k$
+
+\textbf{Adaptivity:}
+$\symbf\gamma^k = \alpha \symbf\gamma^{k-1} + (1 - \alpha) \brack*{\nabla f(\symbf x^k) \odot \nabla f(\symbf x^k)}$,\enskip $\symbf x^{k+1} = \symbf x^k - \frac{\eta}{1 - \beta^k} \symbf\Lambda^k \symbf m^k$,\enskip where\enskip $\symbf\Lambda^k = \diag(\lambda_i^k)$,\enskip $\frac{1}{\lambda_i^k} = \sqrt{\frac{\gamma_i^k}{1 - \alpha^k}} + \delta$
+
+\subsubsection{Compressed stochastic gradients}
+
+Sending information across nodes may be expensive. Idea: use only $\sign$ of the update.
+$\symbf x^{k+1} = \symbf x^k - \eta_k \sign*(\nabla f_{I(k)} (\symbf x^k))$
+
+
+\todo{Lec. ch08-b: Rand. feat. regr. and neural tangent kernel}
+
